@@ -13,7 +13,7 @@
 | **Ebenensystem** | Nutzer bekommen jeweils eine eigene Ebene. (Und können auch andere erstellen) | mittel | 6 Tage | Zeichen-/ Ebenenschicht |
 | **Zeichenhistorie** | Alle Zeichnungen können als Historie angeschaut werden | mittel | 6 Tage | Benutzer-/Channelschicht |
 | **Vorlagen** | Vorlagen zum Ausmalen oder weiterzeichnen, die schon von uns gehostet werden | nice to have | 1 Tage | Zeichenschicht |
-| **Gamification** | Evtl. Punktesystem / Bewertungen einer Zeichnung | nice to have | 4 Tage | Zeichen-/ Benutzerschicht |
+| **Gamification** | Evtl. Punktesystem / Bewertungen einer Zeichnung | nice to have | 4 Tage | Toolschicht |
 
 ## Umsetzung
 
