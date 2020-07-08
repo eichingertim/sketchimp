@@ -3,6 +3,7 @@
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
 | **Benutzerregistrierung/ -verwaltung** | Benutzer sollen sich registrieren und anmelden können. Es soll aber auch ein *Join as Guest* geben -> Also hier dann nur Benutzername. | hoch | 2 Tage | Benutzerschicht |
+| **Feste Channels/Räume** | Es gibt feste *Zeichenräume* die von Nutzern erstellt werden können. Über Invitelinks/-codes können andere Nutzer joinen | hoch | 5 Tage | Benutzer-/ Channelschicht |
 
 ## Umsetzung
 
