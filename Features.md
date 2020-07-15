@@ -13,7 +13,8 @@
 | **Ebenensystem** | Nutzer bekommen jeweils eine eigene Ebene. (Und können auch andere erstellen) | mittel | 6 Tage | Zeichen-/ Ebenenschicht |
 | **Zeichenhistorie** | Alle Zeichnungen können als Historie angeschaut werden | mittel | 6 Tage | Benutzer-/Channelschicht |
 | **Vorlagen** | Vorlagen zum Ausmalen oder weiterzeichnen, die schon von uns gehostet werden | nice to have | 1 Tage | Zeichenschicht |
-| **Gamification** | Evtl. Punktesystem / Bewertungen einer Zeichnung / Levelsystem wenn Benutzer bestimmte Anzahl Sketches erstellt oder Upvotes hat, dann evtl. Perks | nice to have | 4 Tage | Toolschicht |
+| **Score-/Levelsystem** | Evtl. Punktesystem / Bewertungen einer Zeichnung / Levelsystem wenn Benutzer bestimmte Anzahl Sketches erstellt oder Upvotes hat, dann evtl. Perks | nice to have | 4 Tage | Toolschicht |
+| **Montagsmaler** | Zeichen- und Ratesystem mit vorgegebenen / eigens importierten Begriffen | nice to have | 5 Tage | User-Interface |
 
 ## Umsetzung
 
