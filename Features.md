@@ -3,7 +3,7 @@
 | Feature | Beschreibung | Priorität | Geschätzter Aufwand | Betroffene Schichten |
 |---------|--------------|-----------|--------------------|---------------------|
 | **Benutzerregistrierung/ -verwaltung** | Benutzer sollen sich registrieren und anmelden können. Nur wenn ein Nutzer angemeldet ist, kann dieser auf seine Räume zugreifen. Der Public Feed soll öffentlich sein auch ohne Anmeldung. Up- und Downvotes sind nur mit Login möglich | hoch | 3 Tage | UI, Database, Authentication |
-| **Public Feed** | Fertige Sketches können in diesem Feed gepostet werden und öffentlich eingesehen werde. Diese Sketches können dann bewertet werden per Up- und Downvote | UI, Database, Authentication |
+| **Public Feed** | Fertige Sketches können in diesem Feed gepostet werden und öffentlich eingesehen werde. Diese Sketches können dann bewertet werden per Up- und Downvote | mittel | 3 Tage | UI, Database, Authentication |
 | **Channels/Räume** | Es gibt feste *Zeichenräume* die von Nutzern erstellt werden können. Über Invitelinks/-codes können andere Nutzer diesem Raum joinen. Die einzelnen Features im Raum werden in den Features unten beschrieben. | hoch | 5 Tage | UI, Database |
 | **Import/Export Funktion** | In einem *Zeichenraum* können Bilder/Sketches importiert und in gängige Formate exportiert werden. Außerdem können gespeicherte Bilder auch im Public Feed geteilt werden| mittel | 2 Tage | UI, Database |
 | **Rollen** | Der *Admin* eines Raumes kann Nutzer in Rollen einteilen, die verschiedene Rechte haben (Zeichnen-Recht, Export/Import Recht, Speicherrecht, Post-REcht)| mittel | 3 Tage | UI, Database, Authentication |
