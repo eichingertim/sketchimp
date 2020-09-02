@@ -1,4 +1,4 @@
-import {Event, Observable} from './utils/Observable.js'
+import {Event, Observable} from '../utils/Observable.js'
 
 class View extends Observable {
 
