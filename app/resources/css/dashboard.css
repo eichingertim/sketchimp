@@ -1,0 +1,26 @@
+.dashboard-app-bar {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.dashboard-app-bar-actions {
+  display: inline-flex;
+  align-items: stretch;
+  padding: 0;
+}
+
+.dashboard-left-bar-main-content {
+  padding: 0;
+  display: flex;
+  height: 100vw;
+}
+
+.dashboard-left-bar {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-canvas-container {
+  flex-grow: 1;
+}

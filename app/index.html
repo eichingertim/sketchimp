@@ -2,16 +2,36 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MME</title>
-    <link rel="stylesheet" href="resources/css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MME</title>
+  <link rel="stylesheet" href="resources/css/style.css">
+  <link rel="stylesheet" href="resources/css/colors.css">
+  <link rel="stylesheet" href="resources/css/dashboard.css">
 </head>
 
 <body>
-    <h1>Multimedia Engineering</h1>
-    <div></div>
-    <script type="module" src="resources/js/index.js"></script>
+  <div class="primary-background-color dashboard-app-bar">
+    <img class="profile-icon" alt="profile-icon" src="assets/dashboard_account_circle_secondary_color.svg" />
+    <div class="dashboard-app-bar-actions">
+      <input type="button" value="Feed" class="button-app-bar primary-text-color" />
+      <input type="button" value="Ausloggen" class="button-app-bar primary-text-color" />
+    </div>
+  </div>
+  <div class="dashboard-left-bar-main-content">
+    <div class="dashboard-left-bar primary-background-color">
+      <img alt="add-channel-icon" src="assets/dashboard_add_circle_outline_grey.svg" />
+    </div>
+    <div id="container" class="dashboard-canvas-container primary-dark-background-color"></div>
+  </div>
+
+  <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="resources/js/utils/Observable.js"></script>
+  <script type="module" src="resources/js/View.js"></script>
+  <script type="module" src="resources/js/DrawAreaView.js"></script>
+  <script type="module" src="resources/js/DrawAreaController.js"></script>
+  <script type="module" src="resources/js/index.js"></script>
 </body>
 
 </html>
