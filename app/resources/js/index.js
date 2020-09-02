@@ -1,6 +1,6 @@
 /* eslint-env browser */
-import DrawAreaController from "./DrawAreaController.js";
-import DrawAreaView from "./DrawAreaView.js";
+import DrawAreaController from "./controller/DrawAreaController.js";
+import DrawAreaView from "./ui/DrawAreaView.js";
 
 var socket = io(),
   drawAreaController,

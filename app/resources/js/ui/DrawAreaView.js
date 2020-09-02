@@ -1,5 +1,5 @@
 import View from "./View.js";
-import {Event} from "./utils/Observable.js"
+import {Event} from "../utils/Observable.js"
 
 function checkAndNotifyForDrawing(drawAreaView) {
   if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse.pos_prev) {
