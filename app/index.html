@@ -22,7 +22,28 @@
     <div class="dashboard-left-bar primary-background-color">
       <img alt="add-channel-icon" src="assets/dashboard_add_circle_outline_grey.svg" />
     </div>
-    <div id="container" class="dashboard-canvas-container primary-dark-background-color"></div>
+    <div id="stage-parent" style="padding: 0; width: 100vw; height: 100vh; background-color:blue">
+      <div id="container" class="dashboard-canvas-container primary-dark-background-color"></div>
+    </div>
+
+    <div class="dashboard-toolbox primary-background-color">
+      <img style="cursor: pointer;" id="toolbox-pen" alt="pen" height="100px" src="assets/toolbox_pen.png" />
+      <img style="cursor: pointer;" id="toolbox-rubber"alt="rubber" height="80px" src="assets/toolbox_rubber.png" />
+      <div class="dashboard-toolbox-colors">
+        <div class="toolbox-color-row">
+          <img id="color-standard" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_white.svg" />
+          <img id="color-blue" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_blue.svg" />
+          <img id="color-green" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_green.svg" />
+        </div>
+        <div class="toolbox-color-row">
+          <img id="color-yellow" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_yellow.svg" />
+          <img id="color-red" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_red.svg"- />
+          <img id="color-selector" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_rainbow.svg" />
+        </div>
+
+
+      </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
@@ -31,6 +52,8 @@
   <script type="module" src="resources/js/ui/View.js"></script>
   <script type="module" src="resources/js/ui/DrawAreaView.js"></script>
   <script type="module" src="resources/js/controller/DrawAreaController.js"></script>
+  <script type="module" src="resources/js/ui/ToolboxView.js"></script>
+  <script type="module" src="resources/js/Dashboard.js"></script>
   <script type="module" src="resources/js/index.js"></script>
 </body>
 

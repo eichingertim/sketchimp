@@ -1,12 +1,18 @@
 import View from "./View.js";
-import {Event} from "../utils/Observable.js"
+import { Event } from "../utils/Observable.js"
 
 function checkAndNotifyForDrawing(drawAreaView) {
-  if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse.pos_prev) {
-    drawAreaView.notifyAll(new EmitLineEvent(drawAreaView.mouse));
+  if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
+    .pos_prev) {
+    drawAreaView.notifyAll(new EmitLineEvent(
+      drawAreaView.mouse,
+      drawAreaView.context.strokeStyle,
+      drawAreaView.context.globalCompositeOperation
+    ));
     drawAreaView.mouse.move = false;
   }
-  drawAreaView.mouse.pos_prev = { x: drawAreaView.mouse.pos.x, y: drawAreaView.mouse.pos.y };
+  drawAreaView.mouse.pos_prev = { x: drawAreaView.mouse.pos.x, y: drawAreaView
+      .mouse.pos.y };
 }
 
 function setMouseListener(drawAreaView) {
@@ -21,8 +27,10 @@ function setMouseListener(drawAreaView) {
   });
 
   drawAreaView.stage.on('mousemove touchmove', function() {
-    drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x / drawAreaView.stage.width();
-    drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y / drawAreaView.stage.height();
+    drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x /
+      drawAreaView.stage.width();
+    drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y /
+      drawAreaView.stage.height();
     drawAreaView.mouse.move = true;
     checkAndNotifyForDrawing(drawAreaView);
   });
@@ -57,35 +65,58 @@ function setupKonvaJS(drawAreaView) {
 
 
 class EmitLineEvent extends Event {
-  constructor(mouse) {
-    super("EmitLine", {mouse: mouse})
+  constructor(mouse, color, penRubber) {
+    super("EmitLine", { mouse: mouse, color: color, penRubber: penRubber})
   }
 }
 
 class DrawAreaView extends View {
   constructor(el) {
-        super();
-        this.setElement(el);
-        this.layer = null;
-        this.stage = null;
-        this.canvas = null;
-        this.image = null;
-        this.context = null;
-        this.mouse = {
-          click: false,
-          move: false,
-          pos: { x: 0, y: 0 },
-          pos_prev: false
-        }
+    super();
+    this.setElement(el);
+    this.layer = null;
+    this.stage = null;
+    this.canvas = null;
+    this.image = null;
+    this.context = null;
+    this.mouse = {
+      click: false,
+      move: false,
+      pos: { x: 0, y: 0 },
+      pos_prev: false
+    }
+    this.currentXScale = 1.0;
+    this.currentYScale = 1.0;
 
-        setupKonvaJS(this);
-        setMouseListener(this);
+    setupKonvaJS(this);
+    setMouseListener(this);
   }
 
-  addLine(line) {
+  fitWindow() {
+    // TODO: Real scaling
+    location.reload();
+  }
+
+  updateColor(color) {
+    this.context.strokeStyle = color;
+  }
+
+  switchPenRubber(item) {
+    if (item === "toolbox-pen") {
+      this.context.globalCompositeOperation = 'source-over';
+    } else if (item === "toolbox-rubber") {
+      this.context.globalCompositeOperation = 'destination-out';
+    }
+  }
+
+  addLine(line, color, penRubber) {
+    this.context.strokeStyle = color;
+    this.context.globalCompositeOperation = penRubber;
     this.context.beginPath();
-    this.context.moveTo(line[0].x * this.stage.width(), line[0].y * this.stage.height());
-    this.context.lineTo(line[1].x * this.stage.width(), line[1].y * this.stage.height());
+    this.context.moveTo(line[0].x * this.stage.width(), line[0].y * this.stage
+      .height());
+    this.context.lineTo(line[1].x * this.stage.width(), line[1].y * this.stage
+      .height());
     this.context.closePath();
     this.context.stroke();
     this.layer.batchDraw();

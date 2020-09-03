@@ -1,30 +1,22 @@
 /* eslint-env browser */
 import DrawAreaController from "./controller/DrawAreaController.js";
 import DrawAreaView from "./ui/DrawAreaView.js";
+import Dashboard from "./Dashboard.js";
 
 var socket = io(),
-  drawAreaController,
-  drawAreaView;
+  dashboard;
+
+function onWindowResize() {
+  dashboard.resizeElements();
+}
 
 function init() {
+  let container = document.querySelector('#stage-parent');
+  dashboard = new Dashboard(socket);
 
-  const container = document.getElementById('container');
-  drawAreaView = new DrawAreaView(container);
-
-  drawAreaController = new DrawAreaController(socket);
-  drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
-  drawAreaView.addEventListener("EmitLine", onLineShouldBeEmitted.bind(this));
+  window.onresize = onWindowResize;
 }
 
-
-function onLineDrawn(data) {
-  drawAreaView.addLine(data.data.line);
-}
-
-function onLineShouldBeEmitted(data) {
-  let mouse = data.data.mouse;
-  drawAreaController.emitLine(mouse);
-}
 
 
 init();
