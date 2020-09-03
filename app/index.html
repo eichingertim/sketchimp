@@ -11,6 +11,8 @@
 </head>
 
 <body>
+
+  <!--top app bar-->
   <div class="primary-background-color dashboard-app-bar">
     <img class="profile-icon" alt="profile-icon" src="assets/dashboard_account_circle_secondary_color.svg" />
     <div class="dashboard-app-bar-actions">
@@ -18,14 +20,20 @@
       <input type="button" value="Ausloggen" class="button-app-bar primary-text-color" />
     </div>
   </div>
+
+  <!--Left Sidebar, DrawArea and Toolbox-->
   <div class="dashboard-left-bar-main-content">
+    <!--Left Sidebar to display available channels-->
     <div class="dashboard-left-bar primary-background-color">
       <img alt="add-channel-icon" src="assets/dashboard_add_circle_outline_grey.svg" />
     </div>
+
+    <!--Draw Area-->
     <div id="stage-parent" style="padding: 0; width: 100vw; height: 100vh; background-color:blue">
       <div id="container" class="dashboard-canvas-container primary-dark-background-color"></div>
     </div>
 
+    <!--Toolbox Elements-->
     <div class="dashboard-toolbox primary-background-color">
       <div class="dashboard-toolbox-size">
         <img class="toolbox-size-item" id="stroke-size-extra-small" alt="size-small" height="5px" src="assets/toolbox_white.svg" />
