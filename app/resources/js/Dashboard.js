@@ -7,20 +7,21 @@ var drawAreaView,
   toolboxView;
 
 function onLineDrawn(data) {
-  console.log(data);
-  drawAreaView.addLine(data.data.line, data.data.color, data.data.penRubber);
+  drawAreaView.addLine(data.data);
 }
 
 function onLineShouldBeEmitted(data) {
-  let mouse = data.data.mouse;
-  let color = data.data.color;
-  let penRubber = data.data.penRubber;
-  drawAreaController.emitLine(mouse, color, penRubber);
+  console.log(data.data);
+  drawAreaController.emitLine(data.data);
 }
 
 function onColorChanged(data) {
   const colorCodeStr = drawAreaController.getColorStrFromColor(data.data.color);
   drawAreaView.updateColor(colorCodeStr);
+}
+
+function onSizeChanged(data) {
+  drawAreaView.updateSize(data.data.size);
 }
 
 function onPenRubberSwitch(data) {
@@ -39,6 +40,7 @@ class Dashboard {
     drawAreaView.addEventListener("EmitLine", onLineShouldBeEmitted.bind(this));
     toolboxView.addEventListener("ColorChange", onColorChanged.bind(this));
     toolboxView.addEventListener("PenRubberSwitch", onPenRubberSwitch.bind(this));
+    toolboxView.addEventListener("SizeChange", onSizeChanged.bind(this));
   }
 
   resizeElements() {

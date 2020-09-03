@@ -43,9 +43,21 @@
 
 .toolbox-color {
   margin-right: 5px;
+  cursor: pointer;
 }
 
 .toolbox-color-row {
   display: flex;
   justify-content: space-between;
+}
+
+.dashboard-toolbox-size {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.toolbox-size-item {
+  margin-bottom: 5px;
+  cursor: pointer;
 }

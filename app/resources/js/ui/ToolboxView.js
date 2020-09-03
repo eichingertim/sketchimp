@@ -11,6 +11,17 @@ function addClickListeners(toolboxView) {
   pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
   const rubber = toolboxView.el.querySelector('#toolbox-rubber');
   rubber.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
+
+  const sizeItems = toolboxView.el.querySelectorAll('.toolbox-size-item');
+  sizeItems.forEach((sizeItem, i) => {
+    sizeItem.addEventListener("click", onSizeItemClick.bind(this, toolboxView));
+  });
+}
+
+class SizeChangeEvent extends Event {
+  constructor(size) {
+    super("SizeChange", {size: size});
+  }
 }
 
 class ColorChangeEvent extends Event {
@@ -23,6 +34,10 @@ class PenRubberSwitchEvent extends Event {
   constructor(item) {
     super("PenRubberSwitch", {item: item});
   }
+}
+
+function onSizeItemClick(toolboxView, data) {
+  toolboxView.notifyAll(new SizeChangeEvent(data.target.height));
 }
 
 function onColorClicked(toolboxView, data) {

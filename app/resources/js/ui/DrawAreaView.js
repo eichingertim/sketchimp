@@ -4,11 +4,13 @@ import { Event } from "../utils/Observable.js"
 function checkAndNotifyForDrawing(drawAreaView) {
   if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
     .pos_prev) {
-    drawAreaView.notifyAll(new EmitLineEvent(
-      drawAreaView.mouse,
-      drawAreaView.context.strokeStyle,
-      drawAreaView.context.globalCompositeOperation
-    ));
+      let data = {
+        mouse: drawAreaView.mouse,
+        color: drawAreaView.context.strokeStyle,
+        penRubber: drawAreaView.context.globalCompositeOperation,
+        size: drawAreaView.context.lineWidth
+      }
+    drawAreaView.notifyAll(new EmitLineEvent(data));
     drawAreaView.mouse.move = false;
   }
   drawAreaView.mouse.pos_prev = { x: drawAreaView.mouse.pos.x, y: drawAreaView
@@ -65,8 +67,8 @@ function setupKonvaJS(drawAreaView) {
 
 
 class EmitLineEvent extends Event {
-  constructor(mouse, color, penRubber) {
-    super("EmitLine", { mouse: mouse, color: color, penRubber: penRubber})
+  constructor(data) {
+    super("EmitLine", data)
   }
 }
 
@@ -101,6 +103,10 @@ class DrawAreaView extends View {
     this.context.strokeStyle = color;
   }
 
+  updateSize(size) {
+    this.context.lineWidth = size;
+  }
+
   switchPenRubber(item) {
     if (item === "toolbox-pen") {
       this.context.globalCompositeOperation = 'source-over';
@@ -109,13 +115,14 @@ class DrawAreaView extends View {
     }
   }
 
-  addLine(line, color, penRubber) {
-    this.context.strokeStyle = color;
-    this.context.globalCompositeOperation = penRubber;
+  addLine(data) {
+    this.context.strokeStyle = data.color;
+    this.context.globalCompositeOperation = data.penRubber;
+    this.context.lineWidth = data.size;
     this.context.beginPath();
-    this.context.moveTo(line[0].x * this.stage.width(), line[0].y * this.stage
+    this.context.moveTo(data.line[0].x * this.stage.width(), data.line[0].y * this.stage
       .height());
-    this.context.lineTo(line[1].x * this.stage.width(), line[1].y * this.stage
+    this.context.lineTo(data.line[1].x * this.stage.width(), data.line[1].y * this.stage
       .height());
     this.context.closePath();
     this.context.stroke();

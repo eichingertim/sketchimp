@@ -1,8 +1,8 @@
 import { Event, Observable } from "../utils/Observable.js";
 
 class LineDrawnEvent extends Event {
-  constructor(line, color, penRubber) {
-    super("LineDrawn", { line: line, color: color, penRubber: penRubber});
+  constructor(data) {
+    super("LineDrawn", data);
   }
 }
 
@@ -13,16 +13,18 @@ class DrawAreaController extends Observable {
     this.socket = socket;
     let controller = this;
     this.socket.on('line', function(data) {
-      var line = data.line;
-      var color = data.color;
-      var penRubber = data.penRubber;
-      controller.notifyAll(new LineDrawnEvent(line, color, penRubber));
+      controller.notifyAll(new LineDrawnEvent(data));
     });
 
   }
 
-  emitLine(mouse, color, penRubber) {
-    this.socket.emit('line', { line: [mouse.pos, mouse.pos_prev], color: color, penRubber: penRubber});
+  emitLine(data) {
+    this.socket.emit('line', {
+      line: [data.mouse.pos, data.mouse.pos_prev],
+      color: data.color,
+      penRubber: data.penRubber,
+      size: data.size
+    });
   }
 
   getColorStrFromColor(colorElId) {
