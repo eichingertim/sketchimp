@@ -11,7 +11,6 @@ function onLineDrawn(data) {
 }
 
 function onLineShouldBeEmitted(data) {
-  console.log(data.data);
   drawAreaController.emitLine(data.data);
 }
 

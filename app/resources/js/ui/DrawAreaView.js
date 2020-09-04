@@ -20,12 +20,12 @@ function checkAndNotifyForDrawing(drawAreaView) {
 function setMouseListener(drawAreaView) {
   drawAreaView.image.on('mousedown touchstart', function() {
     drawAreaView.mouse.click = true;
-    checkAndNotifyForDrawing(drawAreaView)
   });
 
   drawAreaView.stage.on('mouseup touchend', function() {
     drawAreaView.mouse.click = false;
-    checkAndNotifyForDrawing(drawAreaView);
+    drawAreaView.mouse.pos_prev = false;
+    drawAreaView.mouse.move = false;
   });
 
   drawAreaView.stage.on('mousemove touchmove', function() {
@@ -116,16 +116,21 @@ class DrawAreaView extends View {
   }
 
   addLine(data) {
-    this.context.strokeStyle = data.color;
-    this.context.globalCompositeOperation = data.penRubber;
-    this.context.lineWidth = data.size;
-    this.context.beginPath();
-    this.context.moveTo(data.line[0].x * this.stage.width(), data.line[0].y * this.stage
-      .height());
-    this.context.lineTo(data.line[1].x * this.stage.width(), data.line[1].y * this.stage
-      .height());
-    this.context.closePath();
-    this.context.stroke();
+    let newLine = new Konva.Line({
+        points: [
+          data.line[0].x * this.stage.width(),
+          data.line[0].y * this.stage.height(),
+          data.line[1].x * this.stage.width(),
+          data.line[1].y * this.stage.height()
+        ],
+        stroke: data.color,
+        strokeWidth: data.size,
+        lineCap: 'round',
+        lineJoin: 'round',
+        tension: 1.0,
+        globalCompositeOperation: data.penRubber,
+      });
+    this.layer.add(newLine);
     this.layer.batchDraw();
   }
 }
