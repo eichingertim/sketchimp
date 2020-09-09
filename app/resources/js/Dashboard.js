@@ -27,6 +27,14 @@ function onPenRubberSwitch(data) {
   drawAreaView.switchPenRubber(data.data.item);
 }
 
+function onDeleteForever(data) {
+  drawAreaController.emitClearCanvas();
+}
+
+function onShouldClearCanvas(data) {
+  drawAreaView.clearCanvas();
+}
+
 class Dashboard {
   constructor(socket) {
     const container = document.getElementById('container');
@@ -36,10 +44,13 @@ class Dashboard {
     toolboxView = new ToolboxView(toolbox)
 
     drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
+    drawAreaController.addEventListener("ClearCanvas", onShouldClearCanvas.bind(this));
+
     drawAreaView.addEventListener("EmitLine", onLineShouldBeEmitted.bind(this));
     toolboxView.addEventListener("ColorChange", onColorChanged.bind(this));
     toolboxView.addEventListener("PenRubberSwitch", onPenRubberSwitch.bind(this));
     toolboxView.addEventListener("SizeChange", onSizeChanged.bind(this));
+    toolboxView.addEventListener("DeleteForever", onDeleteForever.bind(this));
   }
 
   resizeElements() {

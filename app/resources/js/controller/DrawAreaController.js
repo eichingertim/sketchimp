@@ -6,6 +6,12 @@ class LineDrawnEvent extends Event {
   }
 }
 
+class ClearCanvasEvent extends Event {
+  constructor() {
+    super("ClearCanvas", null);
+  }
+}
+
 class DrawAreaController extends Observable {
 
   constructor(socket) {
@@ -15,7 +21,14 @@ class DrawAreaController extends Observable {
     this.socket.on('line', function(data) {
       controller.notifyAll(new LineDrawnEvent(data));
     });
+    this.socket.on('clear-canvas', function() {
+      controller.notifyAll(new ClearCanvasEvent());
+    });
 
+  }
+
+  emitClearCanvas() {
+    this.socket.emit('clear-canvas', null);
   }
 
   emitLine(data) {

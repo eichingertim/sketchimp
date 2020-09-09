@@ -16,6 +16,15 @@ function addClickListeners(toolboxView) {
   sizeItems.forEach((sizeItem, i) => {
     sizeItem.addEventListener("click", onSizeItemClick.bind(this, toolboxView));
   });
+
+  const deleteForever = toolboxView.el.querySelector('#toolbox-delete-forever');
+  deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView))
+}
+
+class DeleteForeverEvent extends Event {
+  constructor() {
+    super("DeleteForever", null);
+  }
 }
 
 class SizeChangeEvent extends Event {
@@ -34,6 +43,10 @@ class PenRubberSwitchEvent extends Event {
   constructor(item) {
     super("PenRubberSwitch", {item: item});
   }
+}
+
+function onDeleteForeverClick(toolboxView, data) {
+  toolboxView.notifyAll(new DeleteForeverEvent());
 }
 
 function onSizeItemClick(toolboxView, data) {

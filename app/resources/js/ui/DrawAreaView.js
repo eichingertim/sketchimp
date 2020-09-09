@@ -133,6 +133,11 @@ class DrawAreaView extends View {
     this.layer.add(newLine);
     this.layer.batchDraw();
   }
+
+  clearCanvas() {
+    //TODO: Real clearing
+    location.reload();
+  }
 }
 
 export default DrawAreaView;
