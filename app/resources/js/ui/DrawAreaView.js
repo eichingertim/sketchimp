@@ -135,8 +135,9 @@ class DrawAreaView extends View {
   }
 
   clearCanvas() {
-    //TODO: Real clearing
-    location.reload();
+    this.stage.destroyChildren();
+    setupKonvaJS(this);
+    setMouseListener(this);
   }
 }
 
