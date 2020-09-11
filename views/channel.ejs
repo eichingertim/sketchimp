@@ -1,0 +1,34 @@
+<%- include("partials/header"); -%>
+
+    <div class="page-single">
+        <div class="modal-block modal-visible">
+            <div class="modal-brand">
+                <div class="modal-brand-caption">
+                    <div class="logo"></div>
+                </div>
+            </div>
+            <div class="modal-block-content">
+                <h3><%= channel.name %></h3>
+                <p><%= channel.creation %></p>
+                <p>Owner: <%= channel.creator.username %></p>
+                <h4>Participants: </h4>
+                <ul>
+                    <% channel.participants.forEach(function(user){ %>
+                      <li><%= user.username %></li>
+                    <%});%>
+                </ul>
+                <% if(!isParticipant) { %>
+                    <form action="/channel/join/<%= channel._id %>" method="post">
+                        <button type="submit" class="btn btn-block btn-radius btn-primary">Join Channel</button>
+                    </form>
+                <% } else { %>
+                    <form action="/channel/leave/<%= channel._id %>" method="post">
+                        <button type="submit" class="btn btn-block btn-radius btn-primary">Leave Channel</button>
+                    </form>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+
+<%- include("partials/footer"); -%>

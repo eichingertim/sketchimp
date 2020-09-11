@@ -1,0 +1,25 @@
+<%- include("partials/header"); -%>
+
+    <div class="page-single">
+        <div class="modal-block modal-visible">
+            <div class="modal-brand">
+                <div class="modal-brand-caption">
+                    <div class="logo"></div>
+                </div>
+            </div>
+            <div class="modal-block-content">
+                <h3>Logged in as: </h3>
+            </br>
+                <p><%= user.username %> <%= user.email %></p>
+                <h3>Your Channels:</h3>
+                <ul>
+                    <% user.channels.forEach(function(channel){ %>
+                      <li><a href="/channel/<%= channel._id %>"> <%= channel.name %></a></li>
+                    <%});%>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+<%- include("partials/footer"); -%>
