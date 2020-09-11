@@ -15,10 +15,10 @@
                 <p>Origin: <%= channel.creation %></p>
                 <p>Owner: <%= channel.creator.username %></p>
         </br>
-                <h4>Participants: </h4>
+                <h3>Participants: </h3>
                 <ul>
                     <% channel.participants.forEach(function(user){ %>
-                      <li><%= user.username %></li>
+                      <li><a href="/user/<%= user._id %>"><%= user.username %></a></li>
                     <%});%>
                 </ul>
             </br>
