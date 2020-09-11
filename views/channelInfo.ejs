@@ -1,5 +1,7 @@
 <%- include("partials/header"); -%>
 
+
+
     <div class="page-single">
         <div class="modal-block modal-visible">
             <div class="modal-brand">
@@ -8,15 +10,18 @@
                 </div>
             </div>
             <div class="modal-block-content">
-                <h3><%= channel.name %></h3>
-                <p><%= channel.creation %></p>
+                <h3>Channel Name: <%= channel.name %></h3>
+            </br>
+                <p>Origin: <%= channel.creation %></p>
                 <p>Owner: <%= channel.creator.username %></p>
+        </br>
                 <h4>Participants: </h4>
                 <ul>
                     <% channel.participants.forEach(function(user){ %>
                       <li><%= user.username %></li>
                     <%});%>
                 </ul>
+            </br>
                 <% if(!isParticipant) { %>
                     <form action="/channel/join/<%= channel._id %>" method="post">
                         <button type="submit" class="btn btn-block btn-radius btn-primary">Join Channel</button>
@@ -25,10 +30,28 @@
                     <form action="/channel/leave/<%= channel._id %>" method="post">
                         <button type="submit" class="btn btn-block btn-radius btn-primary">Leave Channel</button>
                     </form>
+                </br>
+                    <span id="copy" class="btn btn-block btn-radius btn-primary">Copy Channel URL</span>
                 <% } %>
             </div>
         </div>
     </div>
+        
+    <script>
+        var copyButton = document.querySelector("#copy");
+
+        function copy() {
+            var dummy = document.createElement("input"),
+                text = window.location.href;
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            copyButton.textContent = "URL copied!";
+        }
+        copyButton.addEventListener("click", copy);
+    </script>
 
 
 <%- include("partials/footer"); -%>
