@@ -4,7 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MME</title>
+  <link rel="shortcut icon" type="image/png" href="assets/swf_logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="description" content="A simple collaborative sketching app">
+  <meta name="theme-color" content="#0277BD" />
+  <title>SketchingWithFriends</title>
   <link rel="stylesheet" href="resources/css/style.css">
   <link rel="stylesheet" href="resources/css/colors.css">
   <link rel="stylesheet" href="resources/css/dashboard.css">
@@ -14,10 +18,10 @@
 
   <!--top app bar-->
   <div class="primary-background-color dashboard-app-bar">
-    <img class="profile-icon" alt="profile-icon" src="assets/dashboard_account_circle_secondary_color.svg" />
+    <img class="profile-icon clickable" alt="profile-icon" src="assets/dashboard_account_circle_secondary_color.svg" />
     <div class="dashboard-app-bar-actions">
-      <input type="button" value="Feed" class="button-app-bar primary-text-color" />
-      <input type="button" value="Ausloggen" class="button-app-bar primary-text-color" />
+      <input type="button" value="Feed" class="button-app-bar primary-text-color clickable" />
+      <input type="button" value="Ausloggen" class="button-app-bar primary-text-color clickable" />
     </div>
   </div>
 
@@ -25,7 +29,7 @@
   <div class="dashboard-left-bar-main-content">
     <!--Left Sidebar to display available channels-->
     <div class="dashboard-left-bar primary-background-color">
-      <img alt="add-channel-icon" src="assets/dashboard_add_circle_outline_grey.svg" />
+      <img class="clickable" alt="add-channel-icon" src="assets/dashboard_add_circle_outline_grey.svg" />
     </div>
 
     <!--Draw Area-->
@@ -35,30 +39,24 @@
 
     <!--Toolbox Elements-->
     <div class="dashboard-toolbox primary-background-color">
+
       <div class="dashboard-toolbox-size">
-        <img class="toolbox-size-item" id="stroke-size-extra-small" alt="size-small" height="5px" src="assets/toolbox_white.svg" />
-        <img class="toolbox-size-item" id="stroke-size-small" alt="size-small" height="10px" src="assets/toolbox_white.svg" />
-        <img class="toolbox-size-item" id="stroke-size-middle" alt="size-small" height="15px" src="assets/toolbox_white.svg" />
-        <img class="toolbox-size-item" id="stroke-size-big" alt="size-small" height="25px" src="assets/toolbox_white.svg" />
+        <img class="toolbox-size-item clickable" id="stroke-size-extra-small" alt="size-small" height="5px" src="assets/toolbox_white.svg" />
+        <img class="toolbox-size-item clickable" id="stroke-size-small" alt="size-small" height="10px" src="assets/toolbox_white.svg" />
+        <img class="toolbox-size-item clickable" id="stroke-size-middle" alt="size-small" height="15px" src="assets/toolbox_white.svg" />
+        <img class="toolbox-size-item clickable" id="stroke-size-big" alt="size-small" height="25px" src="assets/toolbox_white.svg" />
       </div>
-      <img style="cursor: pointer;" id="toolbox-pen" alt="pen" height="100px" src="assets/toolbox_pen.png" />
-      <img style="cursor: pointer;" id="toolbox-rubber"alt="rubber" height="80px" src="assets/toolbox_rubber.png" />
-      <div class="dashboard-toolbox-colors">
-        <div class="toolbox-color-row">
-          <img id="color-standard" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_white.svg" />
-          <img id="color-blue" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_blue.svg" />
-          <img id="color-green" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_green.svg" />
-        </div>
-        <div class="toolbox-color-row">
-          <img id="color-yellow" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_yellow.svg" />
-          <img id="color-red" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_red.svg"- />
-          <img id="color-selector" class="toolbox-color" id="toolbox-pen" alt="pen" height="30px" src="assets/toolbox_rainbow.svg" />
-        </div>
-      </div>
-      <img style="cursor: pointer;" id="toolbox-delete-forever" alt="delete-forever" height="40px" width="40px" src="assets/toolbox_delete_forever.svg" />
+
+      <img class="clickable" id="toolbox-pen" alt="pen" height="100px" src="assets/toolbox_pen.png" />
+      <img class="clickable" id="toolbox-rubber"alt="rubber" height="80px" src="assets/toolbox_rubber.png" />
+
+      <div class="dashboard-color-picker" id="color-slider-container"></div>
+
+      <img class="clickable" id="toolbox-delete-forever" alt="delete-forever" height="40px" width="40px" src="assets/toolbox_delete_forever.svg" />
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro"></script>
   <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="resources/js/utils/Observable.js"></script>
@@ -68,6 +66,17 @@
   <script type="module" src="resources/js/ui/ToolboxView.js"></script>
   <script type="module" src="resources/js/Dashboard.js"></script>
   <script type="module" src="resources/js/index.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then((reg) => {
+              console.log('Service worker registered.', reg);
+            });
+      });
+    }
+  </script>
 </body>
 
 </html>

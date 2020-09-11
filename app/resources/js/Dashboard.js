@@ -15,8 +15,7 @@ function onLineShouldBeEmitted(data) {
 }
 
 function onColorChanged(data) {
-  const colorCodeStr = drawAreaController.getColorStrFromColor(data.data.color);
-  drawAreaView.updateColor(colorCodeStr);
+  drawAreaView.updateColor(data.data.color);
 }
 
 function onSizeChanged(data) {

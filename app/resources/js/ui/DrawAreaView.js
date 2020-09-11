@@ -60,7 +60,7 @@ function setupKonvaJS(drawAreaView) {
   drawAreaView.stage.draw();
 
   drawAreaView.context = drawAreaView.canvas.getContext('2d');
-  drawAreaView.context.strokeStyle = '#ffbe00';
+  drawAreaView.context.strokeStyle = '#ffffff';
   drawAreaView.context.lineJoin = 'round';
   drawAreaView.context.lineWidth = 5;
 }

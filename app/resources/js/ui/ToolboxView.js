@@ -1,11 +1,33 @@
 import View from "./View.js";
 import {Event} from "../utils/Observable.js"
 
+function initColorSlider(toolboxView) {
+  return new iro.ColorPicker("#color-slider-container", {
+
+      layout: [
+      {
+        component: iro.ui.Wheel,
+        options: {
+          sliderType: 'hue'
+        },
+      },
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: 'value'
+        },
+      }
+    ],
+      width:100
+
+  });
+}
+
 function addClickListeners(toolboxView) {
-  const colors = toolboxView.el.querySelectorAll('.toolbox-color');
+  /*const colors = toolboxView.el.querySelectorAll('.dashboard-toolbox-color');
   colors.forEach((colorEl, i) => {
     colorEl.addEventListener("click", onColorClicked.bind(this, toolboxView));
-  });
+  });*/
 
   const pen = toolboxView.el.querySelector('#toolbox-pen');
   pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
@@ -18,7 +40,9 @@ function addClickListeners(toolboxView) {
   });
 
   const deleteForever = toolboxView.el.querySelector('#toolbox-delete-forever');
-  deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView))
+  deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView));
+
+  toolboxView.colorPicker.on('color:change', onColorChanged.bind(this, toolboxView));
 }
 
 class DeleteForeverEvent extends Event {
@@ -53,10 +77,10 @@ function onSizeItemClick(toolboxView, data) {
   toolboxView.notifyAll(new SizeChangeEvent(data.target.height));
 }
 
-function onColorClicked(toolboxView, data) {
-  toolboxView.notifyAll(new ColorChangeEvent(data.target.id));
+function onColorChanged(toolboxView, data) {
+  toolboxView.notifyAll(new ColorChangeEvent(data.hexString));
 }
-onColorClicked
+
 function onPenRubberSwitch(toolboxView, data) {
   toolboxView.switchRubberPencil(data.target.id);
   toolboxView.notifyAll(new PenRubberSwitchEvent(data.target.id));
@@ -67,6 +91,7 @@ class ToolboxView extends View {
   constructor(el) {
     super()
     this.setElement(el);
+    this.colorPicker = initColorSlider(this);
     addClickListeners(this);
   }
 

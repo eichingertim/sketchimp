@@ -40,20 +40,6 @@ class DrawAreaController extends Observable {
     });
   }
 
-  getColorStrFromColor(colorElId) {
-    if (colorElId === "color-standard") {
-      return "#ffffff";
-    } else if (colorElId === "color-blue") {
-      return "#0000ff";
-    } else if (colorElId === "color-green") {
-      return "#00ff00";
-    } else if (colorElId === "color-yellow") {
-      return "#ffff00";
-    } else if (colorElId === "color-red") {
-      return "#ff0000";
-    }
-  }
-
 }
 
 export default DrawAreaController;
