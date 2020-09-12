@@ -1,5 +1,7 @@
 <%- include("partials/header"); -%>
 
+    <%- include ("partials/channel_section"); -%>
+
     <div class="page-single">
         <div class="modal-block modal-visible">
             <div class="modal-brand">
@@ -21,13 +23,6 @@
                     <h3>Member of Channels: </h3>
                     <ul>
                         <% targetUser.channels.forEach(function(channel){ %>
-                          <li><a href="/channel/<%= channel._id %>"> <%= channel.name %></a></li>
-                        <%});%>
-                    </ul>
-                <% } else { %>
-                    <h3>Your Channels:</h3>
-                    <ul>
-                        <% user.channels.forEach(function(channel){ %>
                           <li><a href="/channel/<%= channel._id %>"> <%= channel.name %></a></li>
                         <%});%>
                     </ul>
