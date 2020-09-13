@@ -29,6 +29,9 @@ function addClickListeners(toolboxView) {
     colorEl.addEventListener("click", onColorClicked.bind(this, toolboxView));
   });*/
 
+  const collapseIcon = toolboxView.el.querySelector('#toolbox-collapse-expand');
+  collapseIcon.addEventListener('click', onToolboxExpandCollapseClick.bind(this, toolboxView));
+
   const pen = toolboxView.el.querySelector('#toolbox-pen');
   pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
   const rubber = toolboxView.el.querySelector('#toolbox-rubber');
@@ -71,6 +74,22 @@ class PenRubberSwitchEvent extends Event {
 
 function onDeleteForeverClick(toolboxView, data) {
   toolboxView.notifyAll(new DeleteForeverEvent());
+}
+
+function onToolboxExpandCollapseClick(toolboxView, data) {
+  const toolbox = toolboxView.el.querySelector(".dashboard-toolbox");
+  if (toolbox.classList.contains("hidden")) {
+    data.target.src = "assets/toolbox_collapse.svg";
+    data.target.classList.remove("toolbox-collapsed");
+    data.target.classList.add("toolbox-expanded");
+    toolbox.classList.remove("hidden");
+  } else {
+    data.target.src = "assets/toolbox_icon.svg";
+    data.target.classList.remove("toolbox-expanded");
+    data.target.classList.add("toolbox-collapsed");
+    console.log(data.target.classList);
+    toolbox.classList.add("hidden");
+  }
 }
 
 function onSizeItemClick(toolboxView, data) {

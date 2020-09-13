@@ -38,22 +38,28 @@
     </div>
 
     <!--Toolbox Elements-->
-    <div class="dashboard-toolbox primary-background-color">
+    <div class="dashboard-toolbox-container">
 
-      <div class="dashboard-toolbox-size">
-        <img class="toolbox-size-item clickable" id="stroke-size-extra-small" alt="size-small" height="5px" src="assets/toolbox_white.svg" />
-        <img class="toolbox-size-item clickable" id="stroke-size-small" alt="size-small" height="10px" src="assets/toolbox_white.svg" />
-        <img class="toolbox-size-item clickable" id="stroke-size-middle" alt="size-small" height="15px" src="assets/toolbox_white.svg" />
-        <img class="toolbox-size-item clickable" id="stroke-size-big" alt="size-small" height="25px" src="assets/toolbox_white.svg" />
+      <img class="toolbox-expanded primary-background-color clickable" height="30px" id="toolbox-collapse-expand" src="assets/toolbox_collapse.svg" alt="collapse/expand" />
+
+      <div class="dashboard-toolbox primary-background-color">
+        <div class="dashboard-toolbox-size">
+          <img class="toolbox-size-item clickable" id="stroke-size-extra-small" alt="size-small" height="5px" src="assets/toolbox_white.svg" />
+          <img class="toolbox-size-item clickable" id="stroke-size-small" alt="size-small" height="10px" src="assets/toolbox_white.svg" />
+          <img class="toolbox-size-item clickable" id="stroke-size-middle" alt="size-small" height="15px" src="assets/toolbox_white.svg" />
+          <img class="toolbox-size-item clickable" id="stroke-size-big" alt="size-small" height="25px" src="assets/toolbox_white.svg" />
+        </div>
+
+        <img class="clickable" id="toolbox-pen" alt="pen" height="100px" src="assets/toolbox_pen.png" />
+        <img class="clickable" id="toolbox-rubber"alt="rubber" height="80px" src="assets/toolbox_rubber.png" />
+
+        <div class="dashboard-color-picker" id="color-slider-container"></div>
+
+        <img class="clickable" id="toolbox-delete-forever" alt="delete-forever" height="40px" width="40px" src="assets/toolbox_delete_forever.svg" />
       </div>
 
-      <img class="clickable" id="toolbox-pen" alt="pen" height="100px" src="assets/toolbox_pen.png" />
-      <img class="clickable" id="toolbox-rubber"alt="rubber" height="80px" src="assets/toolbox_rubber.png" />
-
-      <div class="dashboard-color-picker" id="color-slider-container"></div>
-
-      <img class="clickable" id="toolbox-delete-forever" alt="delete-forever" height="40px" width="40px" src="assets/toolbox_delete_forever.svg" />
     </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro"></script>

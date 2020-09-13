@@ -27,13 +27,22 @@
 }
 
 .dashboard-toolbox {
-  position: absolute;
-  bottom: 20px;
-  right: 10px;
   display: flex;
   padding: 0.3vw;
   border-radius: 20px;
   align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.dashboard-toolbox-container {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  display: flex;
+  align-items:center;
 }
 
 .dashboard-color-picker {
@@ -44,6 +53,17 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.toolbox-expanded {
+  padding: 10px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.toolbox-collapsed {
+  padding: 10px;
+  border-radius: 30px;
 }
 
 .toolbox-size-item {
