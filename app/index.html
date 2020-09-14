@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="resources/css/style.css">
   <link rel="stylesheet" href="resources/css/colors.css">
   <link rel="stylesheet" href="resources/css/dashboard.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 
 <body>
@@ -40,9 +41,9 @@
     <!--Toolbox Elements-->
     <div class="dashboard-toolbox-container">
 
-      <img class="toolbox-expanded primary-background-color clickable" height="30px" id="toolbox-collapse-expand" src="assets/toolbox_collapse.svg" alt="collapse/expand" />
+      <img class="toolbox-expanded shadow primary-background-color clickable" height="40vh" width="40vh" id="toolbox-collapse-expand" src="assets/toolbox_collapse.svg" alt="collapse/expand" />
 
-      <div class="dashboard-toolbox primary-background-color">
+      <div class="dashboard-toolbox shadow primary-background-color">
         <div class="dashboard-toolbox-size">
           <img class="toolbox-size-item clickable" id="stroke-size-extra-small" alt="size-small" height="5px" src="assets/toolbox_white.svg" />
           <img class="toolbox-size-item clickable" id="stroke-size-small" alt="size-small" height="10px" src="assets/toolbox_white.svg" />
@@ -62,6 +63,9 @@
 
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro"></script>
   <script src="https://unpkg.com/konva@7.0.3/konva.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
