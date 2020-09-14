@@ -1,0 +1,17 @@
+{
+  "name": "SketchingWithFriends",
+  "short_name": "SketchingWithFriends",
+  "icons": [{
+      "src": "/assets/icons/logo-192px.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }, {
+      "src": "/assets/icons/logo-512px.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#2C2F33",
+  "theme_color": "#0277BD"
+}

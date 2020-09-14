@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js ./app 8000",
+    "start": "node index.js",
     "build": "node build.js",
     "prebuild": "eslint app/resources/js/"
   },
@@ -24,6 +24,7 @@
     "mongoose": "^5.10.5",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "socketio": "^1.0.0"
   }
 }

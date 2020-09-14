@@ -3,6 +3,7 @@
 const AppServer = require("./lib/AppServer.js");
 
 var server;
+var port = process.env.PORT || 8000;
 
 /**
  * Starts webserver to serve files from "/app" folder
