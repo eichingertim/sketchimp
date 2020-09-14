@@ -38,6 +38,7 @@ class Dashboard {
   constructor(socket) {
     const container = document.getElementById('container');
     const toolbox = document.querySelector('.dashboard-toolbox-container');
+
     drawAreaView = new DrawAreaView(container);
     drawAreaController = new DrawAreaController(socket);
     toolboxView = new ToolboxView(toolbox)

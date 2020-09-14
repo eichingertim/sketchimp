@@ -24,10 +24,6 @@ function initColorSlider(toolboxView) {
 }
 
 function addClickListeners(toolboxView) {
-  /*const colors = toolboxView.el.querySelectorAll('.dashboard-toolbox-color');
-  colors.forEach((colorEl, i) => {
-    colorEl.addEventListener("click", onColorClicked.bind(this, toolboxView));
-  });*/
 
   const collapseIcon = toolboxView.el.querySelector('#toolbox-collapse-expand');
   collapseIcon.addEventListener('click', onToolboxExpandCollapseClick.bind(this, toolboxView));

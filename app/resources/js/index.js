@@ -11,9 +11,7 @@ function onWindowResize() {
 }
 
 function init() {
-  let container = document.querySelector('#stage-parent');
   dashboard = new Dashboard(socket);
-
   window.onresize = onWindowResize;
 }
 
