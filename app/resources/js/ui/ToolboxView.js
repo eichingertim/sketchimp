@@ -75,12 +75,12 @@ function onDeleteForeverClick(toolboxView, data) {
 function onToolboxExpandCollapseClick(toolboxView, data) {
   const toolbox = toolboxView.el.querySelector(".dashboard-toolbox");
   if (toolbox.classList.contains("hidden")) {
-    data.target.src = "assets/toolbox_collapse.svg";
+    data.target.src = "/app/assets/toolbox_collapse.svg";
     data.target.classList.remove("toolbox-collapsed");
     data.target.classList.add("toolbox-expanded");
     toolbox.classList.remove("hidden");
   } else {
-    data.target.src = "assets/toolbox_icon.svg";
+    data.target.src = "/app/assets/toolbox_icon.svg";
     data.target.classList.remove("toolbox-expanded");
     data.target.classList.add("toolbox-collapsed");
     console.log(data.target.classList);

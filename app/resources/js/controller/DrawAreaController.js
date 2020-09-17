@@ -14,11 +14,12 @@ class ClearCanvasEvent extends Event {
 
 class DrawAreaController extends Observable {
 
-  constructor(socket) {
+  constructor(socket, channelId) {
     super();
+    this.channelId = channelId;
     this.socket = socket;
     let controller = this;
-    this.socket.emit('subscribe', 'roomOne')
+    this.socket.emit('subscribe', this.channelId)
 
     this.socket.on('line', function(data) {
       controller.notifyAll(new LineDrawnEvent(data));
@@ -30,12 +31,12 @@ class DrawAreaController extends Observable {
   }
 
   emitClearCanvas() {
-    this.socket.emit('clear-canvas', {channelId: 'roomOne'});
+    this.socket.emit('clear-canvas', {channelId: this.channelId});
   }
 
   emitLine(data) {
     this.socket.emit('line', {
-      channelId: 'roomOne',
+      channelId: this.channelId,
       line: [data.mouse.pos, data.mouse.pos_prev],
       color: data.color,
       penRubber: data.penRubber,

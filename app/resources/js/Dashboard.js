@@ -35,12 +35,12 @@ function onShouldClearCanvas(data) {
 }
 
 class Dashboard {
-  constructor(socket) {
+  constructor(socket, channelId) {
     const container = document.getElementById('container');
     const toolbox = document.querySelector('.dashboard-toolbox-container');
 
     drawAreaView = new DrawAreaView(container);
-    drawAreaController = new DrawAreaController(socket);
+    drawAreaController = new DrawAreaController(socket, channelId);
     toolboxView = new ToolboxView(toolbox)
 
     drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
