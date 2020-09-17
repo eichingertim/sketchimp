@@ -1,5 +1,7 @@
 import { Event, Observable } from "../utils/Observable.js";
 
+let areaController;
+
 class LineDrawnEvent extends Event {
   constructor(data) {
     super("LineDrawn", data);
@@ -14,18 +16,23 @@ class ClearCanvasEvent extends Event {
 
 class DrawAreaController extends Observable {
 
-  constructor(socket, channelId) {
+  constructor(socket) {
     super();
-    this.channelId = channelId;
+    this.channelId = null;
     this.socket = socket;
-    let controller = this;
+    areaController = this;
+  }
+
+  join(channelId) {
+    this.channelId = channelId;
+    console.log(channelId);
     this.socket.emit('subscribe', this.channelId)
 
     this.socket.on('line', function(data) {
-      controller.notifyAll(new LineDrawnEvent(data));
+      areaController.notifyAll(new LineDrawnEvent(data));
     });
     this.socket.on('clear-canvas', function() {
-      controller.notifyAll(new ClearCanvasEvent());
+      areaController.notifyAll(new ClearCanvasEvent());
     });
 
   }

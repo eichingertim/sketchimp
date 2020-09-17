@@ -12,7 +12,16 @@ var socket = io(),
         document.querySelector(".info-container").innerHTML = this.responseText;
         let urlParts = href.split("/"),
         channelId = urlParts[urlParts.length - 1]
-        dashboard = new Dashboard(socket, channelId);
+        console.log(dashboard.channelId);
+        if (dashboard.channelId === null) {
+          console.log('new dashboard');
+          dashboard.onJoin(channelId);
+        } else {
+          console.log('available dashboard');
+          dashboard.onLeave();
+          dashboard.onJoin(channelId);
+        }
+        
     }
     xhr.send();
 }
@@ -27,6 +36,7 @@ function onWindowResize() {
 }
 
 function init() {
+  dashboard = new Dashboard(socket);
   channelList = document.querySelectorAll(".channel");
   channelList.forEach(channel => {
     channel.addEventListener("click", triggerAjax);

@@ -35,12 +35,15 @@ function onShouldClearCanvas(data) {
 }
 
 class Dashboard {
-  constructor(socket, channelId) {
+  constructor(socket) {
     const container = document.getElementById('container');
     const toolbox = document.querySelector('.dashboard-toolbox-container');
 
+    this.socket = socket;
+    this.channelId = null;
+
     drawAreaView = new DrawAreaView(container);
-    drawAreaController = new DrawAreaController(socket, channelId);
+    drawAreaController = new DrawAreaController(socket);
     toolboxView = new ToolboxView(toolbox)
 
     drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
@@ -51,6 +54,16 @@ class Dashboard {
     toolboxView.addEventListener("PenRubberSwitch", onPenRubberSwitch.bind(this));
     toolboxView.addEventListener("SizeChange", onSizeChanged.bind(this));
     toolboxView.addEventListener("DeleteForever", onDeleteForever.bind(this));
+  }
+
+  onJoin(channelId) {
+    this.channelId = channelId;
+    drawAreaController.join(this.channelId);
+    drawAreaView.clearCanvas();
+  }
+
+  onLeave() {
+    this.socket.emit("unsubscribe", {channelId: this.channelId})
   }
 
   resizeElements() {
