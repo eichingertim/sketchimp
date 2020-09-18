@@ -374,47 +374,6 @@ a:focus {
   height: calc(100% - 60px);
   z-index: 2; }
 
-.sidebar-menu {
-  list-style: none;
-  padding: 0;
-  margin: 0; }
-  .sidebar-menu li + li {
-    margin-top: 10px; }
-  .sidebar-menu li a {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    display: block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    margin: 0 6px 0;
-    font-weight: 700;
-    text-align: center;
-    border-radius: 60%;
-    font-size: 18px;
-    -webkit-transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-  .sidebar-menu li a:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-radius: 10px; }
-  .sidebar-menu li a:active {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.6); }
-  .sidebar-menu .current-server {
-    background-color: #12c2aa;
-    font-family: "uni_sansheavy_caps", sans-serif;
-    font-size: 24px; }
-  .sidebar-menu .current-server:hover {
-    background-color: #10ab96; }
-  .sidebar-menu .join-server {
-    background: transparent;
-    border: 1px dashed rgba(255, 255, 255, 0.4);
-    color: rgba(255, 255, 255, 0.4); }
-  .sidebar-menu .join-server:hover {
-    border-color: #fff;
-    color: #fff;
-    background: transparent; }
-
 .ui-settings {
   list-style: none;
   padding: 0;
