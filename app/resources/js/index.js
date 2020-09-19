@@ -9,20 +9,18 @@ var socket = io(),
     let xhr = new XMLHttpRequest();
     xhr.open("GET", href, true);
     xhr.onload = function() {
-        document.querySelector(".info-container").innerHTML = this.responseText;
+        //document.querySelector(".info-container").innerHTML = this.responseText;
+        console.log(this.response);
         let urlParts = href.split("/"),
-        channelId = urlParts[urlParts.length - 1]
-        console.log(dashboard.channelId);
+        channelId = urlParts[urlParts.length - 1];
         if (dashboard.channelId === null) {
-          console.log('new dashboard');
           dashboard.onJoin(channelId);
         } else {
-          console.log('available dashboard');
           dashboard.onLeave();
           dashboard.onJoin(channelId);
         }
         
-    }
+    };
     xhr.send();
 }
 
