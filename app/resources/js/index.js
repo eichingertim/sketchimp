@@ -56,7 +56,7 @@ function fetchUserData(href) {
 function createChannel() {
   let channelName = document.querySelector("#r_name").value,
     xhr = new XMLHttpRequest();
-  xhr.open("POST", "/channel/new/" + channelName, true);
+  xhr.open("POST", "/api/channel/new/" + channelName, true);
   xhr.withCredentials = true;
   xhr.onload = function() {
     console.log(this.response);
@@ -64,7 +64,7 @@ function createChannel() {
       channelList = document.querySelector(".sidebar-menu"),
       channelTemplate = channelList.querySelector("li"),
       clone = channelTemplate.cloneNode(true);
-    clone.querySelector("a").href = "/channel/" + data.id;
+    clone.querySelector("a").href = "/api/channel/" + data.id;
     clone.querySelector("a").textContent = data.name.substring(0, 1);
     clone.querySelector("a").addEventListener("click", triggerChannelAjax);
     channelList.insertBefore(clone, channelList.children[channelList.children.length-1]);
@@ -77,7 +77,7 @@ function createChannel() {
 function leaveChannel() {
   let channelID = document.querySelector(".info-channel-id").textContent,
     xhr = new XMLHttpRequest();
-  xhr.open("POST", "/channel/leave/" + channelID, true);
+  xhr.open("POST", "/api/channel/leave/" + channelID, true);
   xhr.withCredentials = true;
   xhr.onload = function() {
     console.log(this.response);
@@ -92,7 +92,7 @@ function leaveChannel() {
 function joinChannel() {
   let channelID = document.querySelector("#r_join").value,
     xhr = new XMLHttpRequest(),
-    href = "/channel/join/" + channelID;
+    href = "/api/channel/join/" + channelID;
   console.log(href);
   xhr.open("POST", href, true);
   xhr.withCredentials = true;
