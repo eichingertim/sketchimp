@@ -10,6 +10,10 @@ function onLineDrawn(data) {
   drawAreaView.addLine(data.data);
 }
 
+function onLineUndo(data) {
+  drawAreaView.undoLine(data.data);
+}
+
 function onLineShouldBeEmitted(data) {
   drawAreaController.emitLine(data.data);
 }
@@ -30,6 +34,10 @@ function onDeleteForever(data) {
   drawAreaController.emitClearCanvas();
 }
 
+function onUndo(data) {
+  drawAreaController.undoLine();
+}
+
 function onShouldClearCanvas(data) {
   drawAreaView.clearCanvas();
 }
@@ -48,12 +56,14 @@ class Dashboard {
 
     drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
     drawAreaController.addEventListener("ClearCanvas", onShouldClearCanvas.bind(this));
+    drawAreaController.addEventListener("LineUndo", onLineUndo.bind(this));
 
     drawAreaView.addEventListener("EmitLine", onLineShouldBeEmitted.bind(this));
     toolboxView.addEventListener("ColorChange", onColorChanged.bind(this));
     toolboxView.addEventListener("PenRubberSwitch", onPenRubberSwitch.bind(this));
     toolboxView.addEventListener("SizeChange", onSizeChanged.bind(this));
     toolboxView.addEventListener("DeleteForever", onDeleteForever.bind(this));
+    toolboxView.addEventListener("Undo", onUndo.bind(this));
   }
 
   onJoin(channelId) {

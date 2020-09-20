@@ -127,10 +127,19 @@ class DrawAreaView extends View {
         strokeWidth: data.size,
         lineCap: 'round',
         lineJoin: 'round',
+        id: data.lineId,
         tension: 1.0,
         globalCompositeOperation: data.penRubber,
       });
     this.layer.add(newLine);
+    this.layer.batchDraw();
+  }
+
+  undoLine(data) {
+    for (let id of data) {
+      let line = this.stage.findOne("#"+id);
+      if (line !== undefined) line.destroy();
+    }
     this.layer.batchDraw();
   }
 

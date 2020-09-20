@@ -38,6 +38,9 @@ function addClickListeners(toolboxView) {
     sizeItem.addEventListener("click", onSizeItemClick.bind(this, toolboxView));
   });
 
+  const undo = toolboxView.el.querySelector('#toolbox-undo');
+  undo.addEventListener("click", onUndoClick.bind(this, toolboxView));
+
   const deleteForever = toolboxView.el.querySelector('#toolbox-delete-forever');
   deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView));
 
@@ -66,6 +69,16 @@ class PenRubberSwitchEvent extends Event {
   constructor(item) {
     super("PenRubberSwitch", {item: item});
   }
+}
+
+class UndoEvent extends Event {
+  constructor() {
+    super("Undo", null);
+  }
+}
+
+function onUndoClick(toolboxView, data) {
+  toolboxView.notifyAll(new UndoEvent())
 }
 
 function onDeleteForeverClick(toolboxView, data) {
