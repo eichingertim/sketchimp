@@ -4,7 +4,9 @@ import Dashboard from "./Dashboard.js";
 var socket = io(),
   dashboard,
   channelList,
-  memberList;
+  memberList,
+  channelTemplate = document.querySelector("#channel-template"),
+  memberTemplate = document.querySelector("#member-template");
 
   function fetchChannelData(href) {
     let xhr = new XMLHttpRequest();
@@ -12,8 +14,7 @@ var socket = io(),
     xhr.onload = function() {
         let data = JSON.parse(this.response).data,
           channelId = data.id,
-          memberList = document.querySelector(".member-list"),
-          memberTemplate = memberList.querySelector("li");
+          memberList = document.querySelector(".member-list");
         console.log(data);
         document.querySelector(".channel-title").textContent = data.name;
         document.querySelector(".info-channel-name").textContent = data.name;
@@ -22,13 +23,12 @@ var socket = io(),
         document.querySelector(".info-channel-creator").textContent = data.creator;
         memberList.innerHTML = "";
         data.members.forEach(user => {
-          let clone = memberTemplate.cloneNode(true);
-          clone.querySelector("a").href = "/user/" + user.id;
-          clone.querySelector("a").textContent = user.username;
-          if (!user.online) {
-            clone.style = "color:red";
-          }
-          clone.querySelector(".member").addEventListener("click", triggerUserAjax);
+          let clone = memberTemplate.content.cloneNode(true),
+            anchor = clone.querySelector("a");
+          anchor.href = "/api/user/" + user.id;
+          anchor.textContent = user.username;
+          anchor.style = (user.online) ? "color:green;" : "color:red";
+          anchor.addEventListener("click", triggerUserAjax);
           memberList.appendChild(clone);
         });
         if (dashboard.channelId === null) {
@@ -62,11 +62,11 @@ function createChannel() {
     console.log(this.response);
     let data = JSON.parse(this.response).data,
       channelList = document.querySelector(".sidebar-menu"),
-      channelTemplate = channelList.querySelector("li"),
-      clone = channelTemplate.cloneNode(true);
-    clone.querySelector("a").href = "/api/channel/" + data.id;
-    clone.querySelector("a").textContent = data.name.substring(0, 1);
-    clone.querySelector("a").addEventListener("click", triggerChannelAjax);
+      clone = channelTemplate.content.cloneNode(true),
+      anchor = clone.querySelector("a");
+    anchor.href = "/api/channel/" + data.id;
+    anchor.textContent = data.name.substring(0, 1);
+    anchor.addEventListener("click", triggerChannelAjax);
     channelList.insertBefore(clone, channelList.children[channelList.children.length-1]);
   };
   xhr.send();
