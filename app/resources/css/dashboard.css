@@ -122,9 +122,9 @@
 }
 
 .dashboard-toolbox {
+    background-color: var(--dashboard-top-bar);
     display: flex;
     padding: 0.3vw;
-    border-radius: 20px;
     align-items: center;
 }
 
@@ -133,7 +133,9 @@
 }
 
 .dashboard-toolbox-container {
+    background-color: var(--dashboard-top-bar);
     position: absolute;
+    border-radius: 20px;
     bottom: 20px;
     right: 10px;
     display: flex;
