@@ -71,7 +71,7 @@ class DrawAreaController extends Observable {
       line: [data.mouse.pos, data.mouse.pos_prev],
       color: data.color,
       penRubber: data.penRubber,
-      size: data.size
+      size: data.size,
     });
   }
 

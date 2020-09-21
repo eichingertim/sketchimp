@@ -112,7 +112,7 @@ function onJoinNewChannelSubmit(data) {
 }
 
 class Dashboard {
-    constructor(socket) {
+    constructor(socket, userId) {
         let instance = this;
 
         const container = document.querySelector("#container"),
