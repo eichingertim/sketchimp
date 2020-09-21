@@ -1,4 +1,4 @@
-import {Event, Observable} from '../utils/Observable.js'
+import {Event, Observable} from '../utils/Observable.js';
 
 class View extends Observable {
 
@@ -9,6 +9,18 @@ class View extends Observable {
 
   setElement(el) {
     this.el = el;
+  }
+
+  show() {
+    this.el.classList.remove("hidden");
+  }
+
+  hide() {
+    this.el.classList.add("hidden");
+  }
+
+  toggleVisibility() {
+    this.el.classList.toggle("hidden");
   }
 
 }
