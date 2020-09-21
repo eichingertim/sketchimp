@@ -127,7 +127,7 @@ class Dashboard {
         this.userId = null;
 
         drawAreaView = new DrawAreaView(container);
-        drawAreaController = new DrawAreaController(socket);
+        drawAreaController = new DrawAreaController(socket, userId);
         toolboxView = new ToolboxView(toolbox);
         memberListView = new MemberListView(memberList);
         memberController = new MemberController();
