@@ -42,15 +42,15 @@ function onPenRubberSwitch(data) {
     drawAreaView.switchPenRubber(data.data.item);
 }
 
-function onDeleteForever(data) {
+function onDeleteForever() {
     drawAreaController.emitClearCanvas();
 }
 
-function onUndo(data) {
+function onUndo() {
     drawAreaController.undoLine();
 }
 
-function onShouldClearCanvas(data) {
+function onShouldClearCanvas() {
     drawAreaView.clearCanvas();
 }
 
@@ -86,7 +86,7 @@ function onMemberItemClick(data) {
 }
 
 function onMemberDataLoaded(data) {
-
+    console.log(data);
 }
 
 function onLeaveChannelClick (data) {
