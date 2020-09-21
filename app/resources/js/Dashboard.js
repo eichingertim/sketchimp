@@ -98,8 +98,17 @@ function onLeaveChannelDataLoaded() {
     window.location.reload();
 }
 
+function onJoinNewChannelDataLoaded() {
+    createChannelDialogView.clearAfterSubmit();
+    window.location.reload();
+}
+
 function onChannelCreateSubmit(data) {
     channelController.createChannel(data.data.name);
+}
+
+function onJoinNewChannelSubmit(data) {
+    channelController.joinNewChannel(data.data.id);
 }
 
 class Dashboard {
@@ -134,6 +143,7 @@ class Dashboard {
         channelController.addEventListener("ChannelDataLoaded", onChannelDataLoaded.bind(this, instance));
         channelController.addEventListener("CreateChannelDataLoaded", onCreateChannelDataLoaded.bind(this));
         channelController.addEventListener("LeaveChannelDataLoaded", onLeaveChannelDataLoaded.bind(this));
+        channelController.addEventListener("JoinNewChannelDataLoaded", onJoinNewChannelDataLoaded.bind(this));
 
         memberController.addEventListener("MemberDataLoaded", onMemberDataLoaded.bind(this));
 
@@ -153,6 +163,7 @@ class Dashboard {
         channelInfoDialogView.addEventListener("LeaveChannelClick", onLeaveChannelClick.bind(this));
 
         createChannelDialogView.addEventListener("CreateChannel", onChannelCreateSubmit.bind(this));
+        createChannelDialogView.addEventListener("JoinNewChannel", onJoinNewChannelSubmit.bind(this));
 
         //Not yet in own classes
         document.querySelector(".channel-info-icon").addEventListener("click", function() {
@@ -163,6 +174,7 @@ class Dashboard {
     onJoin(channelId) {
         this.channelId = channelId;
         drawAreaController.join(this.channelId);
+        toolboxView.reset();
         drawAreaView.clearCanvas();
     }
 

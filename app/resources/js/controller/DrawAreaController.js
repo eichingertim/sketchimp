@@ -42,7 +42,7 @@ class DrawAreaController extends Observable {
   join(channelId) {
     this.channelId = channelId;
     console.log(channelId);
-    this.socket.emit('subscribe', this.channelId)
+    this.socket.emit('subscribe', this.channelId);
 
     this.socket.on('line', function(data) {
       areaController.notifyAll(new LineDrawnEvent(data));

@@ -12,6 +12,12 @@ class CreateChannelDataLoadedEvent extends Event {
     }
 }
 
+class JoinNewChannelDataLoadedEvent extends Event {
+    constructor() {
+        super("JoinNewChannelDataLoaded", null);
+    }
+}
+
 class LeaveChannelDataLoadedEvent extends Event {
     constructor() {
         super("LeaveChannelDataLoaded", null);
@@ -44,6 +50,18 @@ class ChannelController extends Observable {
         xhr.onload = function() {
             let data = JSON.parse(this.response).data;
             instance.notifyAll(new CreateChannelDataLoadedEvent(data));
+        };
+        xhr.send();
+    }
+
+    joinNewChannel(channelId) {
+        let xhr = new XMLHttpRequest(),
+            instance = this;
+        xhr.open("POST", "/api/channel/join/" + channelId, true);
+        xhr.withCredentials = true;
+        xhr.onload = function() {
+            console.log(this.response);
+            instance.notifyAll(new JoinNewChannelDataLoadedEvent());
         };
         xhr.send();
     }
