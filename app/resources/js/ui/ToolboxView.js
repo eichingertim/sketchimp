@@ -1,5 +1,5 @@
 import View from "./View.js";
-import {Event} from "../utils/Observable.js"
+import {Event} from "../utils/Observable.js";
 
 function initColorSlider(toolboxView) {
   return new iro.ColorPicker("#color-slider-container", {
@@ -121,6 +121,10 @@ class ToolboxView extends View {
     this.setElement(el);
     this.colorPicker = initColorSlider(this);
     addClickListeners(this);
+  }
+
+  reset() {
+    this.colorPicker.reset();
   }
 
   switchRubberPencil(id) {

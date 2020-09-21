@@ -5,7 +5,6 @@ let socket = io(),
   dashboard;
 
 function joinChannel() {
-  let channelID = document.querySelector("#r_join").value,
     xhr = new XMLHttpRequest(),
     href = "/api/channel/join/" + channelID;
   console.log(href);
@@ -24,11 +23,6 @@ function joinChannel() {
 
 
 
-function triggerJoinChannelAjax() {
-  event.preventDefault();
-  joinChannel();
-}
-
 function onWindowResize() {
   dashboard.resizeElements();
 }
@@ -39,7 +33,6 @@ function init() {
     dashboard.onJoin(document.querySelector(".info-channel-id").textContent);
   }
 
-  //document.querySelector(".submit-channel-join").addEventListener("click", triggerJoinChannelAjax);
   window.onresize = onWindowResize;
 }
 
