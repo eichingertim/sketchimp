@@ -114,12 +114,11 @@ function onJoinNewChannelSubmit(data) {
 function configureSizes() {
     let mainContent = document.querySelector(".dashboard-main-content-container"),
         canvasContainer = document.querySelector(".dashboard-canvas"),
-        leftBar = document.querySelector(".dashboard-channels-container"),
-        memberBar = document.querySelector(".dashboard-member-container"),
-        topAppBar = document.querySelector(".dashboard-top-app-bar"),
-        history = document.querySelector(".dashboard-sketch-history-container");
+        leftBar = document.querySelector(".channels-container-outer"),
+        memberBar = document.querySelector(".container-member-toolbox"),
+        topAppBar = document.querySelector(".container-top-bar-history-outer");
     mainContent.style.maxWidth = ""+ (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth);
-    canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight - history.offsetHeight);
+    canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight);
 }
 
 class Dashboard {
