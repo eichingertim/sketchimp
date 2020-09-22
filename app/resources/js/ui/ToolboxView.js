@@ -26,9 +26,6 @@ function initColorSlider(toolboxView) {
 
 function addClickListeners(toolboxView) {
 
-  const collapseIcon = toolboxView.el.querySelector('#toolbox-collapse-expand');
-  collapseIcon.addEventListener('click', onToolboxExpandCollapseClick.bind(this, toolboxView));
-
   const pen = toolboxView.el.querySelector('#toolbox-pen');
   pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
   const rubber = toolboxView.el.querySelector('#toolbox-rubber');
@@ -86,22 +83,6 @@ function onDeleteForeverClick(toolboxView, data) {
   toolboxView.notifyAll(new DeleteForeverEvent());
 }
 
-function onToolboxExpandCollapseClick(toolboxView, data) {
-  const toolbox = toolboxView.el.querySelector(".dashboard-toolbox");
-  if (toolbox.classList.contains("hidden")) {
-    data.target.src = "/app/assets/toolbox_collapse.svg";
-    data.target.classList.remove("toolbox-collapsed");
-    data.target.classList.add("toolbox-expanded");
-    toolbox.classList.remove("hidden");
-  } else {
-    data.target.src = "/app/assets/toolbox_icon.svg";
-    data.target.classList.remove("toolbox-expanded");
-    data.target.classList.add("toolbox-collapsed");
-    console.log(data.target.classList);
-    toolbox.classList.add("hidden");
-  }
-}
-
 function onSizeItemClick(toolboxView, data) {
   toolboxView.notifyAll(new SizeChangeEvent(data.target.height));
 }
@@ -118,7 +99,7 @@ function onPenRubberSwitch(toolboxView, data) {
 
 class ToolboxView extends View {
   constructor(el) {
-    super()
+    super();
     this.setElement(el);
     this.colorPicker = initColorSlider(this);
     addClickListeners(this);
