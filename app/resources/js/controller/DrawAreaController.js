@@ -32,8 +32,9 @@ function createUUID() {
 
 class DrawAreaController extends Observable {
 
-  constructor(socket) {
+  constructor(socket, userId) {
     super();
+    this.userId = userId;
     this.channelId = null;
     this.socket = socket;
     areaController = this;
@@ -66,7 +67,7 @@ class DrawAreaController extends Observable {
     //TODO: replace userId with real not socket id
     this.socket.emit('line', {
       channelId: this.channelId,
-      userId: this.socket.id,
+      userId: this.userId,
       lineId: createUUID(),
       line: [data.mouse.pos, data.mouse.pos_prev],
       color: data.color,
@@ -78,7 +79,7 @@ class DrawAreaController extends Observable {
   undoLine() {
     this.socket.emit('undo', {
       channelId: this.channelId,
-      userId: this.socket.id,
+      userId: this.userId,
     });
   }
 
