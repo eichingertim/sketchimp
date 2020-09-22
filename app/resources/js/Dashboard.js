@@ -42,15 +42,15 @@ function onPenRubberSwitch(data) {
     drawAreaView.switchPenRubber(data.data.item);
 }
 
-function onDeleteForever(data) {
+function onDeleteForever() {
     drawAreaController.emitClearCanvas();
 }
 
-function onUndo(data) {
+function onUndo() {
     drawAreaController.undoLine();
 }
 
-function onShouldClearCanvas(data) {
+function onShouldClearCanvas() {
     drawAreaView.clearCanvas();
 }
 
@@ -86,7 +86,7 @@ function onMemberItemClick(data) {
 }
 
 function onMemberDataLoaded(data) {
-
+    console.log(data);
 }
 
 function onLeaveChannelClick (data) {
@@ -112,7 +112,7 @@ function onJoinNewChannelSubmit(data) {
 }
 
 class Dashboard {
-    constructor(socket) {
+    constructor(socket, userId) {
         let instance = this;
 
         const container = document.querySelector("#container"),
@@ -127,7 +127,7 @@ class Dashboard {
         this.userId = null;
 
         drawAreaView = new DrawAreaView(container);
-        drawAreaController = new DrawAreaController(socket);
+        drawAreaController = new DrawAreaController(socket, userId);
         toolboxView = new ToolboxView(toolbox);
         memberListView = new MemberListView(memberList);
         memberController = new MemberController();
