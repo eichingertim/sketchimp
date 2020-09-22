@@ -1,0 +1,24 @@
+.btn-action {
+
+}
+
+.landing-main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.landing-top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.landing-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}

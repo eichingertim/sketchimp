@@ -8,7 +8,7 @@ function checkAndNotifyForDrawing(drawAreaView) {
         mouse: drawAreaView.mouse,
         color: drawAreaView.context.strokeStyle,
         penRubber: drawAreaView.context.globalCompositeOperation,
-        size: drawAreaView.context.lineWidth
+        size: drawAreaView.context.lineWidth,
       }
     drawAreaView.notifyAll(new EmitLineEvent(data));
     drawAreaView.mouse.move = false;
@@ -39,15 +39,25 @@ function setMouseListener(drawAreaView) {
 }
 
 function setupKonvaJS(drawAreaView) {
+  let bigContainer = document.querySelector(".dashboard-canvas");
+  //stageParent = document.querySelector("#stage-parent");
+
+  if (bigContainer.offsetWidth > 1080) drawAreaView.el.style.maxWidth = 1080 + 10;
+  else drawAreaView.el.style.maxWidth = bigContainer.offsetWidth;
+
+  if (bigContainer.offsetHeight > 720) drawAreaView.el.style.maxHeight = 720 + 10;
+  else drawAreaView.el.style.maxHeight = bigContainer.offsetHeight;
+
   drawAreaView.layer = new Konva.Layer();
   drawAreaView.stage = new Konva.Stage({
     container: 'container',
-    width: drawAreaView.el.offsetWidth,
-    height: drawAreaView.el.offsetHeight
+    width: 1080,
+    height: 720,
   });
   drawAreaView.canvas = document.createElement('canvas');
-  drawAreaView.canvas.width = drawAreaView.stage.width();
-  drawAreaView.canvas.height = drawAreaView.stage.height();
+  drawAreaView.canvas.width = 1080;
+  drawAreaView.canvas.height = 720;
+  drawAreaView.canvas.style.background = "#fffff";
   drawAreaView.stage.add(drawAreaView.layer);
 
   drawAreaView.image = new Konva.Image({
@@ -60,7 +70,7 @@ function setupKonvaJS(drawAreaView) {
   drawAreaView.stage.draw();
 
   drawAreaView.context = drawAreaView.canvas.getContext('2d');
-  drawAreaView.context.strokeStyle = '#ffffff';
+  drawAreaView.context.strokeStyle = '#12c2aa';
   drawAreaView.context.lineJoin = 'round';
   drawAreaView.context.lineWidth = 5;
 }
@@ -68,7 +78,7 @@ function setupKonvaJS(drawAreaView) {
 
 class EmitLineEvent extends Event {
   constructor(data) {
-    super("EmitLine", data)
+    super("EmitLine", data);
   }
 }
 
@@ -85,8 +95,8 @@ class DrawAreaView extends View {
       click: false,
       move: false,
       pos: { x: 0, y: 0 },
-      pos_prev: false
-    }
+      pos_prev: false,
+    };
     this.currentXScale = 1.0;
     this.currentYScale = 1.0;
 

@@ -8,17 +8,18 @@ function initColorSlider(toolboxView) {
       {
         component: iro.ui.Wheel,
         options: {
-          sliderType: 'hue'
+          sliderType: 'hue',
         },
       },
       {
         component: iro.ui.Slider,
         options: {
-          sliderType: 'value'
+          sliderType: 'value',
         },
-      }
+      },
     ],
-      width:100
+      color: "#12c2aa",
+      width:100,
 
   });
 }
