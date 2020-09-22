@@ -40,7 +40,6 @@ function setMouseListener(drawAreaView) {
 
 function setupKonvaJS(drawAreaView) {
   let bigContainer = document.querySelector(".dashboard-canvas");
-  //stageParent = document.querySelector("#stage-parent");
 
   if (bigContainer.offsetWidth > 1080) drawAreaView.el.style.maxWidth = 1080 + 10;
   else drawAreaView.el.style.maxWidth = bigContainer.offsetWidth;

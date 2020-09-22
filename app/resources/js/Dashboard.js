@@ -111,6 +111,17 @@ function onJoinNewChannelSubmit(data) {
     channelController.joinNewChannel(data.data.id);
 }
 
+function configureSizes() {
+    let mainContent = document.querySelector(".dashboard-main-content-container"),
+        canvasContainer = document.querySelector(".dashboard-canvas"),
+        leftBar = document.querySelector(".dashboard-channels-container"),
+        memberBar = document.querySelector(".dashboard-member-container"),
+        topAppBar = document.querySelector(".dashboard-top-app-bar"),
+        history = document.querySelector(".dashboard-sketch-history-container");
+    mainContent.style.maxWidth = ""+ (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth);
+    canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight - history.offsetHeight);
+}
+
 class Dashboard {
     constructor(socket, userId) {
         let instance = this;
@@ -121,6 +132,8 @@ class Dashboard {
             memberList = document.querySelector(".member-list"),
             channelInfoDialog = document.querySelector(".info-container"),
             createChannelDialog = document.querySelector(".create-channel-container");
+
+        configureSizes();
 
         this.socket = socket;
         this.channelId = null;
