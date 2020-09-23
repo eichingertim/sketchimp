@@ -103,11 +103,6 @@ class DrawAreaView extends View {
     setMouseListener(this);
   }
 
-  fitWindow() {
-    // TODO: Real scaling
-    location.reload();
-  }
-
   updateColor(color) {
     this.context.strokeStyle = color;
   }
@@ -122,6 +117,17 @@ class DrawAreaView extends View {
     } else if (item === "toolbox-rubber") {
       this.context.globalCompositeOperation = 'destination-out';
     }
+  }
+  
+  resizeViews() {
+    
+  let bigContainer = document.querySelector(".dashboard-canvas");
+
+  if (bigContainer.offsetWidth > 1080) this.el.style.maxWidth = 1080 + 10;
+  else this.el.style.maxWidth = bigContainer.offsetWidth;
+
+  if (bigContainer.offsetHeight > 720) this.el.style.maxHeight = 720 + 10;
+  else this.el.style.maxHeight = bigContainer.offsetHeight;
   }
 
   addLine(data) {

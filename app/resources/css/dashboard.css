@@ -12,6 +12,32 @@ body {
     --accent: #44C681
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    margin-right: 20px;
+    background-color: transparent;
+    height: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    padding: 2px;
+    border-radius: 50%;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #12c2aa;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
 .dashboard {
     overflow: hidden;
     display: flex;
