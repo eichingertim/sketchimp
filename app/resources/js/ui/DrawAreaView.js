@@ -9,7 +9,7 @@ function checkAndNotifyForDrawing(drawAreaView) {
         color: drawAreaView.context.strokeStyle,
         penRubber: drawAreaView.context.globalCompositeOperation,
         size: drawAreaView.context.lineWidth,
-      }
+      };
     drawAreaView.notifyAll(new EmitLineEvent(data));
     drawAreaView.mouse.move = false;
   }
@@ -41,13 +41,16 @@ function setMouseListener(drawAreaView) {
 function setupKonvaJS(drawAreaView) {
   let bigContainer = document.querySelector(".dashboard-canvas");
 
-  if (bigContainer.offsetWidth > 1080) drawAreaView.el.style.maxWidth = 1080 + 10;
-  else drawAreaView.el.style.maxWidth = bigContainer.offsetWidth;
+  if (bigContainer.offsetWidth > 1080) {drawAreaView.el.style.maxWidth = 1080 + 10;}
+  else {drawAreaView.el.style.maxWidth = bigContainer.offsetWidth;}
 
-  if (bigContainer.offsetHeight > 720) drawAreaView.el.style.maxHeight = 720 + 10;
-  else drawAreaView.el.style.maxHeight = bigContainer.offsetHeight;
+  if (bigContainer.offsetHeight > 720){ drawAreaView.el.style.maxHeight = 720 + 10;}
+  else {drawAreaView.el.style.maxHeight = bigContainer.offsetHeight;}
 
+  // eslint-disable-next-line no-undef
   drawAreaView.layer = new Konva.Layer();
+
+  // eslint-disable-next-line no-undef
   drawAreaView.stage = new Konva.Stage({
     container: 'container',
     width: 1080,
@@ -59,10 +62,11 @@ function setupKonvaJS(drawAreaView) {
   drawAreaView.canvas.style.background = "#fffff";
   drawAreaView.stage.add(drawAreaView.layer);
 
+  // eslint-disable-next-line no-undef
   drawAreaView.image = new Konva.Image({
     image: drawAreaView.canvas,
     x: 0,
-    y: 0
+    y: 0,
   });
 
   drawAreaView.layer.add(drawAreaView.image);
@@ -79,6 +83,22 @@ class EmitLineEvent extends Event {
   constructor(data) {
     super("EmitLine", data);
   }
+}
+
+function onSaveClick(drawAreaView, data) {
+
+}
+
+function onSavePublishClick(drawAreaView, data) {
+
+}
+
+function setSaveListeners(drawAreaView) {
+  let btnSave = document.querySelector("#save"),
+      btnSavePublish = document.querySelector("#save-publish");
+
+  btnSave.addEventListener("click", onSaveClick.bind(this, drawAreaView));
+  btnSavePublish.addEventListener("click", onSavePublishClick.bind(this, drawAreaView));
 }
 
 class DrawAreaView extends View {
@@ -101,6 +121,7 @@ class DrawAreaView extends View {
 
     setupKonvaJS(this);
     setMouseListener(this);
+    setSaveListeners(this);
   }
 
   updateColor(color) {

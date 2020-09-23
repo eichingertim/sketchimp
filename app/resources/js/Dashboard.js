@@ -179,7 +179,7 @@ class Dashboard {
         createChannelDialogView.addEventListener("JoinNewChannel", onJoinNewChannelSubmit.bind(this));
 
         configureSizes();
-        window.onresize =  configureSizes;
+        window.onresize = configureSizes;
 
         //Not yet in own classes
         document.querySelector(".channel-info-icon").addEventListener("click", function() {
