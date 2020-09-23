@@ -4,10 +4,6 @@ import Dashboard from "./Dashboard.js";
 let socket = io(),
   dashboard;
 
-function onWindowResize() {
-  dashboard.resizeElements();
-}
-
 function init() {
   let id = document.cookie.split("="),
     filteredUserId = (decodeURIComponent(id[1]).match("\".*\"")[0]).toString().match("[^\"]+")[0];
@@ -15,8 +11,6 @@ function init() {
   if (dashboard.channelId === null) {
     dashboard.onJoin(document.querySelector(".info-channel-id").textContent);
   }
-
-  window.onresize = onWindowResize;
 }
 
 init();

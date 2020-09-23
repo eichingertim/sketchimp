@@ -8,8 +8,8 @@ function checkAndNotifyForDrawing(drawAreaView) {
         mouse: drawAreaView.mouse,
         color: drawAreaView.context.strokeStyle,
         penRubber: drawAreaView.context.globalCompositeOperation,
-        size: drawAreaView.context.lineWidth
-      }
+        size: drawAreaView.context.lineWidth,
+      };
     drawAreaView.notifyAll(new EmitLineEvent(data));
     drawAreaView.mouse.move = false;
   }
@@ -39,28 +39,41 @@ function setMouseListener(drawAreaView) {
 }
 
 function setupKonvaJS(drawAreaView) {
+  let bigContainer = document.querySelector(".dashboard-canvas");
+
+  if (bigContainer.offsetWidth > 1080) {drawAreaView.el.style.maxWidth = 1080 + 10;}
+  else {drawAreaView.el.style.maxWidth = bigContainer.offsetWidth;}
+
+  if (bigContainer.offsetHeight > 720){ drawAreaView.el.style.maxHeight = 720 + 10;}
+  else {drawAreaView.el.style.maxHeight = bigContainer.offsetHeight;}
+
+  // eslint-disable-next-line no-undef
   drawAreaView.layer = new Konva.Layer();
+
+  // eslint-disable-next-line no-undef
   drawAreaView.stage = new Konva.Stage({
     container: 'container',
-    width: drawAreaView.el.offsetWidth,
-    height: drawAreaView.el.offsetHeight
+    width: 1080,
+    height: 720,
   });
   drawAreaView.canvas = document.createElement('canvas');
-  drawAreaView.canvas.width = drawAreaView.stage.width();
-  drawAreaView.canvas.height = drawAreaView.stage.height();
+  drawAreaView.canvas.width = 1080;
+  drawAreaView.canvas.height = 720;
+  drawAreaView.canvas.style.background = "#fffff";
   drawAreaView.stage.add(drawAreaView.layer);
 
+  // eslint-disable-next-line no-undef
   drawAreaView.image = new Konva.Image({
     image: drawAreaView.canvas,
     x: 0,
-    y: 0
+    y: 0,
   });
 
   drawAreaView.layer.add(drawAreaView.image);
   drawAreaView.stage.draw();
 
   drawAreaView.context = drawAreaView.canvas.getContext('2d');
-  drawAreaView.context.strokeStyle = '#ffffff';
+  drawAreaView.context.strokeStyle = '#12c2aa';
   drawAreaView.context.lineJoin = 'round';
   drawAreaView.context.lineWidth = 5;
 }
@@ -68,8 +81,24 @@ function setupKonvaJS(drawAreaView) {
 
 class EmitLineEvent extends Event {
   constructor(data) {
-    super("EmitLine", data)
+    super("EmitLine", data);
   }
+}
+
+function onSaveClick(drawAreaView, data) {
+
+}
+
+function onSavePublishClick(drawAreaView, data) {
+
+}
+
+function setSaveListeners(drawAreaView) {
+  let btnSave = document.querySelector("#save"),
+      btnSavePublish = document.querySelector("#save-publish");
+
+  btnSave.addEventListener("click", onSaveClick.bind(this, drawAreaView));
+  btnSavePublish.addEventListener("click", onSavePublishClick.bind(this, drawAreaView));
 }
 
 class DrawAreaView extends View {
@@ -85,18 +114,14 @@ class DrawAreaView extends View {
       click: false,
       move: false,
       pos: { x: 0, y: 0 },
-      pos_prev: false
-    }
+      pos_prev: false,
+    };
     this.currentXScale = 1.0;
     this.currentYScale = 1.0;
 
     setupKonvaJS(this);
     setMouseListener(this);
-  }
-
-  fitWindow() {
-    // TODO: Real scaling
-    location.reload();
+    setSaveListeners(this);
   }
 
   updateColor(color) {
@@ -113,6 +138,17 @@ class DrawAreaView extends View {
     } else if (item === "toolbox-rubber") {
       this.context.globalCompositeOperation = 'destination-out';
     }
+  }
+  
+  resizeViews() {
+    
+  let bigContainer = document.querySelector(".dashboard-canvas");
+
+  if (bigContainer.offsetWidth > 1080) this.el.style.maxWidth = 1080 + 10;
+  else this.el.style.maxWidth = bigContainer.offsetWidth;
+
+  if (bigContainer.offsetHeight > 720) this.el.style.maxHeight = 720 + 10;
+  else this.el.style.maxHeight = bigContainer.offsetHeight;
   }
 
   addLine(data) {

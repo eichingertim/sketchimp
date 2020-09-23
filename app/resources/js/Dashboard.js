@@ -111,6 +111,19 @@ function onJoinNewChannelSubmit(data) {
     channelController.joinNewChannel(data.data.id);
 }
 
+function configureSizes() {
+    let mainContent = document.querySelector(".dashboard-main-content-container"),
+        canvasContainer = document.querySelector(".dashboard-canvas"),
+        leftBar = document.querySelector(".channels-container-outer"),
+        memberBar = document.querySelector(".container-member-toolbox"),
+        topAppBar = document.querySelector(".container-top-bar-history-outer");
+    mainContent.style.maxWidth = ""+ (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth);
+    console.log(mainContent);
+    canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight);
+
+    drawAreaView.resizeViews();
+}
+
 class Dashboard {
     constructor(socket, userId) {
         let instance = this;
@@ -165,6 +178,9 @@ class Dashboard {
         createChannelDialogView.addEventListener("CreateChannel", onChannelCreateSubmit.bind(this));
         createChannelDialogView.addEventListener("JoinNewChannel", onJoinNewChannelSubmit.bind(this));
 
+        configureSizes();
+        window.onresize = configureSizes;
+
         //Not yet in own classes
         document.querySelector(".channel-info-icon").addEventListener("click", function() {
             channelInfoDialogView.toggleVisibility();
@@ -180,10 +196,6 @@ class Dashboard {
 
     onLeave() {
         this.socket.emit("unsubscribe", {channelId: this.channelId});
-    }
-
-    resizeElements() {
-        drawAreaView.fitWindow();
     }
 
 }
