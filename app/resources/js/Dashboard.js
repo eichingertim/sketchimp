@@ -117,8 +117,7 @@ function onJoinNewChannelSubmit(data) {
 }
 
 function onSketchSaveClick(dashboard, data) {
-    let json = drawAreaView.getStageJSON();
-    sketchController.saveSketch(json, dashboard.channelId);
+    sketchController.saveSketch(dashboard.channelId);
 }
 
 function configureSizes() {
@@ -159,7 +158,7 @@ class Dashboard {
         channelInfoDialogView = new ChannelInfoDialogView(channelInfoDialog);
         createChannelDialogView = new CreateChannelDialogView(createChannelDialog);
         saveLoadView = new SaveLoadView(saveLoad);
-        sketchController = new SketchController();
+        sketchController = new SketchController(socket);
 
         drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
         drawAreaController.addEventListener("ClearCanvas", onShouldClearCanvas.bind(this));

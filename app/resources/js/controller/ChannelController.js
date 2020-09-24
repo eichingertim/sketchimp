@@ -56,7 +56,7 @@ class ChannelController extends Observable {
             xhrSketch.onload = function() {
                 instance.notifyAll(new CreateChannelDataLoadedEvent(data));
             };
-            xhrSketch.send("name=TestName");
+            xhrSketch.send("name=Erster+Sketch+fuer+"+channelName.split(" ").join("+"));
 
         };
         xhr.send();
