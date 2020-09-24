@@ -7,6 +7,8 @@ import ChannelListView from "./ui/ChannelListView.js";
 import ChannelController from "./controller/ChannelController.js";
 import ChannelInfoDialogView from "./ui/ChannelInfoDialogView.js";
 import CreateChannelDialogView from "./ui/CreateChannelDialogView.js";
+import SaveLoadView from "./ui/SaveLoadView.js";
+import SketchController from "./controller/SketchController.js";
 
 let drawAreaView,
     drawAreaController,
@@ -16,7 +18,9 @@ let drawAreaView,
     channelListView,
     channelController,
     channelInfoDialogView,
-    createChannelDialogView;
+    createChannelDialogView,
+    saveLoadView,
+    sketchController;
 
 function onLineDrawn(data) {
     drawAreaView.addLine(data.data);
@@ -111,6 +115,11 @@ function onJoinNewChannelSubmit(data) {
     channelController.joinNewChannel(data.data.id);
 }
 
+function onSketchSaveClick(dashboard, data) {
+    let json = drawAreaView.getStageJSON();
+    sketchController.saveSketch(json, dashboard.channelId);
+}
+
 function configureSizes() {
     let mainContent = document.querySelector(".dashboard-main-content-container"),
         canvasContainer = document.querySelector(".dashboard-canvas"),
@@ -133,7 +142,8 @@ class Dashboard {
             channelList = document.querySelector(".sidebar-menu"),
             memberList = document.querySelector(".member-list"),
             channelInfoDialog = document.querySelector(".info-container"),
-            createChannelDialog = document.querySelector(".create-channel-container");
+            createChannelDialog = document.querySelector(".create-channel-container"),
+            saveLoad = document.querySelector(".container-load-and-publish");
 
         this.socket = socket;
         this.channelId = null;
@@ -148,6 +158,8 @@ class Dashboard {
         channelController = new ChannelController();
         channelInfoDialogView = new ChannelInfoDialogView(channelInfoDialog);
         createChannelDialogView = new CreateChannelDialogView(createChannelDialog);
+        saveLoadView = new SaveLoadView(saveLoad);
+        sketchController = new SketchController();
 
         drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
         drawAreaController.addEventListener("ClearCanvas", onShouldClearCanvas.bind(this));
@@ -177,6 +189,8 @@ class Dashboard {
 
         createChannelDialogView.addEventListener("CreateChannel", onChannelCreateSubmit.bind(this));
         createChannelDialogView.addEventListener("JoinNewChannel", onJoinNewChannelSubmit.bind(this));
+
+        saveLoadView.addEventListener("Save", onSketchSaveClick.bind(this, instance));
 
         configureSizes();
         window.onresize = configureSizes;

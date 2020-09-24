@@ -48,8 +48,16 @@ class ChannelController extends Observable {
         xhr.open("POST", "/api/channel/new/" + channelName, true);
         xhr.withCredentials = true;
         xhr.onload = function() {
-            let data = JSON.parse(this.response).data;
-            instance.notifyAll(new CreateChannelDataLoadedEvent(data));
+            let data = JSON.parse(this.response).data,
+            xhrSketch = new XMLHttpRequest();
+            xhrSketch.open("POST", "/api/sketch/new/" + data.id, true);
+            xhrSketch.withCredentials = true;
+            xhrSketch.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhrSketch.onload = function() {
+                instance.notifyAll(new CreateChannelDataLoadedEvent(data));
+            };
+            xhrSketch.send("name=TestName");
+
         };
         xhr.send();
     }

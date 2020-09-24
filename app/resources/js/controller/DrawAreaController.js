@@ -40,6 +40,10 @@ class DrawAreaController extends Observable {
     areaController = this;
   }
 
+  saveSketch(sketchJSON) {
+
+  }
+
   join(channelId) {
     this.channelId = channelId;
     console.log(channelId);
@@ -64,7 +68,6 @@ class DrawAreaController extends Observable {
   }
 
   emitLine(data) {
-    //TODO: replace userId with real not socket id
     this.socket.emit('line', {
       channelId: this.channelId,
       userId: this.userId,
