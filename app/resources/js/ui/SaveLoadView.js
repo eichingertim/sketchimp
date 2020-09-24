@@ -13,9 +13,6 @@ function onSaveClick(saveLoadView, data) {
 
 function setListeners(saveLoadView) {
     let btnSave = saveLoadView.el.querySelector("#save");
-
-    console.log(btnSave);
-
     btnSave.addEventListener("click", onSaveClick.bind(this, saveLoadView));
 }
 

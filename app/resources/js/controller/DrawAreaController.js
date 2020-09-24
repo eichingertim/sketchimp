@@ -40,13 +40,8 @@ class DrawAreaController extends Observable {
     areaController = this;
   }
 
-  saveSketch(sketchJSON) {
-
-  }
-
   join(channelId) {
     this.channelId = channelId;
-    console.log(channelId);
     this.socket.emit('subscribe', this.channelId);
 
     this.socket.on('line', function(data) {
@@ -64,26 +59,33 @@ class DrawAreaController extends Observable {
   }
 
   emitClearCanvas() {
-    this.socket.emit('clear-canvas', { channelId: this.channelId });
+    if (this.channelId !== null) {
+      this.socket.emit('clear-canvas', { channelId: this.channelId });
+    }
   }
 
   emitLine(data) {
-    this.socket.emit('line', {
-      channelId: this.channelId,
-      userId: this.userId,
-      lineId: createUUID(),
-      line: [data.mouse.pos, data.mouse.pos_prev],
-      color: data.color,
-      penRubber: data.penRubber,
-      size: data.size,
-    });
+    if (this.channelId !== null) {
+      this.socket.emit('line', {
+        channelId: this.channelId,
+        userId: this.userId,
+        lineId: createUUID(),
+        line: [data.mouse.pos, data.mouse.pos_prev],
+        color: data.color,
+        penRubber: data.penRubber,
+        size: data.size,
+      });
+    }
+
   }
 
   undoLine() {
-    this.socket.emit('undo', {
-      channelId: this.channelId,
-      userId: this.userId,
-    });
+    if (this.channelId !== null) {
+      this.socket.emit('undo', {
+        channelId: this.channelId,
+        userId: this.userId,
+      });
+    }
   }
 
 }

@@ -26,7 +26,6 @@ class MemberListView extends View {
     }
 
     updateMembers(data) {
-        console.log(data.members);
         /*let memberTemplate = document.querySelector("#member-template");
         this.el.innerHTML = "";
         data.members.forEach(user => {

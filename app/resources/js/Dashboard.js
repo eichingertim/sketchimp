@@ -80,9 +80,10 @@ function onChannelDataLoaded(dashboard, data) {
     }
 }
 
-function onCreateChannelDataLoaded(data) {
+function onCreateChannelDataLoaded(dashboard, data) {
     channelListView.addNewChannel(data.data.data);
     createChannelDialogView.clearAfterSubmit();
+    onChannelDataLoaded(dashboard, data);
 }
 
 function onMemberItemClick(data) {
@@ -127,7 +128,6 @@ function configureSizes() {
         memberBar = document.querySelector(".container-member-toolbox"),
         topAppBar = document.querySelector(".container-top-bar-history-outer");
     mainContent.style.maxWidth = ""+ (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth);
-    console.log(mainContent);
     canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight);
 
     drawAreaView.resizeViews();
@@ -166,7 +166,7 @@ class Dashboard {
         drawAreaController.addEventListener("LineUndo", onLineUndo.bind(this));
 
         channelController.addEventListener("ChannelDataLoaded", onChannelDataLoaded.bind(this, instance));
-        channelController.addEventListener("CreateChannelDataLoaded", onCreateChannelDataLoaded.bind(this));
+        channelController.addEventListener("CreateChannelDataLoaded", onCreateChannelDataLoaded.bind(this, instance));
         channelController.addEventListener("LeaveChannelDataLoaded", onLeaveChannelDataLoaded.bind(this));
         channelController.addEventListener("JoinNewChannelDataLoaded", onJoinNewChannelDataLoaded.bind(this));
 
