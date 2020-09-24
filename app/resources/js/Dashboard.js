@@ -120,6 +120,10 @@ function onSketchSaveClick(dashboard, data) {
     sketchController.saveSketch(dashboard.channelId);
 }
 
+function onSketchSavedSuccessFuly(data) {
+    saveLoadView.setSketchSaved();
+}
+
 function configureSizes() {
     let mainContent = document.querySelector(".dashboard-main-content-container"),
         canvasContainer = document.querySelector(".dashboard-canvas"),
@@ -190,6 +194,8 @@ class Dashboard {
         createChannelDialogView.addEventListener("JoinNewChannel", onJoinNewChannelSubmit.bind(this));
 
         saveLoadView.addEventListener("Save", onSketchSaveClick.bind(this, instance));
+
+        sketchController.addEventListener("SketchSaved", onSketchSavedSuccessFuly.bind(this));
 
         configureSizes();
         window.onresize = configureSizes;

@@ -20,11 +20,11 @@ class SketchController extends Observable{
     }
 
     saveSketch(channelId) {
-        let socketId = this.socket.id;
+        let socketId = this.socket.id,
+            instance = this;
         this.socket.emit("getLineHistory", {channelId: channelId, socketId: socketId});
         this.socket.on("getLineHistory", function (data) {
             let xhr = new XMLHttpRequest(),
-                instance = this,
                 url = "/api/sketch/save/" + channelId;
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Content-Type", "application/json");

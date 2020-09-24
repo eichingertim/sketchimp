@@ -23,6 +23,11 @@ class SaveLoadView extends View {
         this.setElement(el);
         setListeners(this);
     }
+
+    setSketchSaved() {
+        let btnSave = this.el.querySelector("#save");
+        btnSave.innerHTML = "Successfully saved";
+    }
 }
 
 export default SaveLoadView;
