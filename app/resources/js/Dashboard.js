@@ -50,6 +50,12 @@ function onJoinNewChannelDataLoaded() {
  * Member Event Methods
  */
 
+function onCreateSketchDataLoaded(dashboard, event) {
+    console.log("Moin");
+    createSketchDialogView.clearAfterSubmit();
+    drawAreaController.emitClearCanvas();
+}
+
 function onMemberDataLoaded(data) {
     console.log(data);
 }
@@ -62,9 +68,8 @@ function onSketchExportClick() {
 
 function onSketchCreateClick(dashboard, data) {
     drawAreaView.getStageAsPNG().then(function(imageTarget) {
-        //let newChannelName = data.data.name;
-        //imageTarget = <img src="data:image/png,...../>"
-        //sketchController.finalizeSketch(dashboard.channelId, image);
+        let newSketchName = data.data.name;
+        sketchController.finalizeSketch(dashboard.channelId, imageTarget.src, newSketchName);
     });
 
 }
@@ -138,6 +143,7 @@ class Dashboard {
         memberController.addEventListener(EventKeys.DATA_OF_ONE_MEMBER_LOADED, onMemberDataLoaded.bind(this));
 
         sketchController.addEventListener(EventKeys.SKETCH_SAVED_IN_DB, () => saveLoadView.setSketchSaved());
+        sketchController.addEventListener(EventKeys.FINALIZED_AND_CREATED_SKETCH, onCreateSketchDataLoaded.bind(this, instance));
 
         drawAreaView.addEventListener(EventKeys.LINE_READY_FOR_EMIT, (event) => drawAreaController.emitLine(event.data));
 

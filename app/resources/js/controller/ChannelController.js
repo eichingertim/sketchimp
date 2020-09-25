@@ -9,7 +9,7 @@ class ChannelDataLoadedEvent extends Event {
 
 class CreateChannelDataLoadedEvent extends Event {
     constructor(data) {
-        super(EventKeys.CREATED_CHANNEL_DATA_LOADED, {data: data});
+        super(EventKeys.CREATED_CHANNEL_DATA_LOADED, {sketchData: data});
     }
 }
 

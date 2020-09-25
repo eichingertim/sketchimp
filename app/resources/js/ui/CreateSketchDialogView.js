@@ -25,6 +25,11 @@ class CreateSketchDialogView extends View {
         this.setElement(el);
         setListeners(this);
     }
+
+    clearAfterSubmit() {
+        this.el.querySelector("#sketch_name").value = "";
+        this.toggleVisibility();
+    }
 }
 
 export default CreateSketchDialogView;

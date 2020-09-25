@@ -1,4 +1,4 @@
-import { Event, Observable } from "../utils/Observable.js";
+import {Event, Observable} from "../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 class SketchSavedEvent extends Event {
@@ -14,12 +14,12 @@ class LoadedHistoryEvent extends Event {
 }
 
 class SketchCreateEvent extends Event {
-    constructor() {
-        super(EventKeys.FINALIZED_AND_CREATED_SKETCH, null);
+    constructor(sketchData) {
+        super(EventKeys.FINALIZED_AND_CREATED_SKETCH, {data: sketchData});
     }
 }
 
-class SketchController extends Observable{
+class SketchController extends Observable {
 
     constructor(socket) {
         super();
@@ -35,7 +35,7 @@ class SketchController extends Observable{
                 url = Config.API_URL_SKETCH_SAVE + channelId;
             xhr.open(Config.HTTP_POST, url, true);
             xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
-            xhr.onload = function() {
+            xhr.onload = function () {
                 instance.notifyAll(new SketchSavedEvent());
             };
             xhr.send(JSON.stringify(data.channel));
@@ -43,7 +43,22 @@ class SketchController extends Observable{
 
     }
 
-    finalizeSketch(channelId, image) {
+    finalizeSketch(channelId, imageBase64, sketchName) {
+        let xhr = new XMLHttpRequest(),
+            instance = this,
+            sketchBody = {
+                name: sketchName,
+                image: imageBase64,
+            },
+            url = "/api/sketch/finalize-create/" + channelId;
+        xhr.open(Config.HTTP_POST, url, true);
+        xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
+        xhr.onload = function () {
+            let newSketchData = this.response.data;
+            instance.notifyAll(new SketchCreateEvent(newSketchData));
+        };
+
+        xhr.send(JSON.stringify(sketchBody));
 
     }
 
@@ -53,7 +68,7 @@ class SketchController extends Observable{
     }
 
     exportSketch(uri, name) {
-        let link = document.createElement('a');
+        let link = document.createElement("a");
         link.download = name;
         link.href = uri;
         document.body.appendChild(link);
