@@ -9,15 +9,16 @@ class JoinNewChannelEvent extends Event {
 }
 
 class CreateChannelEvent extends Event {
-    constructor(name) {
-        super("CreateChannel", {name: name});
+    constructor(name, sketchName) {
+        super("CreateChannel", {name: name, sketchName: sketchName});
     }
 }
 
 function onSubmitChannelClick(createChannelDialogView, data) {
     event.preventDefault();
-    let channelName = createChannelDialogView.el.querySelector("#r_name").value;
-    createChannelDialogView.notifyAll(new CreateChannelEvent(channelName));
+    let channelName = createChannelDialogView.el.querySelector("#r_name").value,
+        sketchName = createChannelDialogView.el.querySelector("#r_sketch_name").value;
+    createChannelDialogView.notifyAll(new CreateChannelEvent(channelName, sketchName));
 }
 
 function onSubmitChannelJoin(createChannelDialogView, data) {

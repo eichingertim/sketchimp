@@ -42,7 +42,7 @@ class ChannelController extends Observable {
         xhr.send();
     }
 
-    createChannel(channelName) {
+    createChannel(channelName, sketchName) {
         let xhr = new XMLHttpRequest(),
             instance = this;
         xhr.open("POST", "/api/channel/new/" + channelName, true);
@@ -56,8 +56,7 @@ class ChannelController extends Observable {
             xhrSketch.onload = function() {
                 instance.notifyAll(new CreateChannelDataLoadedEvent(data));
             };
-            xhrSketch.send("name=Erster+Sketch+fuer+"+channelName.split(" ").join("+"));
-
+            xhrSketch.send("name=" + sketchName.split(" ").join("+"));
         };
         xhr.send();
     }

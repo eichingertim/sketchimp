@@ -36,6 +36,19 @@ class SketchController extends Observable{
 
     }
 
+    finalizeSketch(channelId, image) {
+
+    }
+
+    exportSketch(uri, name) {
+        let link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     createSketch(channelId, sketchName) {
         let xhrSketch = new XMLHttpRequest(),
             instance = this;
@@ -48,9 +61,6 @@ class SketchController extends Observable{
         xhrSketch.send("name=" + sketchName.split(" ").join("+"));
     }
 
-    downloadSketch(sketchId) {
-
-    }
 }
 
 export default SketchController;

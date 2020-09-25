@@ -112,11 +112,20 @@ class DrawAreaView extends View {
         setMouseListener(this);
     }
 
-    getStageJSON() {
+    getStageAsBase64() {
         if (this.stage !== undefined && this.stage !== null) {
-            return this.stage.toJSON();
+            return this.stage.toDataURL({
+                pixelRatio: 3,
+            });
         }
-        return "";
+        return null;
+    }
+
+    getStageAsPNG() {
+        if (this.stage !== undefined && this.stage !== null) {
+            return this.stage.toImage();
+        }
+        return null;
     }
 
     updateColor(color) {

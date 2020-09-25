@@ -9,64 +9,13 @@ import ChannelInfoDialogView from "./ui/ChannelInfoDialogView.js";
 import CreateChannelDialogView from "./ui/CreateChannelDialogView.js";
 import SaveLoadView from "./ui/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
+import CreateSketchDialogView from "./ui/CreateSketchDialogView.js";
 
-let drawAreaView,
-    drawAreaController,
-    toolboxView,
-    memberListView,
-    memberController,
-    channelListView,
-    channelController,
-    channelInfoDialogView,
-    createChannelDialogView,
-    saveLoadView,
-    sketchController;
+let drawAreaView, drawAreaController, toolboxView, memberListView, memberController,
+    channelListView, channelController, channelInfoDialogView, createChannelDialogView,
+    saveLoadView, sketchController, createSketchDialogView;
 
-function onLineDrawn(data) {
-    drawAreaView.addLine(data.data);
-}
-
-function onLineUndo(data) {
-    drawAreaView.undoLine(data.data);
-}
-
-function onLineShouldBeEmitted(data) {
-    drawAreaController.emitLine(data.data);
-}
-
-function onColorChanged(data) {
-    drawAreaView.updateColor(data.data.color);
-}
-
-function onSizeChanged(data) {
-    drawAreaView.updateSize(data.data.size);
-}
-
-function onPenRubberSwitch(data) {
-    drawAreaView.switchPenRubber(data.data.item);
-}
-
-function onDeleteForever() {
-    drawAreaController.emitClearCanvas();
-}
-
-function onUndo() {
-    drawAreaController.undoLine();
-}
-
-function onShouldClearCanvas() {
-    drawAreaView.clearCanvas();
-}
-
-function onJoinServerClick() {
-    createChannelDialogView.toggleVisibility();
-}
-
-function onChannelItemClick(data) {
-    channelController.fetchChannelData(data.data.url);
-}
-
-function onChannelDataLoaded(dashboard, data) {
+function onChannelDataForEnteringLoaded(dashboard, data) {
     let realData = data.data.data;
     channelInfoDialogView.updateInfo(realData);
     document.querySelector(".channel-title").textContent = realData.name;
@@ -83,19 +32,7 @@ function onChannelDataLoaded(dashboard, data) {
 function onCreateChannelDataLoaded(dashboard, data) {
     channelListView.addNewChannel(data.data.data);
     createChannelDialogView.clearAfterSubmit();
-    onChannelDataLoaded(dashboard, data);
-}
-
-function onMemberItemClick(data) {
-    memberController.fetchMemberData(data.url);
-}
-
-function onMemberDataLoaded(data) {
-    console.log(data);
-}
-
-function onLeaveChannelClick (data) {
-    channelController.leaveChannel(data.data.id);
+    onChannelDataForEnteringLoaded(dashboard, data);
 }
 
 function onLeaveChannelDataLoaded() {
@@ -108,29 +45,32 @@ function onJoinNewChannelDataLoaded() {
     window.location.reload();
 }
 
-function onChannelCreateSubmit(data) {
-    channelController.createChannel(data.data.name);
+/*
+ * Member Event Methods
+ */
+
+function onMemberDataLoaded(data) {
+    console.log(data);
 }
 
-function onJoinNewChannelSubmit(data) {
-    channelController.joinNewChannel(data.data.id);
+function onSketchExportClick() {
+    let base64Uri = drawAreaView.getStageAsBase64();
+    sketchController.exportSketch(base64Uri, "sketch-export.png");
+    saveLoadView.setSketchExported();
 }
 
-function onSketchSaveClick(dashboard, data) {
-    sketchController.saveSketch(dashboard.channelId);
+function onSketchCreateClick(dashboard, data) {
+    let image = drawAreaView.getStageAsPNG();
+    sketchController.finalizeSketch(dashboard.channelId, image);
 }
 
-function onSketchSavedSuccessFuly(data) {
-    saveLoadView.setSketchSaved();
-}
-
-function configureSizes() {
+function configureDivSizes() {
     let mainContent = document.querySelector(".dashboard-main-content-container"),
         canvasContainer = document.querySelector(".dashboard-canvas"),
         leftBar = document.querySelector(".channels-container-outer"),
         memberBar = document.querySelector(".container-member-toolbox"),
         topAppBar = document.querySelector(".container-top-bar-history-outer");
-    mainContent.style.maxWidth = ""+ (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth);
+    mainContent.style.maxWidth = "" + (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth);
     canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight);
 
     drawAreaView.resizeViews();
@@ -138,22 +78,35 @@ function configureSizes() {
 
 class Dashboard {
     constructor(socket, userId) {
-        let instance = this;
 
+        this.socket = socket;
+        this.channelId = null;
+        this.userId = userId;
+
+        this.initUIAndController();
+        this.setListeners();
+
+        configureDivSizes();
+        window.onresize = configureDivSizes;
+
+        //Not yet in own classes
+        document.querySelector(".channel-info-icon").addEventListener("click", function () {
+            channelInfoDialogView.toggleVisibility();
+        });
+    }
+
+    initUIAndController() {
         const container = document.querySelector("#container"),
             toolbox = document.querySelector(".dashboard-toolbox-container"),
             channelList = document.querySelector(".sidebar-menu"),
             memberList = document.querySelector(".member-list"),
             channelInfoDialog = document.querySelector(".info-container"),
             createChannelDialog = document.querySelector(".create-channel-container"),
-            saveLoad = document.querySelector(".container-load-and-publish");
-
-        this.socket = socket;
-        this.channelId = null;
-        this.userId = null;
+            saveLoad = document.querySelector(".container-load-and-publish"),
+            createSketchDialog = document.querySelector(".create-sketch-container");
 
         drawAreaView = new DrawAreaView(container);
-        drawAreaController = new DrawAreaController(socket, userId);
+        drawAreaController = new DrawAreaController(this.socket, this.userId);
         toolboxView = new ToolboxView(toolbox);
         memberListView = new MemberListView(memberList);
         memberController = new MemberController();
@@ -162,48 +115,48 @@ class Dashboard {
         channelInfoDialogView = new ChannelInfoDialogView(channelInfoDialog);
         createChannelDialogView = new CreateChannelDialogView(createChannelDialog);
         saveLoadView = new SaveLoadView(saveLoad);
-        sketchController = new SketchController(socket);
+        sketchController = new SketchController(this.socket);
+        createSketchDialogView = new CreateSketchDialogView(createSketchDialog);
+    }
 
-        drawAreaController.addEventListener("LineDrawn", onLineDrawn.bind(this));
-        drawAreaController.addEventListener("ClearCanvas", onShouldClearCanvas.bind(this));
-        drawAreaController.addEventListener("LineUndo", onLineUndo.bind(this));
+    setListeners() {
+        let instance = this;
+        drawAreaController.addEventListener("LineDrawn", (data) => drawAreaView.addLine(data.data));
+        drawAreaController.addEventListener("ClearCanvas", () => drawAreaView.clearCanvas());
+        drawAreaController.addEventListener("LineUndo", (data) => drawAreaView.undoLine(data.data));
 
-        channelController.addEventListener("ChannelDataLoaded", onChannelDataLoaded.bind(this, instance));
+        channelController.addEventListener("ChannelDataLoaded", onChannelDataForEnteringLoaded.bind(this, instance));
         channelController.addEventListener("CreateChannelDataLoaded", onCreateChannelDataLoaded.bind(this, instance));
         channelController.addEventListener("LeaveChannelDataLoaded", onLeaveChannelDataLoaded.bind(this));
         channelController.addEventListener("JoinNewChannelDataLoaded", onJoinNewChannelDataLoaded.bind(this));
 
         memberController.addEventListener("MemberDataLoaded", onMemberDataLoaded.bind(this));
 
-        drawAreaView.addEventListener("EmitLine", onLineShouldBeEmitted.bind(this));
+        drawAreaView.addEventListener("EmitLine", (data) => drawAreaController.emitLine(data.data));
 
-        toolboxView.addEventListener("ColorChange", onColorChanged.bind(this));
-        toolboxView.addEventListener("PenRubberSwitch", onPenRubberSwitch.bind(this));
-        toolboxView.addEventListener("SizeChange", onSizeChanged.bind(this));
-        toolboxView.addEventListener("DeleteForever", onDeleteForever.bind(this));
-        toolboxView.addEventListener("Undo", onUndo.bind(this));
+        toolboxView.addEventListener("ColorChange", (data) => drawAreaView.updateColor(data.data.color));
+        toolboxView.addEventListener("PenRubberSwitch", (data) => drawAreaView.switchPenRubber(data.data.item));
+        toolboxView.addEventListener("SizeChange", (data) => drawAreaView.updateSize(data.data.size));
+        toolboxView.addEventListener("DeleteForever", () => drawAreaController.emitClearCanvas());
+        toolboxView.addEventListener("Undo", () => drawAreaController.undoLine());
 
-        channelListView.addEventListener("ChannelItemClick", onChannelItemClick.bind(this));
-        channelListView.addEventListener("JoinServerClick", onJoinServerClick.bind(this));
+        channelListView.addEventListener("ChannelItemClick", (data) => channelController.fetchChannelData(data.data.url));
+        channelListView.addEventListener("JoinServerClick", () => createChannelDialogView.toggleVisibility());
 
-        memberListView.addEventListener("MemberItemClick", onMemberItemClick.bind(this));
+        memberListView.addEventListener("MemberItemClick", (data) => memberController.fetchMemberData(data.url));
 
-        channelInfoDialogView.addEventListener("LeaveChannelClick", onLeaveChannelClick.bind(this));
+        channelInfoDialogView.addEventListener("LeaveChannelClick", (data) => channelController.leaveChannel(data.data.id));
 
-        createChannelDialogView.addEventListener("CreateChannel", onChannelCreateSubmit.bind(this));
-        createChannelDialogView.addEventListener("JoinNewChannel", onJoinNewChannelSubmit.bind(this));
+        createChannelDialogView.addEventListener("CreateChannel", (data) => channelController.createChannel(data.data.name, data.data.sketchName));
+        createChannelDialogView.addEventListener("JoinNewChannel", (data) => channelController.joinNewChannel(data.data.id));
 
-        saveLoadView.addEventListener("Save", onSketchSaveClick.bind(this, instance));
+        saveLoadView.addEventListener("Save", () => sketchController.saveSketch(instance.channelId));
+        saveLoadView.addEventListener("Finalize", () => createSketchDialogView.toggleVisibility());
+        saveLoadView.addEventListener("Export", onSketchExportClick.bind(this));
 
-        sketchController.addEventListener("SketchSaved", onSketchSavedSuccessFuly.bind(this));
+        sketchController.addEventListener("SketchSaved", () => saveLoadView.setSketchSaved());
 
-        configureSizes();
-        window.onresize = configureSizes;
-
-        //Not yet in own classes
-        document.querySelector(".channel-info-icon").addEventListener("click", function() {
-            channelInfoDialogView.toggleVisibility();
-        });
+        createSketchDialogView.addEventListener("SketchCreateClick", onSketchCreateClick.bind(this, instance));
     }
 
     onJoin(channelId) {

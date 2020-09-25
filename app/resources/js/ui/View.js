@@ -20,6 +20,7 @@ class View extends Observable {
   }
 
   toggleVisibility() {
+    console.log("hallo");
     this.el.classList.toggle("hidden");
   }
 

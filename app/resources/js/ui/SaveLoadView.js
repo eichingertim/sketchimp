@@ -7,13 +7,38 @@ class SaveEvent extends Event {
     }
 }
 
+class FinalizeEvent extends Event {
+    constructor() {
+        super("Finalize", null);
+    }
+}
+
+class ExportEvent extends Event {
+    constructor() {
+        super("Export", null);
+    }
+}
+
 function onSaveClick(saveLoadView, data) {
     saveLoadView.notifyAll(new SaveEvent());
 }
 
+function onFinalizeAndCreateNew(saveLoadView, data) {
+    saveLoadView.notifyAll(new FinalizeEvent());
+}
+
+function onExportSketchAndDownload(saveLoadView, data) {
+    saveLoadView.notifyAll(new ExportEvent());
+}
+
 function setListeners(saveLoadView) {
-    let btnSave = saveLoadView.el.querySelector("#save");
+    let btnSave = saveLoadView.el.querySelector("#save"),
+        btnFinalizeAndCreate = saveLoadView.el.querySelector("#save-publish"),
+        btnExportDownload = saveLoadView.el.querySelector("#export-download");
+
     btnSave.addEventListener("click", onSaveClick.bind(this, saveLoadView));
+    btnFinalizeAndCreate.addEventListener("click", onFinalizeAndCreateNew.bind(this, saveLoadView));
+    btnExportDownload.addEventListener("click", onExportSketchAndDownload.bind(this, saveLoadView));
 }
 
 class SaveLoadView extends View {
@@ -27,6 +52,16 @@ class SaveLoadView extends View {
     setSketchSaved() {
         let btnSave = this.el.querySelector("#save");
         btnSave.innerHTML = "Successfully saved";
+    }
+
+    setSketchFinalized() {
+        let btnFinalizeAndCreate = this.el.querySelector("#save-publish");
+        btnFinalizeAndCreate.innerHTML = "Successfully Finalized";
+    }
+
+    setSketchExported() {
+        let btnExportDownload = this.el.querySelector("#export-download");
+        btnExportDownload.innerHTML = "Successfully Exported";
     }
 }
 
