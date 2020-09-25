@@ -1,5 +1,16 @@
-.btn-action {
 
+.landing-main * {
+    color: black;
+}
+@media (max-width: 768px) {
+    .navbar:not(.top-nav-collapse) {
+        background-color: #24355C;
+    }
+}
+@media (min-width: 800px) and (max-width: 850px) {
+    .navbar:not(.top-nav-collapse) {
+        background-color: #24355C;
+    }
 }
 
 .landing-main-container {
@@ -9,10 +20,18 @@
     flex-direction: column;
 }
 
+.landing-main {
+    margin: 20px 0;
+}
+
 .landing-top-bar {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+}
+
+.scroll {
+    background-color: rgba(0,0,0,0.5);
 }
 
 .landing-content {
@@ -21,4 +40,21 @@
     flex-grow: 1;
     justify-content: center;
     align-items: center;
+}
+
+section {
+    margin: 30px 0 30px;
+}
+
+section .row {
+    padding: 30px 0 30px;
+}
+
+footer {
+    background-color: #111111;
+    padding-top: 20px;
+    position: static;
+    width: 100%;
+    bottom: 0;
+    color: white;
 }
