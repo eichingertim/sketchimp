@@ -1,9 +1,10 @@
 import View from "./View.js";
 import {Event} from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config";
 
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
-        .pos_prev) {
+        .posPrev) {
         let data = {
             mouse: drawAreaView.mouse,
             color: drawAreaView.context.strokeStyle,
@@ -13,7 +14,7 @@ function checkAndNotifyForDrawing(drawAreaView) {
         drawAreaView.notifyAll(new EmitLineEvent(data));
         drawAreaView.mouse.move = false;
     }
-    drawAreaView.mouse.pos_prev = {
+    drawAreaView.mouse.posPrev = {
         x: drawAreaView.mouse.pos.x, y: drawAreaView
             .mouse.pos.y,
     };
@@ -26,7 +27,7 @@ function setMouseListener(drawAreaView) {
 
     drawAreaView.stage.on("mouseup touchend", function () {
         drawAreaView.mouse.click = false;
-        drawAreaView.mouse.pos_prev = false;
+        drawAreaView.mouse.posPrev = false;
         drawAreaView.mouse.move = false;
     });
 
@@ -41,19 +42,7 @@ function setMouseListener(drawAreaView) {
 }
 
 function setupKonvaJS(drawAreaView) {
-    let bigContainer = document.querySelector(".dashboard-canvas");
-
-    if (bigContainer.offsetWidth > 1080) {
-        drawAreaView.el.style.maxWidth = 1080 + 10;
-    } else {
-        drawAreaView.el.style.maxWidth = bigContainer.offsetWidth;
-    }
-
-    if (bigContainer.offsetHeight > 720) {
-        drawAreaView.el.style.maxHeight = 720 + 10;
-    } else {
-        drawAreaView.el.style.maxHeight = bigContainer.offsetHeight;
-    }
+    drawAreaView.resizeViews();
 
     // eslint-disable-next-line no-undef
     drawAreaView.layer = new Konva.Layer();
@@ -61,12 +50,12 @@ function setupKonvaJS(drawAreaView) {
     // eslint-disable-next-line no-undef
     drawAreaView.stage = new Konva.Stage({
         container: "container",
-        width: 1080,
-        height: 720,
+        width: Config.CANVAS_WIDTH,
+        height: Config.CANVAS_HEIGHT,
     });
     drawAreaView.canvas = document.createElement("canvas");
-    drawAreaView.canvas.width = 1080;
-    drawAreaView.canvas.height = 720;
+    drawAreaView.canvas.width = Config.CANVAS_WIDTH;
+    drawAreaView.canvas.height = Config.CANVAS_HEIGHT;
     drawAreaView.canvas.style.background = "#fffff";
     drawAreaView.stage.add(drawAreaView.layer);
 
@@ -81,14 +70,14 @@ function setupKonvaJS(drawAreaView) {
     drawAreaView.stage.draw();
 
     drawAreaView.context = drawAreaView.canvas.getContext("2d");
-    drawAreaView.context.strokeStyle = "#12c2aa";
+    drawAreaView.context.strokeStyle = Config.DEFAULT_PEN_COLOR;
     drawAreaView.context.lineJoin = "round";
-    drawAreaView.context.lineWidth = 5;
+    drawAreaView.context.lineWidth = Config.DEFAULT_PEN_SIZE;
 }
 
 class EmitLineEvent extends Event {
     constructor(data) {
-        super("EmitLine", data);
+        super(EventKeys.LINE_READY_FOR_EMIT, data);
     }
 }
 
@@ -105,7 +94,7 @@ class DrawAreaView extends View {
             click: false,
             move: false,
             pos: {x: 0, y: 0},
-            pos_prev: false,
+            posPrev: false,
         };
 
         setupKonvaJS(this);
@@ -124,7 +113,6 @@ class DrawAreaView extends View {
     getStageAsPNG() {
         let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
-
             return new Promise(
                 function(resolve, reject) {
                     instance.stage.toImage({
@@ -149,24 +137,23 @@ class DrawAreaView extends View {
 
     switchPenRubber(item) {
         if (item === "toolbox-pen") {
-            this.context.globalCompositeOperation = "source-over";
+            this.context.globalCompositeOperation = Config.PEN_OPERATION;
         } else if (item === "toolbox-rubber") {
-            this.context.globalCompositeOperation = "destination-out";
+            this.context.globalCompositeOperation = Config.RUBBER_OPERATION;
         }
     }
 
     resizeViews() {
-
         let bigContainer = document.querySelector(".dashboard-canvas");
 
-        if (bigContainer.offsetWidth > 1080) {
-            this.el.style.maxWidth = 1080 + 10;
+        if (bigContainer.offsetWidth > Config.CANVAS_WIDTH) {
+            this.el.style.maxWidth = (Config.CANVAS_WIDTH + Config.CANVAS_SIZE_OFFSET).toString();
         } else {
             this.el.style.maxWidth = bigContainer.offsetWidth;
         }
 
-        if (bigContainer.offsetHeight > 720) {
-            this.el.style.maxHeight = 720 + 10;
+        if (bigContainer.offsetHeight > Config.CANVAS_HEIGHT) {
+            this.el.style.maxHeight = (Config.CANVAS_HEIGHT + Config.CANVAS_SIZE_OFFSET).toString();
         } else {
             this.el.style.maxHeight = bigContainer.offsetHeight;
         }
@@ -182,8 +169,8 @@ class DrawAreaView extends View {
             ],
             stroke: data.color,
             strokeWidth: data.size,
-            lineCap: "round",
-            lineJoin: "round",
+            lineCap: Config.DEFAULT_PEN_JOIN_CAP,
+            lineJoin: Config.DEFAULT_PEN_JOIN_CAP,
             id: data.lineId,
             tension: 1.0,
             globalCompositeOperation: data.penRubber,

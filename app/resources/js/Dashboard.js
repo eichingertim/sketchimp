@@ -10,13 +10,14 @@ import CreateChannelDialogView from "./ui/CreateChannelDialogView.js";
 import SaveLoadView from "./ui/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
 import CreateSketchDialogView from "./ui/CreateSketchDialogView.js";
+import {Config, EventKeys, SocketKeys} from "./utils/Config";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView, memberController,
     channelListView, channelController, channelInfoDialogView, createChannelDialogView,
     saveLoadView, sketchController, createSketchDialogView;
 
-function onChannelDataForEnteringLoaded(dashboard, data) {
-    let realData = data.data.data;
+function onChannelDataForEnteringLoaded(dashboard, event) {
+    let realData = event.data.data;
     channelInfoDialogView.updateInfo(realData);
     document.querySelector(".channel-title").textContent = realData.name;
     memberListView.updateMembers(realData);
@@ -29,10 +30,10 @@ function onChannelDataForEnteringLoaded(dashboard, data) {
     }
 }
 
-function onCreateChannelDataLoaded(dashboard, data) {
-    channelListView.addNewChannel(data.data.data);
+function onCreateChannelDataLoaded(dashboard, event) {
+    channelListView.addNewChannel(event.data.data);
     createChannelDialogView.clearAfterSubmit();
-    onChannelDataForEnteringLoaded(dashboard, data);
+    onChannelDataForEnteringLoaded(dashboard, event);
 }
 
 function onLeaveChannelDataLoaded() {
@@ -55,12 +56,13 @@ function onMemberDataLoaded(data) {
 
 function onSketchExportClick() {
     let base64Uri = drawAreaView.getStageAsBase64();
-    sketchController.exportSketch(base64Uri, "sketch-export.png");
+    sketchController.exportSketch(base64Uri, Config.DEFAULT_PNG_NAME);
     saveLoadView.setSketchExported();
 }
 
 function onSketchCreateClick(dashboard, data) {
     drawAreaView.getStageAsPNG().then(function(imageTarget) {
+        //let newChannelName = data.data.name;
         //imageTarget = <img src="data:image/png,...../>"
         //sketchController.finalizeSketch(dashboard.channelId, image);
     });
@@ -124,42 +126,42 @@ class Dashboard {
 
     setListeners() {
         let instance = this;
-        drawAreaController.addEventListener("LineDrawn", (data) => drawAreaView.addLine(data.data));
-        drawAreaController.addEventListener("ClearCanvas", () => drawAreaView.clearCanvas());
-        drawAreaController.addEventListener("LineUndo", (data) => drawAreaView.undoLine(data.data));
+        drawAreaController.addEventListener(EventKeys.LINE_DRAWN_RECEIVED, (event) => drawAreaView.addLine(event.data));
+        drawAreaController.addEventListener(EventKeys.CLEAR_RECEIVED, () => drawAreaView.clearCanvas());
+        drawAreaController.addEventListener(EventKeys.LINE_UNDO_RECEIVED, (event) => drawAreaView.undoLine(event.data));
 
-        channelController.addEventListener("ChannelDataLoaded", onChannelDataForEnteringLoaded.bind(this, instance));
-        channelController.addEventListener("CreateChannelDataLoaded", onCreateChannelDataLoaded.bind(this, instance));
-        channelController.addEventListener("LeaveChannelDataLoaded", onLeaveChannelDataLoaded.bind(this));
-        channelController.addEventListener("JoinNewChannelDataLoaded", onJoinNewChannelDataLoaded.bind(this));
+        channelController.addEventListener(EventKeys.CHANNEL_DATA_LOADED, onChannelDataForEnteringLoaded.bind(this, instance));
+        channelController.addEventListener(EventKeys.CREATED_CHANNEL_DATA_LOADED, onCreateChannelDataLoaded.bind(this, instance));
+        channelController.addEventListener(EventKeys.LEAVE_CHANNEL_DATA_LOADED, onLeaveChannelDataLoaded.bind(this));
+        channelController.addEventListener(EventKeys.JOIN_NEW_CHANNEL_DATA_LOADED, onJoinNewChannelDataLoaded.bind(this));
 
-        memberController.addEventListener("MemberDataLoaded", onMemberDataLoaded.bind(this));
+        memberController.addEventListener(EventKeys.DATA_OF_ONE_MEMBER_LOADED, onMemberDataLoaded.bind(this));
 
-        drawAreaView.addEventListener("EmitLine", (data) => drawAreaController.emitLine(data.data));
+        sketchController.addEventListener(EventKeys.SKETCH_SAVED_IN_DB, () => saveLoadView.setSketchSaved());
 
-        toolboxView.addEventListener("ColorChange", (data) => drawAreaView.updateColor(data.data.color));
-        toolboxView.addEventListener("PenRubberSwitch", (data) => drawAreaView.switchPenRubber(data.data.item));
-        toolboxView.addEventListener("SizeChange", (data) => drawAreaView.updateSize(data.data.size));
-        toolboxView.addEventListener("DeleteForever", () => drawAreaController.emitClearCanvas());
-        toolboxView.addEventListener("Undo", () => drawAreaController.undoLine());
+        drawAreaView.addEventListener(EventKeys.LINE_READY_FOR_EMIT, (event) => drawAreaController.emitLine(event.data));
 
-        channelListView.addEventListener("ChannelItemClick", (data) => channelController.fetchChannelData(data.data.url));
-        channelListView.addEventListener("JoinServerClick", () => createChannelDialogView.toggleVisibility());
+        toolboxView.addEventListener(EventKeys.COLOR_CHANGE_CLICK, (event) => drawAreaView.updateColor(event.data.color));
+        toolboxView.addEventListener(EventKeys.PEN_RUBBER_SWITCH_CLICK, (event) => drawAreaView.switchPenRubber(event.data.item));
+        toolboxView.addEventListener(EventKeys.SIZE_CHANGE_CLICK, (event) => drawAreaView.updateSize(event.data.size));
+        toolboxView.addEventListener(EventKeys.CLEAR_CANVAS_CLICK, () => drawAreaController.emitClearCanvas());
+        toolboxView.addEventListener(EventKeys.UNDO_CLICK, () => drawAreaController.undoLine());
 
-        memberListView.addEventListener("MemberItemClick", (data) => memberController.fetchMemberData(data.url));
+        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CLICK, (event) => channelController.fetchChannelData(event.data.url));
+        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CREATE_CLICK, () => createChannelDialogView.toggleVisibility());
 
-        channelInfoDialogView.addEventListener("LeaveChannelClick", (data) => channelController.leaveChannel(data.data.id));
+        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => memberController.fetchMemberData(event.url));
 
-        createChannelDialogView.addEventListener("CreateChannel", (data) => channelController.createChannel(data.data.name, data.data.sketchName));
-        createChannelDialogView.addEventListener("JoinNewChannel", (data) => channelController.joinNewChannel(data.data.id));
+        channelInfoDialogView.addEventListener(EventKeys.LEAVE_CHANNEL_CLICK, (event) => channelController.leaveChannel(event.data.id));
 
-        saveLoadView.addEventListener("Save", () => sketchController.saveSketch(instance.channelId));
-        saveLoadView.addEventListener("Finalize", () => createSketchDialogView.toggleVisibility());
-        saveLoadView.addEventListener("Export", onSketchExportClick.bind(this));
+        createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => channelController.createChannel(event.data.name, event.data.sketchName));
+        createChannelDialogView.addEventListener(EventKeys.JOIN_CHANNEL_SUBMIT, (event) => channelController.joinNewChannel(event.data.id));
 
-        sketchController.addEventListener("SketchSaved", () => saveLoadView.setSketchSaved());
+        saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () => sketchController.saveSketch(instance.channelId));
+        saveLoadView.addEventListener(EventKeys.SKETCH_FINALIZE_CLICK, () => createSketchDialogView.toggleVisibility());
+        saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
 
-        createSketchDialogView.addEventListener("SketchCreateClick", onSketchCreateClick.bind(this, instance));
+        createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
     }
 
     onJoin(channelId) {
@@ -167,10 +169,11 @@ class Dashboard {
         drawAreaController.join(this.channelId);
         toolboxView.reset();
         drawAreaView.clearCanvas();
+        sketchController.loadHistory();
     }
 
     onLeave() {
-        this.socket.emit("unsubscribe", {channelId: this.channelId});
+        this.socket.emit(SocketKeys.UNSUBSCRIBE, {channelId: this.channelId});
     }
 
 }

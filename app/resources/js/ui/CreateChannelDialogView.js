@@ -1,16 +1,17 @@
 import View from "./View.js";
 import { Event } from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config";
 
 class JoinNewChannelEvent extends Event {
     constructor(id) {
-        super("JoinNewChannel", {id: id});
+        super(EventKeys.JOIN_CHANNEL_SUBMIT, {id: id});
 
     }
 }
 
 class CreateChannelEvent extends Event {
     constructor(name, sketchName) {
-        super("CreateChannel", {name: name, sketchName: sketchName});
+        super(EventKeys.CREATE_CHANNEL_SUBMIT, {name: name, sketchName: sketchName});
     }
 }
 

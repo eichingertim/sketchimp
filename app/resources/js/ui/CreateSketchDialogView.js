@@ -1,15 +1,16 @@
 import View from "./View.js";
 import { Event } from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config";
 
 class SketchCreateEvent extends Event {
     constructor(name) {
-        super("SketchCreateClick", {name: name});
+        super(EventKeys.CREATE_SKETCH_SUBMIT, {name: name});
     }
 }
 
 function onSketchSubmitClick(createSketchDialogView, data) {
     event.preventDefault();
-    let name = createSketchDialogView.el.querySelector("#sketch_name");
+    let name = createSketchDialogView.el.querySelector("#sketch_name").value;
     createSketchDialogView.notifyAll(new SketchCreateEvent(name));
 }
 

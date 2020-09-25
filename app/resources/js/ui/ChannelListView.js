@@ -1,22 +1,22 @@
 import View from "./View.js";
 import { Event } from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config";
 
 class ChannelItemClickEvent extends Event {
     constructor(href) {
-        super("ChannelItemClick", {url: href});
+        super(EventKeys.CHANNEL_ITEM_CLICK, {url: href});
     }
 }
 
 class JoinServerClickEvent extends Event {
     constructor() {
-        super("JoinServerClick", null);
+        super(EventKeys.CHANNEL_ITEM_CREATE_CLICK, null);
     }
 }
 
 function onJoinServerClick(channelListView, data) {
     event.preventDefault();
     channelListView.notifyAll(new JoinServerClickEvent());
-    //document.querySelector(".create-channel-container").classList.toggle("hidden");
 }
 
 function onChannelItemClick(channelListView, data) {
@@ -43,7 +43,7 @@ class ChannelListView extends View {
             let channelTemplate = this.el.querySelector("#channel-template"),
             clone = channelTemplate.content.cloneNode(true),
             anchor = clone.querySelector("a");
-        anchor.id = "/api/channel/" + data.id;
+        anchor.id = Config.API_URL_CHANNEL + data.id;
         anchor.textContent = data.name.substring(0, 1);
         this.el.insertBefore(clone, this.el.children[this.el.children.length-1]);
         setListener(this);
