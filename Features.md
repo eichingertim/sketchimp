@@ -10,7 +10,7 @@
 | **Rollen** | Der *Admin* eines Raumes kann Nutzer in Rollen einteilen, die verschiedene Rechte haben (Zeichnen-Recht, Export/Import Recht, Speicherrecht, Post-Recht, View-Recht). Es gibt drei Rollen, mit farblicher Zuordnung: *Admin* (besitzt alle Rechte), *CoLlaborator* (kann zeichnen) und *Observer* (kann zuschauen).| mittel | 3 Tage | UI, Database, Authentication |
 | **Zeichenfläche** | Fläche auf der gezeichnet werden kann. Dort werden auch die verschieden Layer zusammengefügt | hoch | 4 Tage | UI, Database |
 | **Zeichentools** | Größe, Farbe, Deckkraft, Pattern, Rückgängig, Radierer, Stiftart. Eine Toolbox in der alle Tools aufgelistet sind und ausgewählt werden können. | hoch | 9 Tage | UI, Database |
-| **Ebenensystem** | Standart nur eine Ebene für einen Sketch. Admin kann aber zusätzlich jedem Nutzer jeweils eine eigene Ebene zuweisen. -> siehe *Zeichenfläche* | mittel | 6 Tage | UI, Database |
+| **Ebenensystem** | Standart nur eine Ebene für einen Sketch. Admin kann aber zusätzlich eine Ebene eröffnen, in denen dann alle Collaborater Zeichnen können. Der Admin besitzt dann sozusagen die Überebene | mittel | 6 Tage | UI, Database |
 | **Vorlagen** | Vorlagen zum Ausmalen oder weiterzeichnen, die schon von uns gehostet werden | niedrig | 1 Tage | UI, Database |
 | **Score-/Levelsystem** | Punktesystem / Bewertungen einer Zeichnung / Levelsystem wenn Benutzer bestimmte Anzahl Sketches erstellt oder Upvotes hat | nice to have | 4 Tage | Database |
 
