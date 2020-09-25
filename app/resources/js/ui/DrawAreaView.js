@@ -1,6 +1,6 @@
 import View from "./View.js";
 import {Event} from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config";
+import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse

@@ -1,6 +1,6 @@
 import View from "./View.js";
 import { Event } from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config";
+import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 class JoinNewChannelEvent extends Event {
     constructor(id) {

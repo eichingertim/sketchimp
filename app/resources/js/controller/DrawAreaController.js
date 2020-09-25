@@ -1,5 +1,5 @@
 import {Event, Observable} from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config";
+import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 class LineDrawnEvent extends Event {
     constructor(data) {

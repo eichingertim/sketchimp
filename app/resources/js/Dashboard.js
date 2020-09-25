@@ -10,7 +10,7 @@ import CreateChannelDialogView from "./ui/CreateChannelDialogView.js";
 import SaveLoadView from "./ui/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
 import CreateSketchDialogView from "./ui/CreateSketchDialogView.js";
-import {Config, EventKeys, SocketKeys} from "./utils/Config";
+import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView, memberController,
     channelListView, channelController, channelInfoDialogView, createChannelDialogView,
