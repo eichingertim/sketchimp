@@ -60,8 +60,11 @@ function onSketchExportClick() {
 }
 
 function onSketchCreateClick(dashboard, data) {
-    let image = drawAreaView.getStageAsPNG();
-    sketchController.finalizeSketch(dashboard.channelId, image);
+    drawAreaView.getStageAsPNG().then(function(imageTarget) {
+        //imageTarget = <img src="data:image/png,...../>"
+        //sketchController.finalizeSketch(dashboard.channelId, image);
+    });
+
 }
 
 function configureDivSizes() {

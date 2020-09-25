@@ -122,8 +122,19 @@ class DrawAreaView extends View {
     }
 
     getStageAsPNG() {
+        let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
-            return this.stage.toImage();
+
+            return new Promise(
+                function(resolve, reject) {
+                    instance.stage.toImage({
+                        callback: function (img) {
+                            resolve(img);
+                        },
+                    });
+                }
+            );
+
         }
         return null;
     }

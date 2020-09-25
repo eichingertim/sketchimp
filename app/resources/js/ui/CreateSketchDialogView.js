@@ -8,7 +8,8 @@ class SketchCreateEvent extends Event {
 }
 
 function onSketchSubmitClick(createSketchDialogView, data) {
-    let name = createSketchDialogView.el.querySelector("#r_name");
+    event.preventDefault();
+    let name = createSketchDialogView.el.querySelector("#sketch_name");
     createSketchDialogView.notifyAll(new SketchCreateEvent(name));
 }
 
