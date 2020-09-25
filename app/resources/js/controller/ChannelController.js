@@ -1,26 +1,27 @@
 import { Event, Observable } from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 class ChannelDataLoadedEvent extends Event {
     constructor(data) {
-        super("ChannelDataLoaded", {data: data});
+        super(EventKeys.CHANNEL_DATA_LOADED, {data: data});
     }
 }
 
 class CreateChannelDataLoadedEvent extends Event {
     constructor(data) {
-        super("CreateChannelDataLoaded", {data: data});
+        super(EventKeys.CREATED_CHANNEL_DATA_LOADED, {data: data});
     }
 }
 
 class JoinNewChannelDataLoadedEvent extends Event {
     constructor() {
-        super("JoinNewChannelDataLoaded", null);
+        super(EventKeys.JOIN_NEW_CHANNEL_DATA_LOADED, null);
     }
 }
 
 class LeaveChannelDataLoadedEvent extends Event {
     constructor() {
-        super("LeaveChannelDataLoaded", null);
+        super(EventKeys.LEAVE_CHANNEL_DATA_LOADED, null);
     }
 }
 
@@ -33,8 +34,7 @@ class ChannelController extends Observable {
         event.preventDefault();
         let xhr = new XMLHttpRequest(),
             instance = this;
-        console.log(url);
-        xhr.open("GET", url, true);
+        xhr.open(Config.HTTP_GET, url, true);
         xhr.onload = function() {
             let data = JSON.parse(this.response).data;
             instance.notifyAll(new ChannelDataLoadedEvent(data));
@@ -42,22 +42,26 @@ class ChannelController extends Observable {
         xhr.send();
     }
 
-    createChannel(channelName) {
+    createChannel(channelName, sketchName) {
         let xhr = new XMLHttpRequest(),
             instance = this;
-        xhr.open("POST", "/api/channel/new/" + channelName, true);
+        xhr.open(Config.HTTP_POST, Config.API_URL_NEW_CHANNEL + channelName, true);
         xhr.withCredentials = true;
         xhr.onload = function() {
             let data = JSON.parse(this.response).data,
+                name = sketchName,
             xhrSketch = new XMLHttpRequest();
-            xhrSketch.open("POST", "/api/sketch/new/" + data.id, true);
+            xhrSketch.open(Config.HTTP_POST, Config.API_URL_NEW_SKETCH + data.id, true);
             xhrSketch.withCredentials = true;
-            xhrSketch.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhrSketch.setRequestHeader("Content-Type", Config.CONTENT_TYPE_URL_ENCODED);
             xhrSketch.onload = function() {
                 instance.notifyAll(new CreateChannelDataLoadedEvent(data));
             };
-            xhrSketch.send("name=TestName");
 
+            if (sketchName === "" || sketchName === " ") {
+                name = Config.DEFAULT_SKETCH_NAME;
+            }
+            xhrSketch.send("name=" + name.split(" ").join("+"));
         };
         xhr.send();
     }
@@ -65,10 +69,9 @@ class ChannelController extends Observable {
     joinNewChannel(channelId) {
         let xhr = new XMLHttpRequest(),
             instance = this;
-        xhr.open("POST", "/api/channel/join/" + channelId, true);
+        xhr.open(Config.HTTP_POST, Config.API_URL_JOIN_CHANNEL + channelId, true);
         xhr.withCredentials = true;
         xhr.onload = function() {
-            console.log(this.response);
             instance.notifyAll(new JoinNewChannelDataLoadedEvent());
         };
         xhr.send();
@@ -77,10 +80,9 @@ class ChannelController extends Observable {
     leaveChannel(channelId) {
         let xhr = new XMLHttpRequest(),
             instance = this;
-        xhr.open("POST", "/api/channel/leave/" + channelId, true);
+        xhr.open(Config.HTTP_POST, Config.API_URL_LEAVE_CHANNEL + channelId, true);
         xhr.withCredentials = true;
         xhr.onload = function() {
-            console.log(this.response);
             instance.notifyAll(new LeaveChannelDataLoadedEvent());
         };
         xhr.send();

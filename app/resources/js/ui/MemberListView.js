@@ -1,9 +1,10 @@
 import View from "./View.js";
 import { Event } from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 class MemberItemClickEvent extends Event {
     constructor(href) {
-        super("MemberItemClick", {url: href});
+        super(EventKeys.MEMBER_ITEM_CLICK, {url: href});
     }
 }
 

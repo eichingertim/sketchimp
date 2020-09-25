@@ -1,9 +1,10 @@
 import View from "./View.js";
 import { Event } from "../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
 class LeaveChannelClickEvent extends Event {
     constructor(id) {
-        super("LeaveChannelClick", {id: id});
+        super(EventKeys.LEAVE_CHANNEL_CLICK, {id: id});
     }
 }
 
