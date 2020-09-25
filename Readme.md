@@ -1,12 +1,30 @@
 # Projekt
 
-[Beschreiben Sie hier in einer kurzen Zusammenfassung Hintergrund, Ziele und Funktionen Ihrer Anwendung. Fügen Sie einen sinnvollen Screenshot ein. Geben Sie eine Link zu einer lauffähigen, online-erreichbaren Version der fertigen Anwendung an.]
-
-Die geplanten Features der Anwendung werden [hier](./Features.md) beschrieben. Das verwendete Software Design ist [hier](./Design.md) zusammengefasst. Allgemeine Guidelines, die das Team im Rahmen des Projekts einhalten möchte werden [hier](./GFuidelines.md) zusammengetragen.
+Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benutzern bieten. Der Fokus liegt dabei auf dem Zusammenschluss in Gruppen (Channels), die eine gemeinsame Zeichenfläche zur Verfügung gestellt bekommen, mit der sie an einem Sketch arbeiten können. Die so erstellten Zeichnungen können abgeschlossen und wenn gewünscht veröffentlicht werden. Im "Public Feed" können diese dann, zusammen mit Bildern anderer Kanäle, eingesehen und up- oder downgevotet werden.
 
 ## Team
 
-[Beschreiben Sie hier die einzelnen Teammitglieder mit Namen, E-Mail-Adresse, Github-Nutzer und Foto. Nennen Sie mindestens eine Komponenten der Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
+1. Tim Eichinger - tim1.eichinger@stud.uni-regensburg.de
+  * Komponenten: 
+    * Socketio 
+    * Zeichenkomponente+Toolbox
+    * Dashboard Frontend
+2. Tobias Dollhofer - tobias.dollhofer@stud.uni-regensburg.de
+  * Komponenten: 
+    * Sketchfunktionalität (Datenbankmodel, Upload) 
+    * Publicfeed Kartendesign 
+    * Web- und Datenbankhosting
+3. Lukas Schauhuber - lukas.schauhuber@stud.uni-regensburg.de
+  * Komponenten: 
+    * Backendrouting und Konfiguration
+    * Datenbank, Modelle User und Channel
+    * Authentifizierung
+    * Channelsystem
+    * Frontend Landing- und PublicFeed
+    * View Engine
+    * Dateiupload
+4. Timon Lorenz
+5. Jonas Ernst
 
 ## Setup und Testing
 
@@ -20,15 +38,46 @@ So nutzen Sie den vorgegebenen Server:
 
 ### Automatisches Bauen der Anwendung
 
-Unter Umständen müssen oder wollen Sie vor dem Ausführen bzw. Bereitstellen Ihrer Anwendung bestimmte Optimierungsvorgänge durchführen (z.B. mehrere Javascript-Dateien zu einer zusammenfügen oder Grafikdateien für die Verwendung im Browser anpassen). Versuchen Sie diese Schritte mithilfe entsprechende *Node.js*-Module zu lösen und implementieren Sie die Automatisierung in der Datei `build.js`. Sie können diese Datei über den Befehl `npm run build` starten. Dabei wird vor dem Ausführen der Datei der Javascript-Code unter `app/resources/js/` auf Fehler und Warnungen (*eslint*) geprüft. Der automatisierte Bau der Software startet nur dann, wenn Ihr Code fehlerfrei ist.
+Es sind keine besonderen Schritte notwendig um die Anwendung zu starten
 
-[Beschreiben Sie alle Schritte, die notwendig sind um Ihre Anwendung auf Basis dieses Repositorys zu starten.]
+npm install 
+npm start
 
 ## Beschreibung
 
-[Dokumentieren Sie ausführlich alle Funktionen der Anwendung. Verwenden Sie Screenshots und ggf. auch Gif-Dateien um zentrale Elemente und Abläufe zu beschreiben.]
-
-
-mlab
-Name: sketching2
-PW: G26wFVdXqQnUqddu
+* Registrieren von Usern
+  * -- Screenshot Signup Maske --
+* Anmeldung im System
+  * -- Screenshot Login Maske --
+* Erstellen von Channels Beitreten von Channels
+  * -- Screenshot Channel Create Maske --
+* Zeichnen auf eigenem peristentem Canvas pro Channel
+  * -- Screenshot Canvas --
+* Festlegen von Benutzerrollen mit verschiedenen Rechten pro Channel
+  * -- Screenshot Channel Admin Panel --
+* Verwendung eines Ebenensystems
+  * -- Screenshot Layer Auswahl --
+* Wechseln von Stiftgrößen, Farben; Radieren, Rückgängig machen, Löschen
+  * -- Screenshot Toolbox --
+* Ändern von Usereinstellungen, Hochladen eines Avatars
+  * -- Screenshot User Profile --
+* Hochladen eines Channel Avatars
+  * -- Screenshot Channel Info --
+* Abschließen von Zeichnungen
+  * -- Screenshot Save Sketch Maske --
+* Veröffentlichen von Zeichnungen
+  * -- Screenshot Finalize and Publish Sketch --
+* Anzeigen einer Zeichenhistorie im Channel
+  * -- Screenshot Sketch History --
+* Exportieren von Zeichnungen
+  * -- Screenshot Export Sketch --
+* Auflistung aller veröffentlichten Zeichnungen im Public Feed
+  * -- Screenshot Public Feed --
+* Upvote und Downvote von Sketches
+  * -- Screenshot Card Hover --
+* Scoresystem bei Benutzern
+  * -- Screenshot User Hover --
+* Dynamisches Reloading des Frontends über AJAX
+  * -- Gif AJAX Reloading --
+* Eigen erstellte Server-API zur Abfrage von Channels/Usern/Sketches
+  * -- Screenshot Lookup API --
