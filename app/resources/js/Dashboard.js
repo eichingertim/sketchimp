@@ -21,7 +21,7 @@ function onChannelDataForEnteringLoaded(dashboard, event) {
     let channelData = event.data.data,
         sketchData = event.data.sketchData;
 
-    //TODO: Participants roles handling
+    console.log(channelData);
 
     channelInfoDialogView.updateInfo(channelData);
     document.querySelector(".channel-title").textContent = channelData.name;
