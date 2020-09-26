@@ -10,11 +10,12 @@ import CreateChannelDialogView from "./ui/CreateChannelDialogView.js";
 import SaveLoadView from "./ui/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
 import CreateSketchDialogView from "./ui/CreateSketchDialogView.js";
+import AdminSettingsDialogView from "./ui/AdminSettingsDialogView.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView, memberController,
     channelListView, channelController, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, sketchController, createSketchDialogView;
+    saveLoadView, sketchController, createSketchDialogView, adminSettingsDialogView;
 
 function onChannelDataForEnteringLoaded(dashboard, event) {
     let realData = event.data.data;
@@ -74,6 +75,11 @@ function onSketchCreateClick(dashboard, data) {
 
 }
 
+function onSaveAdminSettingsLoaded() {
+    adminSettingsDialogView.toggleVisibility();
+    console.log("function onSave");
+}
+
 function configureDivSizes() {
     let mainContent = document.querySelector(".dashboard-main-content-container"),
         canvasContainer = document.querySelector(".dashboard-canvas"),
@@ -103,6 +109,11 @@ class Dashboard {
         document.querySelector(".channel-info-icon").addEventListener("click", function () {
             channelInfoDialogView.toggleVisibility();
         });
+
+        //not yet in own classes
+        document.querySelector(".admin-settings-icon").addEventListener("click", function() {
+            adminSettingsDialogView.toggleVisibility();
+        });
     }
 
     initUIAndController() {
@@ -113,7 +124,8 @@ class Dashboard {
             channelInfoDialog = document.querySelector(".info-container"),
             createChannelDialog = document.querySelector(".create-channel-container"),
             saveLoad = document.querySelector(".container-load-and-publish"),
-            createSketchDialog = document.querySelector(".create-sketch-container");
+            createSketchDialog = document.querySelector(".create-sketch-container"),
+            adminSettingsDialog = document.querySelector(".admin-settings");
 
         drawAreaView = new DrawAreaView(container);
         drawAreaController = new DrawAreaController(this.socket, this.userId);
@@ -127,6 +139,7 @@ class Dashboard {
         saveLoadView = new SaveLoadView(saveLoad);
         sketchController = new SketchController(this.socket);
         createSketchDialogView = new CreateSketchDialogView(createSketchDialog);
+        adminSettingsDialogView = new AdminSettingsDialogView(adminSettingsDialog);
     }
 
     setListeners() {
@@ -168,6 +181,8 @@ class Dashboard {
         saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
 
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded.bind(this));
     }
 
     onJoin(channelId) {
