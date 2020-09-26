@@ -7,6 +7,8 @@ const Config = {
         API_URL_LEAVE_CHANNEL: "/api/channel/leave/",
         API_URL_SKETCH_SAVE: "/api/sketch/save/",
         API_URL_CHANNEL: "/api/channel/",
+        API_URL_SKETCH_PUBLISH: "/api/sketch/publish/",
+        API_URL_FINALIZED_SKETCHES: "/api/sketch/all-finalized/",
         HTTP_POST: "POST",
         HTTP_GET: "GET",
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
@@ -20,6 +22,7 @@ const Config = {
         PEN_OPERATION: "source-over",
         RUBBER_OPERATION: "destination-out",
         DEFAULT_PNG_NAME: "sketch-export.png",
+        SKETCH_HISTORY_ITEM_HEIGHT: 30,
     },
 
     EventKeys = {
@@ -60,6 +63,12 @@ const Config = {
         COLOR_CHANGE_CLICK: "ColorChange",
         PEN_RUBBER_SWITCH_CLICK: "PenRubberSwitch",
         UNDO_CLICK: "Undo",
+
+        HISTORY_ITEM_CLICK: "HistoryItemClick",
+        FULLSCREEN_CLOSE_CLICK: "FullScreenCloseClick",
+        PUBLISH_SKETCH_CLICK: "PublishSketchClick",
+
+        PUBLISH_SKETCH_FINISHED: "PublishSketchFinished",
     },
 
     SocketKeys = {
