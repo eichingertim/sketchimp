@@ -14,8 +14,8 @@ class LineUndoEvent extends Event {
 }
 
 class ClearCanvasEvent extends Event {
-    constructor(sketchData) {
-        super(EventKeys.CLEAR_RECEIVED, {sketchData: sketchData});
+    constructor(data) {
+        super(EventKeys.CLEAR_RECEIVED, {sketchData: data.sketchData, userRole: data.userRole});
     }
 }
 
@@ -51,18 +51,16 @@ class DrawAreaController extends Observable {
         });
 
         this.socket.on(SocketKeys.CLEAR_CANVAS, function (data) {
-            if (data !== null) {
-                instance.notifyAll(new ClearCanvasEvent(data.sketchData));
-            } else {
-                instance.notifyAll(new ClearCanvasEvent(null));
-            }
+            instance.notifyAll(new ClearCanvasEvent(data));
         });
 
     }
 
-    emitClearCanvas(sketchData) {
+    emitClearCanvas(currentChannelsUserRole, sketchData) {
+        console.log(currentChannelsUserRole);
+        console.log(sketchData);
         if (this.channelId !== null) {
-            this.socket.emit(SocketKeys.CLEAR_CANVAS, {channelId: this.channelId, sketchData: sketchData});
+            this.socket.emit(SocketKeys.CLEAR_CANVAS, {channelId: this.channelId, sketchData: sketchData, userRole: currentChannelsUserRole});
         }
     }
 
@@ -76,6 +74,7 @@ class DrawAreaController extends Observable {
                 color: data.color,
                 penRubber: data.penRubber,
                 size: data.size,
+                adminLine: data.adminLine,
             });
         }
 

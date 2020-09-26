@@ -31,7 +31,9 @@ class ChannelController extends Observable {
     }
 
     fetchChannelData(url) {
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         let xhr = new XMLHttpRequest(),
             instance = this;
         xhr.open(Config.HTTP_GET, url, true);
@@ -52,7 +54,7 @@ class ChannelController extends Observable {
         let xhr = new XMLHttpRequest(),
             instance = this,
             channelName = data.name,
-            sketchName = data.sketchData,
+            sketchName = data.sketchName,
             isMultiLayer = data.isMultiLayer;
         xhr.open(Config.HTTP_POST, Config.API_URL_NEW_CHANNEL + channelName, true);
         xhr.withCredentials = true;
@@ -71,6 +73,7 @@ class ChannelController extends Observable {
             if (sketchName === "" || sketchName === " ") {
                 name = Config.DEFAULT_SKETCH_NAME;
             }
+
             xhrSketch.send("name=" + name.split(" ").join("+") + "&multilayer="+isMultiLayer);
         };
         xhr.send();

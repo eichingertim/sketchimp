@@ -4,19 +4,24 @@ import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 function getMarkedAsAdminLine(drawAreaView) {
 
+    if (drawAreaView.isMultiLayer) {
+        return drawAreaView.currentUserRole === "admins";
+    }
+    return true;
+
 }
 
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
         .posPrev) {
 
-        let shouldMarkAsAdminLine = getMarkedAsAdminLine(drawAreaView);
-
-        let data = {
+        let shouldMarkAsAdminLine = getMarkedAsAdminLine(drawAreaView),
+            data = {
             mouse: drawAreaView.mouse,
             color: drawAreaView.context.strokeStyle,
             penRubber: drawAreaView.context.globalCompositeOperation,
             size: drawAreaView.context.lineWidth,
+            adminLine: shouldMarkAsAdminLine,
         };
         drawAreaView.notifyAll(new EmitLineEvent(data));
         drawAreaView.mouse.move = false;
@@ -29,13 +34,13 @@ function checkAndNotifyForDrawing(drawAreaView) {
 
 function setMouseListener(drawAreaView) {
     drawAreaView.image.on("mousedown touchstart", function () {
-        if (drawAreaView.isDrawingActivated) {
+        if (drawAreaView.isDrawingActivated && drawAreaView.currentUserRole !== "viewers") {
             drawAreaView.mouse.click = true;
         }
     });
 
     drawAreaView.stage.on("mouseup touchend", function () {
-        if (drawAreaView.isDrawingActivated) {
+        if (drawAreaView.isDrawingActivated && drawAreaView.currentUserRole !== "viewers") {
             drawAreaView.mouse.click = false;
             drawAreaView.mouse.posPrev = false;
             drawAreaView.mouse.move = false;
@@ -43,7 +48,7 @@ function setMouseListener(drawAreaView) {
     });
 
     drawAreaView.stage.on("mousemove touchmove", function () {
-        if (drawAreaView.isDrawingActivated) {
+        if (drawAreaView.isDrawingActivated && drawAreaView.currentUserRole !== "viewers") {
             drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x /
                 drawAreaView.stage.width();
             drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y /
@@ -52,6 +57,17 @@ function setMouseListener(drawAreaView) {
             checkAndNotifyForDrawing(drawAreaView);
         }
     });
+}
+
+function clearAndSetupCollaboratorLayer(drawAreaView) {
+    drawAreaView.layer.collaboratorLayer.destroyChildren();
+    drawAreaView.image = new Konva.Image({
+        image: drawAreaView.canvas,
+        x: 0,
+        y: 0,
+    });
+    drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
+    drawAreaView.stage.draw();
 }
 
 function setupKonvaJS(drawAreaView, isMultiLayer) {
@@ -109,6 +125,7 @@ class DrawAreaView extends View {
     constructor(el) {
         super();
         this.setElement(el);
+        this.currentUserRole = "viewers";
         this.isDrawingActivated = true;
         this.isMultiLayer = false;
         this.layer = {
@@ -153,11 +170,14 @@ class DrawAreaView extends View {
                             resolve(img);
                         },
                     });
-                },
-            );
+                });
 
         }
         return null;
+    }
+
+    setUserRole(userRole) {
+        this.currentUserRole = userRole;
     }
 
     updateColor(color) {
@@ -193,7 +213,7 @@ class DrawAreaView extends View {
     }
 
     addLine(data) {
-        let isAdminLine = data.isAdminLine;
+        let isAdminLine = data.adminLine;
 
         let newLine = new Konva.Line({
             points: [
@@ -218,7 +238,6 @@ class DrawAreaView extends View {
             this.layer.collaboratorLayer.add(newLine);
             this.layer.collaboratorLayer.batchDraw();
         }
-
     }
 
     undoLine(data) {
@@ -231,12 +250,18 @@ class DrawAreaView extends View {
         this.layer.batchDraw();
     }
 
-    clearCanvas(sketchData) {
-        this.stage.destroyChildren();
-        if (sketchData) {
-            setupKonvaJS(this, sketchData.multilayer);
-        } else {
-            setupKonvaJS(this, false);
+    clearCanvas(data) {
+        console.log(data);
+        if ((data.sketchData !== null && data.sketchData !== undefined) || (data.userRole !== null && data.userRole === "admins")) {
+            this.stage.destroyChildren();
+            if (data.sketchData === undefined) {
+                setupKonvaJS(this, this.isMultiLayer);
+            } else {
+                setupKonvaJS(this, data.sketchData.multilayer);
+            }
+
+        } else if (data.userRole !== null && data.userRole === "collaborators") {
+            clearAndSetupCollaboratorLayer(this);
         }
 
         setMouseListener(this);

@@ -61,7 +61,7 @@ class SketchController extends Observable {
         xhr.open(Config.HTTP_POST, url, true);
         xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
         xhr.onload = function () {
-            let newSketchData = this.response.data;
+            let newSketchData = JSON.parse(this.response).data;
             instance.notifyAll(new SketchCreateEvent(newSketchData));
         };
 
