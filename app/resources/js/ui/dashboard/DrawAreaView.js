@@ -2,9 +2,16 @@ import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
+function getMarkedAsAdminLine(drawAreaView) {
+
+}
+
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
         .posPrev) {
+
+        let shouldMarkAsAdminLine = getMarkedAsAdminLine(drawAreaView);
+
         let data = {
             mouse: drawAreaView.mouse,
             color: drawAreaView.context.strokeStyle,
@@ -47,11 +54,16 @@ function setMouseListener(drawAreaView) {
     });
 }
 
-function setupKonvaJS(drawAreaView) {
+function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
+    drawAreaView.isMultiLayer = isMultiLayer;
 
     // eslint-disable-next-line no-undef
-    drawAreaView.layer = new Konva.Layer();
+
+    drawAreaView.layer.adminLayer = new Konva.Layer();
+    if (drawAreaView.isMultiLayer) {
+        drawAreaView.layer.collaboratorLayer = new Konva.Layer();
+    }
 
     // eslint-disable-next-line no-undef
     drawAreaView.stage = new Konva.Stage({
@@ -63,7 +75,10 @@ function setupKonvaJS(drawAreaView) {
     drawAreaView.canvas.width = Config.CANVAS_WIDTH;
     drawAreaView.canvas.height = Config.CANVAS_HEIGHT;
     drawAreaView.canvas.style.background = "#fffff";
-    drawAreaView.stage.add(drawAreaView.layer);
+    drawAreaView.stage.add(drawAreaView.layer.adminLayer);
+    if (drawAreaView.isMultiLayer) {
+        drawAreaView.stage.add(drawAreaView.layer.collaboratorLayer);
+    }
 
     // eslint-disable-next-line no-undef
     drawAreaView.image = new Konva.Image({
@@ -72,7 +87,10 @@ function setupKonvaJS(drawAreaView) {
         y: 0,
     });
 
-    drawAreaView.layer.add(drawAreaView.image);
+    drawAreaView.layer.adminLayer.add(drawAreaView.image);
+    if (drawAreaView.isMultiLayer) {
+        drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
+    }
     drawAreaView.stage.draw();
 
     drawAreaView.context = drawAreaView.canvas.getContext("2d");
@@ -92,7 +110,11 @@ class DrawAreaView extends View {
         super();
         this.setElement(el);
         this.isDrawingActivated = true;
-        this.layer = null;
+        this.isMultiLayer = false;
+        this.layer = {
+            adminLayer: null,
+            collaboratorLayer: null,
+        };
         this.stage = null;
         this.canvas = null;
         this.image = null;
@@ -104,7 +126,7 @@ class DrawAreaView extends View {
             posPrev: false,
         };
 
-        setupKonvaJS(this);
+        setupKonvaJS(this, false);
         setMouseListener(this);
     }
 
@@ -125,13 +147,13 @@ class DrawAreaView extends View {
         let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
             return new Promise(
-                function(resolve, reject) {
+                function (resolve, reject) {
                     instance.stage.toImage({
                         callback: function (img) {
                             resolve(img);
                         },
                     });
-                }
+                },
             );
 
         }
@@ -171,6 +193,8 @@ class DrawAreaView extends View {
     }
 
     addLine(data) {
+        let isAdminLine = data.isAdminLine;
+
         let newLine = new Konva.Line({
             points: [
                 data.line[0].x * this.stage.width(),
@@ -186,8 +210,15 @@ class DrawAreaView extends View {
             tension: 1.0,
             globalCompositeOperation: data.penRubber,
         });
-        this.layer.add(newLine);
-        this.layer.batchDraw();
+
+        if (isAdminLine) {
+            this.layer.adminLayer.add(newLine);
+            this.layer.adminLayer.batchDraw();
+        } else {
+            this.layer.collaboratorLayer.add(newLine);
+            this.layer.collaboratorLayer.batchDraw();
+        }
+
     }
 
     undoLine(data) {
@@ -200,9 +231,14 @@ class DrawAreaView extends View {
         this.layer.batchDraw();
     }
 
-    clearCanvas() {
+    clearCanvas(sketchData) {
         this.stage.destroyChildren();
-        setupKonvaJS(this);
+        if (sketchData) {
+            setupKonvaJS(this, sketchData.multilayer);
+        } else {
+            setupKonvaJS(this, false);
+        }
+
         setMouseListener(this);
     }
 }

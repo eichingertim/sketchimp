@@ -49,11 +49,12 @@ class SketchController extends Observable {
 
     }
 
-    finalizeSketch(channelId, imageBase64, sketchName) {
+    finalizeSketch(channelId, imageBase64, newSketchName, isNewSketchMultiLayer) {
         let xhr = new XMLHttpRequest(),
             instance = this,
             sketchBody = {
-                name: sketchName,
+                name: newSketchName,
+                multilayer: isNewSketchMultiLayer,
                 image: imageBase64,
             },
             url = "/api/sketch/finalize-create/" + channelId;

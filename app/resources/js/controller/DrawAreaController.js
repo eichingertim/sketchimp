@@ -14,8 +14,8 @@ class LineUndoEvent extends Event {
 }
 
 class ClearCanvasEvent extends Event {
-    constructor() {
-        super(EventKeys.CLEAR_RECEIVED, null);
+    constructor(sketchData) {
+        super(EventKeys.CLEAR_RECEIVED, {sketchData: sketchData});
     }
 }
 
@@ -50,15 +50,19 @@ class DrawAreaController extends Observable {
             instance.notifyAll(new LineUndoEvent(data));
         });
 
-        this.socket.on(SocketKeys.CLEAR_CANVAS, function () {
-            instance.notifyAll(new ClearCanvasEvent());
+        this.socket.on(SocketKeys.CLEAR_CANVAS, function (data) {
+            if (data !== null) {
+                instance.notifyAll(new ClearCanvasEvent(data.sketchData));
+            } else {
+                instance.notifyAll(new ClearCanvasEvent(null));
+            }
         });
 
     }
 
-    emitClearCanvas() {
+    emitClearCanvas(sketchData) {
         if (this.channelId !== null) {
-            this.socket.emit(SocketKeys.CLEAR_CANVAS, {channelId: this.channelId});
+            this.socket.emit(SocketKeys.CLEAR_CANVAS, {channelId: this.channelId, sketchData: sketchData});
         }
     }
 
