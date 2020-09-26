@@ -1,6 +1,6 @@
-import View from "./View.js";
-import {Event} from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import View from "../View.js";
+import {Event} from "../../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
@@ -22,22 +22,28 @@ function checkAndNotifyForDrawing(drawAreaView) {
 
 function setMouseListener(drawAreaView) {
     drawAreaView.image.on("mousedown touchstart", function () {
-        drawAreaView.mouse.click = true;
+        if (drawAreaView.isDrawingActivated) {
+            drawAreaView.mouse.click = true;
+        }
     });
 
     drawAreaView.stage.on("mouseup touchend", function () {
-        drawAreaView.mouse.click = false;
-        drawAreaView.mouse.posPrev = false;
-        drawAreaView.mouse.move = false;
+        if (drawAreaView.isDrawingActivated) {
+            drawAreaView.mouse.click = false;
+            drawAreaView.mouse.posPrev = false;
+            drawAreaView.mouse.move = false;
+        }
     });
 
     drawAreaView.stage.on("mousemove touchmove", function () {
-        drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x /
-            drawAreaView.stage.width();
-        drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y /
-            drawAreaView.stage.height();
-        drawAreaView.mouse.move = true;
-        checkAndNotifyForDrawing(drawAreaView);
+        if (drawAreaView.isDrawingActivated) {
+            drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x /
+                drawAreaView.stage.width();
+            drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y /
+                drawAreaView.stage.height();
+            drawAreaView.mouse.move = true;
+            checkAndNotifyForDrawing(drawAreaView);
+        }
     });
 }
 
@@ -85,6 +91,7 @@ class DrawAreaView extends View {
     constructor(el) {
         super();
         this.setElement(el);
+        this.isDrawingActivated = true;
         this.layer = null;
         this.stage = null;
         this.canvas = null;
@@ -99,6 +106,10 @@ class DrawAreaView extends View {
 
         setupKonvaJS(this);
         setMouseListener(this);
+    }
+
+    setDrawingActivated(active) {
+        this.isDrawingActivated = active;
     }
 
     getStageAsBase64() {
