@@ -384,3 +384,7 @@ body {
     background-color: #FFFFFF;
     height: 100%;
 }
+
+#admin-settings-dialog .member-item {
+    display: block;
+}

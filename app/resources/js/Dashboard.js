@@ -75,9 +75,8 @@ function onSketchCreateClick(dashboard, data) {
 
 }
 
-function onSaveAdminSettingsLoaded() {
-    adminSettingsDialogView.toggleVisibility();
-    console.log("function onSave");
+function onSaveAdminSettingsLoaded(event) {
+    adminSettingsDialogView.hide();
 }
 
 function configureDivSizes() {
@@ -182,7 +181,7 @@ class Dashboard {
 
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
 
-        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded.bind(this));
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
     }
 
     onJoin(channelId) {
