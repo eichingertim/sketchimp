@@ -13,7 +13,7 @@ Die Routes die die App bereitstellt sind in zwei Übergruppen unterteilt:
 ##### Markup
 
 Diese Routen werden verwendet, um dynamisch erzeugtes HTML an den Benutzer auszuliefern.
-Dabei werden Parameter an die View Engine übergeben, um den Content darzustellen. Die Routen werden durch die markupWrapper-Klasse eingebunden. Folgende Routen stehen zur Verfügung:
+Dabei werden Parameter an die View Engine übergeben, um den Content darzustellen. Die Routen werden durch die `markupWrapper`-Klasse eingebunden. Folgende Routen stehen zur Verfügung:
 
 * / (GET) - Startseite der App
 * /login (GET/POST) - Anmeldung im System
@@ -28,7 +28,7 @@ Dabei werden Parameter an die View Engine übergeben, um den Content darzustelle
 
 ##### API
 
-Diese Routen bieten eine Schnittstelle zur Abfrage von Serverdaten. Die jeweiligen Serverantworten werden im JSON-Format ausgeliefert und je nach Erfolg der Anfrage mit dem passenden HTTP-Status-Code versehen. Die API wird von der Anwendung auch intern genutzt, um Benutzeroberflächen in Echtzeit per AJAX nachzuladen und dieses so aktuell zu halten, ohne den Benutzer zu zwingen sein Browserfenster zu aktualisieren. Die Routen werden durch die apiWrapper-Klasse eingebunden. Folgende Routen stehen unter /api zur Verfügung:
+Diese Routen bieten eine Schnittstelle zur Abfrage von Serverdaten. Die jeweiligen Serverantworten werden im JSON-Format, durch die `ApiResponse`-Klasse dargestellt, ausgeliefert und je nach Erfolg der Anfrage mit dem passenden HTTP-Status-Code versehen. Die API wird von der Anwendung auch intern genutzt, um Benutzeroberflächen in Echtzeit per AJAX nachzuladen und dieses so aktuell zu halten, ohne den Benutzer zu zwingen sein Browserfenster zu aktualisieren. Die Routen werden durch die `apiWrapper`-Klasse eingebunden. Folgende Routen stehen unter /api zur Verfügung:
 
 * /user/:id (GET) - Abfrage eines Benutzerprofils
 * /channel 
@@ -47,29 +47,30 @@ Diese Routen bieten eine Schnittstelle zur Abfrage von Serverdaten. Die jeweilig
     * /save/:channelId (POST) - Speichern eines Sketches in einem Channel
     * /upvote/:sketchId (POST) - Upvote eins Sketches
     * /downvote/:sketchId (POST) - Downvote eines Sketches
-    * finalize-create/:channelId (POST) - Abschließen eines Sketches und Erstellung eines neuen Sketches in einem Channel
+    * /finalize-create/:channelId (POST) - Abschließen eines Sketches und Erstellung eines neuen Sketches in einem Channel
 
 ### Authentifizierung
 
-Zur Authentifizierung mit dem System wird das Node-Modul Passport.js verwendet. Dafür werden eine SignIn- und eine SignUp-Strategie definiert und über die authWrapper-Klasse im Server eingebunden. Die Benutzer werden in einer externen Datenbank gespeichert, wobei die Passwörter als 10-stellige Hashes hinterlegt werden. Die Zugriffsberechtigungen werden bei sämtlichen Routen, mit Ausnahme der Startseite, Public-Feed und Fehleranzeigen, durch eine Middleware geprüft, bevor entsprechende Inhalte ausgeliefert werden.
+Zur Authentifizierung mit dem System wird das Node-Modul `passport.js` verwendet. Dafür werden eine SignIn- und eine SignUp-Strategie definiert und über die `authWrapper`-Klasse im Server eingebunden. Die Benutzer werden in einer externen Datenbank gespeichert, wobei die Passwörter als 10-stellige Hashes hinterlegt werden. Die Zugriffsberechtigungen werden bei sämtlichen Routen, mit Ausnahme der Startseite, Public-Feed und Fehleranzeigen, durch eine Middleware geprüft, bevor entsprechende Inhalte ausgeliefert werden.
 
 ### Datenbank
-Als Datenbank-Lösung wurde eine MongoDB verwendet. Die Datenbank wird in Form eines Clustern beim Anbieter MongoDB Atlas gehostet.
-Sie wird über die Mongoose.js Library angesprochen. Dafür werden Schemata für die zu persistierenden Daten - User, Channel, Sketch - erstellt. Diese Modelle werden durch jeweilige Repositories und eine zusammenfassende DatabaseWrapper-Klasse vom Rest der App abstrahiert. 
+
+Als Datenbank-Lösung wird eine MongoDB verwendet. Die Datenbank wird in Form eines Clustern beim Anbieter MongoDB Atlas gehostet.
+Sie wird über die `Mongoose.js` Library angesprochen. Dafür werden Schemata für die zu persistierenden Daten - User, Channel, Sketch - erstellt. Diese Modelle werden durch jeweilige Repositories und eine zusammenfassende `DatabaseWrapper`-Klasse vom Rest der App abstrahiert. 
 
 ### View Engine
 
-Zur dynamischen Erstellung des Contents wird die View Engine EJS verwendet. Diese erhält Übergabeparameter beim Renderaufruf der jeweiligen Route.
+Zur dynamischen Erstellung des Contents wird die View Engine EJS verwendet. Diese erhält Übergabeparameter, wie Benutzerdaten, beim Renderaufruf der jeweiligen Route.
 
 ### Storage
 
-Um den Upload von benutzereigenen Daten zu ermöglichen, wird die StorageWorker-Klasse verwendet. Diese dient als Middleware und stellt das Multer-Modul zur Verfügung. Die hochgeladenen Bilder werden im öffentlichen App-Directory der Anwendung abgelegt und in den MongoDB-Dokumenten referenziert.
+Um den Upload von benutzereigenen Daten zu ermöglichen, wird die `StorageWorker`-Klasse verwendet. Diese dient als Middleware und stellt das `Multer`-Package zur Verfügung. Die hochgeladenen Bilder werden im öffentlichen App-Directory der Anwendung abgelegt und in den MongoDB-Dokumenten referenziert.
 
 ### Socket.IO
 
-Die Socket.IO Library wird als Websocket eingesetzt, um das kollaborative Zeichnen in Echtzeit zu ermöglichen. Um zwischen verschiedenen Channels zu unterscheiden, werden zwischen Clients Events mit dynamisch generierten Identifiern emited.
+Die `Socket.IO` Library wird als Websocket eingesetzt, um das kollaborative Zeichnen in Echtzeit zu ermöglichen. Um zwischen verschiedenen Channels zu unterscheiden, werden zwischen Clients Events mit dynamisch generierten Identifiern emited.
 
-## Module
+## Dependencies
 
 Zur Umsetzung der Anwendung werden eine Reihe von Fremdlibraries verwendet:
 
