@@ -1,20 +1,21 @@
 import DrawAreaController from "./controller/DrawAreaController.js";
-import DrawAreaView from "./ui/DrawAreaView.js";
-import ToolboxView from "./ui/ToolboxView.js";
-import MemberListView from "./ui/MemberListView.js";
+import DrawAreaView from "./ui/dashboard/DrawAreaView.js";
+import ToolboxView from "./ui/dashboard/ToolboxView.js";
+import MemberListView from "./ui/dashboard/MemberListView.js";
 import MemberController from "./controller/MemberController.js";
-import ChannelListView from "./ui/ChannelListView.js";
+import ChannelListView from "./ui/dashboard/ChannelListView.js";
 import ChannelController from "./controller/ChannelController.js";
-import ChannelInfoDialogView from "./ui/ChannelInfoDialogView.js";
-import CreateChannelDialogView from "./ui/CreateChannelDialogView.js";
-import SaveLoadView from "./ui/SaveLoadView.js";
+import ChannelInfoDialogView from "./ui/dashboard/ChannelInfoDialogView.js";
+import CreateChannelDialogView from "./ui/dashboard/CreateChannelDialogView.js";
+import SaveLoadView from "./ui/dashboard/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
-import CreateSketchDialogView from "./ui/CreateSketchDialogView.js";
+import CreateSketchDialogView from "./ui/dashboard/CreateSketchDialogView.js";
+import TopBarView from "./ui/dashboard/TopBarView.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView, memberController,
     channelListView, channelController, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, sketchController, createSketchDialogView;
+    saveLoadView, sketchController, createSketchDialogView, topBarView;
 
 function onChannelDataForEnteringLoaded(dashboard, event) {
     let realData = event.data.data;
@@ -51,9 +52,10 @@ function onJoinNewChannelDataLoaded() {
  */
 
 function onCreateSketchDataLoaded(dashboard, event) {
-    console.log("Moin");
     createSketchDialogView.clearAfterSubmit();
     drawAreaController.emitClearCanvas();
+    topBarView.clearSketchHistory();
+    sketchController.loadHistory(dashboard.channelId);
 }
 
 function onMemberDataLoaded(data) {
@@ -67,11 +69,30 @@ function onSketchExportClick() {
 }
 
 function onSketchCreateClick(dashboard, data) {
-    drawAreaView.getStageAsPNG().then(function(imageTarget) {
+    drawAreaView.getStageAsPNG().then(function (imageTarget) {
         let newSketchName = data.data.name;
         sketchController.finalizeSketch(dashboard.channelId, imageTarget.src, newSketchName);
     });
+}
 
+function onHistoryItemClick(dashboard, event) {
+    drawAreaView.setDrawingActivated(false);
+    topBarView.showImageFullscreen(event.data);
+}
+
+function onSketchHistoryLoaded(event) {
+    let sketches = event.data.sketches;
+    topBarView.addSketchHistory(sketches);
+}
+
+function onFullScreenCloseClick() {
+    topBarView.closeFullScreen();
+    drawAreaView.setDrawingActivated(true);
+}
+
+function onPublishSketchBtnClick(event) {
+    let sketchId = event.data.sketchId;
+    sketchController.publishSketch(sketchId);
 }
 
 function configureDivSizes() {
@@ -113,7 +134,8 @@ class Dashboard {
             channelInfoDialog = document.querySelector(".info-container"),
             createChannelDialog = document.querySelector(".create-channel-container"),
             saveLoad = document.querySelector(".container-load-and-publish"),
-            createSketchDialog = document.querySelector(".create-sketch-container");
+            createSketchDialog = document.querySelector(".create-sketch-container"),
+            topBar = document.querySelector(".container-top-bar-history-inner");
 
         drawAreaView = new DrawAreaView(container);
         drawAreaController = new DrawAreaController(this.socket, this.userId);
@@ -127,6 +149,8 @@ class Dashboard {
         saveLoadView = new SaveLoadView(saveLoad);
         sketchController = new SketchController(this.socket);
         createSketchDialogView = new CreateSketchDialogView(createSketchDialog);
+        topBarView = new TopBarView(topBar);
+
     }
 
     setListeners() {
@@ -144,6 +168,12 @@ class Dashboard {
 
         sketchController.addEventListener(EventKeys.SKETCH_SAVED_IN_DB, () => saveLoadView.setSketchSaved());
         sketchController.addEventListener(EventKeys.FINALIZED_AND_CREATED_SKETCH, onCreateSketchDataLoaded.bind(this, instance));
+        sketchController.addEventListener(EventKeys.LOADED_SKETCH_HISTORY_FOR_CHANNEL, onSketchHistoryLoaded.bind(this));
+        sketchController.addEventListener(EventKeys.PUBLISH_SKETCH_FINISHED, () => {
+            topBarView.finishedPublishing();
+            topBarView.clearSketchHistory();
+            sketchController.loadHistory(instance.channelId);
+        });
 
         drawAreaView.addEventListener(EventKeys.LINE_READY_FOR_EMIT, (event) => drawAreaController.emitLine(event.data));
 
@@ -168,6 +198,10 @@ class Dashboard {
         saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
 
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+
+        topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
+        topBarView.addEventListener(EventKeys.FULLSCREEN_CLOSE_CLICK, onFullScreenCloseClick.bind(this));
+        topBarView.addEventListener(EventKeys.PUBLISH_SKETCH_CLICK, onPublishSketchBtnClick.bind(this));
     }
 
     onJoin(channelId) {
@@ -175,7 +209,8 @@ class Dashboard {
         drawAreaController.join(this.channelId);
         toolboxView.reset();
         drawAreaView.clearCanvas();
-        sketchController.loadHistory();
+        topBarView.clearSketchHistory();
+        sketchController.loadHistory(channelId);
     }
 
     onLeave() {

@@ -8,14 +8,20 @@ class SketchSavedEvent extends Event {
 }
 
 class LoadedHistoryEvent extends Event {
-    constructor(images) {
-        super(EventKeys.LOADED_SKETCH_HISTORY_FOR_CHANNEL, {images: images});
+    constructor(sketches) {
+        super(EventKeys.LOADED_SKETCH_HISTORY_FOR_CHANNEL, {sketches: sketches});
     }
 }
 
 class SketchCreateEvent extends Event {
     constructor(sketchData) {
         super(EventKeys.FINALIZED_AND_CREATED_SKETCH, {data: sketchData});
+    }
+}
+
+class PublishSketchEvent extends Event {
+    constructor() {
+        super(EventKeys.PUBLISH_SKETCH_FINISHED, null);
     }
 }
 
@@ -59,12 +65,27 @@ class SketchController extends Observable {
         };
 
         xhr.send(JSON.stringify(sketchBody));
+    }
 
+    publishSketch(sketchId) {
+        let xhr = new XMLHttpRequest(),
+            instance = this;
+        xhr.open(Config.HTTP_POST, Config.API_URL_SKETCH_PUBLISH + sketchId, true);
+        xhr.onload = function () {
+            instance.notifyAll(new PublishSketchEvent());
+        };
+        xhr.send();
     }
 
     loadHistory(channelId) {
-        //loadhistory, then
-        //this.notifyAll(new LoadedHistoryEvent(/*loadedImages*/));
+        let xhr = new XMLHttpRequest(),
+            instance = this;
+        xhr.open(Config.HTTP_GET, Config.API_URL_FINALIZED_SKETCHES + channelId, true);
+        xhr.onload = function () {
+            let sketches = JSON.parse(this.response).data;
+            instance.notifyAll(new LoadedHistoryEvent(sketches));
+        };
+        xhr.send();
     }
 
     exportSketch(uri, name) {
@@ -75,18 +96,6 @@ class SketchController extends Observable {
         link.click();
         document.body.removeChild(link);
     }
-
-    /*createSketch(channelId, sketchName) {
-        let xhrSketch = new XMLHttpRequest(),
-            instance = this;
-        xhrSketch.open("POST", "/api/sketch/new/" + channelId, true);
-        xhrSketch.withCredentials = true;
-        xhrSketch.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhrSketch.onload = function() {
-            instance.notifyAll(new SketchCreateEvent());
-        };
-        xhrSketch.send("name=" + sketchName.split(" ").join("+"));
-    }*/
 
 }
 
