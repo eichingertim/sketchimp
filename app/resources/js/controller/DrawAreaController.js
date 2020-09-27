@@ -15,7 +15,7 @@ class LineUndoEvent extends Event {
 
 class ClearCanvasEvent extends Event {
     constructor(data) {
-        super(EventKeys.CLEAR_RECEIVED, {sketchData: data.sketchData, userRole: data.userRole});
+        super(EventKeys.CLEAR_RECEIVED, {sketchData: data.sketchData, userRole: data.userRole, isMultiLayer: data.isMultiLayer});
     }
 }
 
@@ -56,16 +56,21 @@ class DrawAreaController extends Observable {
 
     }
 
-    emitClearCanvas(currentChannelsUserRole, sketchData) {
-        console.log(currentChannelsUserRole);
-        console.log(sketchData);
+    emitClearCanvas(currentChannelsUserRole, sketchData, isMultiLayer, creatorId) {
         if (this.channelId !== null) {
-            this.socket.emit(SocketKeys.CLEAR_CANVAS, {channelId: this.channelId, sketchData: sketchData, userRole: currentChannelsUserRole});
+            this.socket.emit(SocketKeys.CLEAR_CANVAS, {
+                channelId: this.channelId,
+                sketchData: sketchData,
+                userRole: currentChannelsUserRole,
+                isMultiLayer: isMultiLayer,
+                creatorId: creatorId,
+            });
         }
     }
 
     emitLine(data) {
         if (this.channelId !== null) {
+            console.log(data.adminLine);
             this.socket.emit(SocketKeys.LINE_DRAWN, {
                 channelId: this.channelId,
                 userId: this.userId,

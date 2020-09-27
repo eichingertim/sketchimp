@@ -5,6 +5,7 @@ import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 function getMarkedAsAdminLine(drawAreaView) {
 
     if (drawAreaView.isMultiLayer) {
+        console.log(drawAreaView.currentUserRole);
         return drawAreaView.currentUserRole === "admins";
     }
     return true;
@@ -104,6 +105,7 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
     });
 
     drawAreaView.layer.adminLayer.add(drawAreaView.image);
+
     if (drawAreaView.isMultiLayer) {
         drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
     }
@@ -128,6 +130,7 @@ class DrawAreaView extends View {
         this.currentUserRole = "viewers";
         this.isDrawingActivated = true;
         this.isMultiLayer = false;
+        this.creatorId = null;
         this.layer = {
             adminLayer: null,
             collaboratorLayer: null,
@@ -143,8 +146,16 @@ class DrawAreaView extends View {
             posPrev: false,
         };
 
-        setupKonvaJS(this, false);
+        setupKonvaJS(this);
         setMouseListener(this);
+    }
+
+    setCreatorId(creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    setMultiLayer(isMultiLayer) {
+        this.isMultiLayer = isMultiLayer;
     }
 
     setDrawingActivated(active) {
@@ -247,14 +258,18 @@ class DrawAreaView extends View {
                 line.destroy();
             }
         }
-        this.layer.batchDraw();
+        if (this.isMultiLayer) {
+            this.layer.adminLayer.batchDraw();
+            this.layer.collaboratorLayer.batchDraw();
+        } else {
+            this.layer.adminLayer.batchDraw();
+        }
     }
 
     clearCanvas(data) {
-        console.log(data);
         if ((data.sketchData !== null && data.sketchData !== undefined) || (data.userRole !== null && data.userRole === "admins")) {
             this.stage.destroyChildren();
-            if (data.sketchData === undefined) {
+            if (data.sketchData === undefined || data.sketchData === null) {
                 setupKonvaJS(this, this.isMultiLayer);
             } else {
                 setupKonvaJS(this, data.sketchData.multilayer);

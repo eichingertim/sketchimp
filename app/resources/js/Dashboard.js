@@ -37,10 +37,10 @@ function onChannelDataForEnteringLoaded(dashboard, event) {
     memberListView.updateMembers(channelData);
 
     if (dashboard.channelId === null) {
-        dashboard.onJoin(channelData.id, sketchData, userRole);
+        dashboard.onJoin(channelData.id, sketchData, userRole, channelData.multilayer, channelData.creator.id);
     } else {
         dashboard.onLeave();
-        dashboard.onJoin(channelData.id, sketchData, userRole);
+        dashboard.onJoin(channelData.id, sketchData, userRole, channelData.multilayer, channelData.creator.id);
     }
 }
 
@@ -70,7 +70,7 @@ function onCreateSketchDataLoaded(dashboard, event) {
     let sketchData = event.data.data;
 
     createSketchDialogView.clearAfterSubmit();
-    drawAreaController.emitClearCanvas(null, sketchData);
+    drawAreaController.emitClearCanvas(null, sketchData, null, null);
     topBarView.clearSketchHistory();
     sketchController.loadHistory(dashboard.channelId);
 }
@@ -199,7 +199,9 @@ class Dashboard {
         toolboxView.addEventListener(EventKeys.PEN_RUBBER_SWITCH_CLICK, (event) => drawAreaView.switchPenRubber(event.data.item));
         toolboxView.addEventListener(EventKeys.SIZE_CHANGE_CLICK, (event) => drawAreaView.updateSize(event.data.size));
 
-        toolboxView.addEventListener(EventKeys.CLEAR_CANVAS_CLICK, () => drawAreaController.emitClearCanvas(this.currentChannelsUserRole, null));
+        toolboxView.addEventListener(EventKeys.CLEAR_CANVAS_CLICK, () => {
+            drawAreaController.emitClearCanvas(this.currentChannelsUserRole, null, drawAreaView.isMultiLayer, drawAreaView.creatorId);
+        });
         toolboxView.addEventListener(EventKeys.UNDO_CLICK, () => drawAreaController.undoLine());
 
         channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CLICK, (event) => channelController.fetchChannelData(event.data.url));
@@ -223,15 +225,23 @@ class Dashboard {
         topBarView.addEventListener(EventKeys.PUBLISH_SKETCH_CLICK, onPublishSketchBtnClick.bind(this));
     }
 
-    onJoin(channelId, sketchData, userRole) {
+    onJoin(channelId, sketchData, userRole, isMultiLayer, creatorId) {
         this.channelId = channelId;
+        console.log(sketchData);
+
+        let data = {
+            sketchData: sketchData,
+            userRole: userRole,
+        };
 
         if (sketchData) {
             this.currentChannelsUserRole = userRole;
-            drawAreaController.join(this.channelId);
             toolboxView.reset();
+            drawAreaController.join(channelId);
+            drawAreaView.setCreatorId(creatorId);
+            drawAreaView.setMultiLayer(isMultiLayer);
             drawAreaView.setUserRole(userRole);
-            drawAreaView.clearCanvas(sketchData);
+            drawAreaView.clearCanvas(data);
             topBarView.clearSketchHistory();
             sketchController.loadHistory(channelId);
         } else {
