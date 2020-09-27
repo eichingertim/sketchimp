@@ -15,8 +15,15 @@ class LineUndoEvent extends Event {
 
 class ClearCanvasEvent extends Event {
     constructor(data) {
-        super(EventKeys.CLEAR_RECEIVED, {sketchData: data.sketchData, userRole: data.userRole, isMultiLayer: data.isMultiLayer});
+        super(EventKeys.CLEAR_RECEIVED, data);
     }
+}
+
+function getMarkedAsAdminLine(isMultiLayer, userRole) {
+    if (isMultiLayer) {
+        return userRole === Config.CHANNEL_ROLE_ADMIN;
+    }
+    return true;
 }
 
 function createUUID() {
@@ -51,26 +58,26 @@ class DrawAreaController extends Observable {
         });
 
         this.socket.on(SocketKeys.CLEAR_CANVAS, function (data) {
+            console.log(data);
             instance.notifyAll(new ClearCanvasEvent(data));
         });
 
     }
 
-    emitClearCanvas(currentChannelsUserRole, sketchData, isMultiLayer, creatorId) {
+    emitClearCanvas(isNewSketch, currentChannelRole, multilayer, creatorId) {
         if (this.channelId !== null) {
             this.socket.emit(SocketKeys.CLEAR_CANVAS, {
                 channelId: this.channelId,
-                sketchData: sketchData,
-                userRole: currentChannelsUserRole,
-                isMultiLayer: isMultiLayer,
+                isNewSketch: isNewSketch,
+                userRole: currentChannelRole,
+                multilayer: multilayer,
                 creatorId: creatorId,
             });
         }
     }
 
-    emitLine(data) {
-        if (this.channelId !== null) {
-            console.log(data.adminLine);
+    emitLine(data, multilayer, currentChannelRole) {
+        if (this.channelId !== null && currentChannelRole !== Config.CHANNEL_ROLE_VIEWER) {
             this.socket.emit(SocketKeys.LINE_DRAWN, {
                 channelId: this.channelId,
                 userId: this.userId,
@@ -79,17 +86,17 @@ class DrawAreaController extends Observable {
                 color: data.color,
                 penRubber: data.penRubber,
                 size: data.size,
-                adminLine: data.adminLine,
+                adminLine: getMarkedAsAdminLine(multilayer, currentChannelRole),
             });
         }
 
     }
 
-    undoLine() {
-        if (this.channelId !== null) {
+    emitUndoLine(channelId, userId) {
+        if (channelId !== null) {
             this.socket.emit(SocketKeys.LINE_UNDO, {
-                channelId: this.channelId,
-                userId: this.userId,
+                channelId: channelId,
+                userId: userId,
             });
         }
     }
