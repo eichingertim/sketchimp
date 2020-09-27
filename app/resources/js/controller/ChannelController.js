@@ -1,91 +1,106 @@
-import { Event, Observable } from "../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import ChannelModel from "../models/ChannelModel.js";
+import SketchModel from "../models/SketchModel.js";
 
-class ChannelDataLoadedEvent extends Event {
-    constructor(data) {
-        super(EventKeys.CHANNEL_DATA_LOADED, {data: data});
-    }
-}
+class ChannelController {
 
-class CreateChannelDataLoadedEvent extends Event {
-    constructor(data) {
-        super(EventKeys.CREATED_CHANNEL_DATA_LOADED, {data: data});
-    }
-}
+    static fetchChannelData(url) {
+        if (event) {
+            event.preventDefault();
+        }
 
-class JoinNewChannelDataLoadedEvent extends Event {
-    constructor() {
-        super(EventKeys.JOIN_NEW_CHANNEL_DATA_LOADED, null);
-    }
-}
-
-class LeaveChannelDataLoadedEvent extends Event {
-    constructor() {
-        super(EventKeys.LEAVE_CHANNEL_DATA_LOADED, null);
-    }
-}
-
-class ChannelController extends Observable {
-    constructor() {
-        super();
-    }
-
-    fetchChannelData(url) {
-        event.preventDefault();
-        let xhr = new XMLHttpRequest(),
-            instance = this;
-        xhr.open(Config.HTTP_GET, url, true);
-        xhr.onload = function() {
-            let data = JSON.parse(this.response).data;
-            instance.notifyAll(new ChannelDataLoadedEvent(data));
-        };
-        xhr.send();
-    }
-
-    createChannel(channelName, sketchName) {
-        let xhr = new XMLHttpRequest(),
-            instance = this;
-        xhr.open(Config.HTTP_POST, Config.API_URL_NEW_CHANNEL + channelName, true);
-        xhr.withCredentials = true;
-        xhr.onload = function() {
-            let data = JSON.parse(this.response).data,
-                name = sketchName,
-            xhrSketch = new XMLHttpRequest();
-            xhrSketch.open(Config.HTTP_POST, Config.API_URL_NEW_SKETCH + data.id, true);
-            xhrSketch.withCredentials = true;
-            xhrSketch.setRequestHeader("Content-Type", Config.CONTENT_TYPE_URL_ENCODED);
-            xhrSketch.onload = function() {
-                instance.notifyAll(new CreateChannelDataLoadedEvent(data));
+        return new Promise(function (resolve, reject) {
+            let xhr = new XMLHttpRequest(),
+                xhrSketch = new XMLHttpRequest();
+            xhr.open(Config.HTTP_GET, url, true);
+            xhr.onload = function() {
+                let data = JSON.parse(this.response).data, channel;
+                if (data) {
+                    channel = new ChannelModel(data.id, data.name, data.creator.id, data.creator.username, data.creation, data.members);
+                }
+                xhrSketch.open(Config.HTTP_GET, Config.API_URL_CURRENT_SKETCH + data.id, true);
+                xhrSketch.onload = function () {
+                    let sketchData = JSON.parse(this.response).data;
+                    channel.currentSketch = new SketchModel(sketchData.id, sketchData.name, sketchData.multilayer);
+                    resolve(channel);
+                };
+                xhrSketch.send();
             };
+            xhr.send();
+        });
 
-            if (sketchName === "" || sketchName === " ") {
-                name = Config.DEFAULT_SKETCH_NAME;
+    }
+
+    static createChannel(data) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest(),
+                    xhrSketch = new XMLHttpRequest(),
+                    channelName = data.name,
+                    sketchName = data.sketchName,
+                    isMultiLayer = data.isMultiLayer;
+
+                xhr.open(Config.HTTP_POST, Config.API_URL_NEW_CHANNEL + channelName, true);
+                xhr.withCredentials = true;
+                xhr.onload = function() {
+                    let channelData = JSON.parse(this.response).data,
+                        channel;
+
+                    if (channelData) {
+                        channel = new ChannelModel(channelData.id, channelData.name, channelData.creator.id, channelData.creator.username, channelData.creation, channelData.members);
+                    }
+
+                    xhrSketch.open(Config.HTTP_POST, Config.API_URL_NEW_SKETCH + channelData.id, true);
+                    xhrSketch.withCredentials = true;
+                    xhrSketch.setRequestHeader("Content-Type", Config.CONTENT_TYPE_URL_ENCODED);
+                    xhrSketch.onload = function() {
+                        let sketchData = JSON.parse(this.response).data;
+                        if (sketchData) {
+                            channel.currentSketch = new SketchModel(sketchData.id, sketchData.name, sketchData.multilayer);
+                            resolve(channel);
+                        }
+                    };
+
+                    if (sketchName === "" || sketchName === " ") {
+                        sketchName = Config.DEFAULT_SKETCH_NAME;
+                    }
+
+                    xhrSketch.send("name=" + sketchName.split(" ").join("+") + "&multilayer="+isMultiLayer);
+                };
+                xhr.send();
             }
-            xhrSketch.send("name=" + name.split(" ").join("+"));
-        };
-        xhr.send();
+        );
+
     }
 
-    joinNewChannel(channelId) {
-        let xhr = new XMLHttpRequest(),
-            instance = this;
-        xhr.open(Config.HTTP_POST, Config.API_URL_JOIN_CHANNEL + channelId, true);
-        xhr.withCredentials = true;
-        xhr.onload = function() {
-            instance.notifyAll(new JoinNewChannelDataLoadedEvent());
-        };
-        xhr.send();
+    static joinNewChannel(channelId) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(Config.HTTP_POST, Config.API_URL_JOIN_CHANNEL + channelId, true);
+                xhr.withCredentials = true;
+                xhr.onload = function() {
+                    resolve();
+                };
+                xhr.send();
+            }
+        );
+
     }
 
-    leaveChannel(channelId) {
-        let xhr = new XMLHttpRequest(),
-            instance = this;
-        xhr.open(Config.HTTP_POST, Config.API_URL_LEAVE_CHANNEL + channelId, true);
-        xhr.withCredentials = true;
-        xhr.onload = function() {
-            instance.notifyAll(new LeaveChannelDataLoadedEvent());
-        };
-        xhr.send();
+    static leaveChannel(channelId) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(Config.HTTP_POST, Config.API_URL_LEAVE_CHANNEL + channelId, true);
+                xhr.withCredentials = true;
+                xhr.onload = function() {
+                    resolve();
+                };
+                xhr.send();
+            }
+        );
+
     }
 }
 
