@@ -1,6 +1,6 @@
 # Projekt
 
-Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benutzern bieten. Der Fokus liegt dabei auf dem Zusammenschluss in Gruppen (Channels), die eine gemeinsame Zeichenfläche zur Verfügung gestellt bekommen, mit der sie an einem Sketch arbeiten können. Die so erstellten Zeichnungen können abgeschlossen und wenn gewünscht veröffentlicht werden. Im "Public Feed" können diese dann, zusammen mit Bildern anderer Kanäle, eingesehen und up- oder downgevotet werden.
+Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benutzern bieten. Der Fokus liegt dabei auf dem Zusammenschluss in Gruppen (Channels), die eine Zeichenfläche zur Verfügung gestellt bekommen, mit der sie gemeinsam an einem Sketch arbeiten können. Die so erstellten Zeichnungen können abgeschlossen und wenn gewünscht veröffentlicht werden. Im "Public Feed" werden diese dann, zusammen mit Bildern anderer Kanäle, allen angemeldeten und anonymen Besuchern angezeigt und können von ersteren mit "Gefällt mir" oder "Gefällt mir nicht" ausgezeichnet werden.
 
 ## Team
 
@@ -9,11 +9,13 @@ Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benu
     * Socketio 
     * Zeichenkomponente+Toolbox
     * Dashboard Frontend
+    * Sketch-History
 2. Tobias Dollhofer - tobias.dollhofer@stud.uni-regensburg.de
   * Komponenten: 
     * Sketchfunktionalität (Datenbankmodel, Upload) 
     * Publicfeed Kartendesign 
     * Web- und Datenbankhosting
+    * Logo-Design
 3. Lukas Schauhuber - lukas.schauhuber@stud.uni-regensburg.de
   * Komponenten: 
     * Backendrouting und Konfiguration
@@ -23,25 +25,22 @@ Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benu
     * Frontend Landing- und PublicFeed
     * View Engine
     * Dateiupload
+    * Public .me Domain registriert
 4. Timon Lorenz
 5. Jonas Ernst
 
-## Setup und Testing
+## Setup und Ausführen der Anwendung
 
-Im Starterpaket ist ein einfacher Webserver vorgegeben, mit dem Sie die Inhalte des Ordners `/app` statisch ausliefern können. Benutzen Sie diesen, um Ihre Anwendung zu entwickeln und zu testen. Sollten Sie zu Realisierung Ihrer Anwendung eine komplexere Serverkomponente benötigen, können Sie die vorhandenen Dateien (`index.js` und `lib/AppServer.js`) als Ausgangslage für eigene Erweiterungen nutzten. Speichern Sie alle weiteren, serverseitig verwendeten Dateien im Verzeichnis `/lib` ab.
+Die App wird vom Projektteam unter der Domain http angeboten.
+Zusätzlich besteht die Möglichkeit, das Projekt direkt auf einem eigenen Webserver auszuführen.
+Allerdings ist zu beachten, dass, ohne Anpassung der Datenbank-Verbindung, die Bild-Referenzen nicht geladen werden können, da die Quelldateien nur auf dem gehosteten Webserver vorliegen. Die reguläre Datenbank-URL liegt unter `/lib/config/Constants.js` als Konstante vor.
 
-So nutzen Sie den vorgegebenen Server:
+Um die Anwendung lokal zu installieren und zu starten sind keine besonderen Schritte notwendig. 
+Es reichen folgende Kommandos:
 
-1. Führen Sie **einmalig** den Befehl `npm install` aus, um die notwendigen Abhängigkeiten (`express`) zu installieren.
+```npm install```
 
-2. Führen Sie den Befehl `npm start` aus um die Anwendung zu starten. Der Inhalt des `/app`-Verzeichnis ist anschließend über die die Adresse `http://localhost:8000/app` erreichbar.
-
-### Automatisches Bauen der Anwendung
-
-Es sind keine besonderen Schritte notwendig um die Anwendung zu starten
-
-npm install 
-npm start
+```npm start```
 
 ## Beschreibung
 

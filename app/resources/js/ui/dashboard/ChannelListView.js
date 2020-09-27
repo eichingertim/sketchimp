@@ -1,6 +1,6 @@
-import View from "./View.js";
-import { Event } from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import View from "../View.js";
+import { Event } from "../../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 class ChannelItemClickEvent extends Event {
     constructor(href) {
@@ -39,12 +39,12 @@ class ChannelListView extends View {
         setListener(this);
     }
 
-    addNewChannel(data) {
+    addNewChannel(channel) {
             let channelTemplate = this.el.querySelector("#channel-template"),
             clone = channelTemplate.content.cloneNode(true),
             anchor = clone.querySelector("a");
-        anchor.id = Config.API_URL_CHANNEL + data.id;
-        anchor.textContent = data.name.substring(0, 1);
+        anchor.id = Config.API_URL_CHANNEL + channel.channelId;
+        anchor.textContent = channel.channelName.substring(0, 1);
         this.el.insertBefore(clone, this.el.children[this.el.children.length-1]);
         setListener(this);
     }

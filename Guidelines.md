@@ -14,11 +14,9 @@
 
 ## Zusätzliche Übereinkünfte
 
-[Notieren Sie hier alle team-internen Übereinkünfte zur Verwendung des Repositorys, z.B. spezielle Überlegungen zur Codequalität oder zur Formulierung von *Commit Messages*]
-
+- Zum gemeinsamen Arbeiten wird Pair-Programming in einem Discord Kanal eingesetzt
+- Ein Discord Bot postet alle Benachrichtigung des Repositories in einen Textkanal des Discord Channels
 - Jedes grundlegende Feature wird in einem eigens dafür erstellten Branch bearbeitet, der auf dem dev basiert
 - Um einen Branch in den dev zu mergen, wird ein Pull Request erstellt. Pull Requests werden von mindestens einem Reviewer (nicht dem Ersteller des Requests) bearbeitet und bei Merge Konflikten gemeinsam resolved
 - Code wird mit Summaries in Englisch und kleingeschrieben commited
 - Planung und Organisatorisches wird mit deutschen Commit Messages addiert
-
-

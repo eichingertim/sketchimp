@@ -1,10 +1,11 @@
-import View from "./View.js";
-import {Event} from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import View from "../View.js";
+import {Event} from "../../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
         .posPrev) {
+
         let data = {
             mouse: drawAreaView.mouse,
             color: drawAreaView.context.strokeStyle,
@@ -22,30 +23,53 @@ function checkAndNotifyForDrawing(drawAreaView) {
 
 function setMouseListener(drawAreaView) {
     drawAreaView.image.on("mousedown touchstart", function () {
-        drawAreaView.mouse.click = true;
+        if (drawAreaView.isDrawingActivated) {
+            drawAreaView.mouse.click = true;
+        }
     });
 
     drawAreaView.stage.on("mouseup touchend", function () {
-        drawAreaView.mouse.click = false;
-        drawAreaView.mouse.posPrev = false;
-        drawAreaView.mouse.move = false;
+        if (drawAreaView.isDrawingActivated) {
+            drawAreaView.mouse.click = false;
+            drawAreaView.mouse.posPrev = false;
+            drawAreaView.mouse.move = false;
+        }
     });
 
     drawAreaView.stage.on("mousemove touchmove", function () {
-        drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x /
-            drawAreaView.stage.width();
-        drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y /
-            drawAreaView.stage.height();
-        drawAreaView.mouse.move = true;
-        checkAndNotifyForDrawing(drawAreaView);
+        if (drawAreaView.isDrawingActivated) {
+            drawAreaView.mouse.pos.x = drawAreaView.stage.getPointerPosition().x /
+                drawAreaView.stage.width();
+            drawAreaView.mouse.pos.y = drawAreaView.stage.getPointerPosition().y /
+                drawAreaView.stage.height();
+            drawAreaView.mouse.move = true;
+            checkAndNotifyForDrawing(drawAreaView);
+        }
     });
 }
 
-function setupKonvaJS(drawAreaView) {
+function clearAndSetupCollaboratorLayer(drawAreaView) {
+    drawAreaView.layer.collaboratorLayer.destroyChildren();
+    drawAreaView.image = new Konva.Image({
+        image: drawAreaView.canvas,
+        x: 0,
+        y: 0,
+    });
+    drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
+    drawAreaView.stage.draw();
+}
+
+function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
 
     // eslint-disable-next-line no-undef
-    drawAreaView.layer = new Konva.Layer();
+
+    drawAreaView.layer.adminLayer = new Konva.Layer();
+    if (isMultiLayer) {
+        drawAreaView.layer.collaboratorLayer = new Konva.Layer();
+    } else {
+        drawAreaView.layer.collaboratorLayer = null;
+    }
 
     // eslint-disable-next-line no-undef
     drawAreaView.stage = new Konva.Stage({
@@ -57,7 +81,10 @@ function setupKonvaJS(drawAreaView) {
     drawAreaView.canvas.width = Config.CANVAS_WIDTH;
     drawAreaView.canvas.height = Config.CANVAS_HEIGHT;
     drawAreaView.canvas.style.background = "#fffff";
-    drawAreaView.stage.add(drawAreaView.layer);
+    drawAreaView.stage.add(drawAreaView.layer.adminLayer);
+    if (isMultiLayer) {
+        drawAreaView.stage.add(drawAreaView.layer.collaboratorLayer);
+    }
 
     // eslint-disable-next-line no-undef
     drawAreaView.image = new Konva.Image({
@@ -66,7 +93,11 @@ function setupKonvaJS(drawAreaView) {
         y: 0,
     });
 
-    drawAreaView.layer.add(drawAreaView.image);
+    drawAreaView.layer.adminLayer.add(drawAreaView.image);
+
+    if (isMultiLayer) {
+        drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
+    }
     drawAreaView.stage.draw();
 
     drawAreaView.context = drawAreaView.canvas.getContext("2d");
@@ -85,7 +116,11 @@ class DrawAreaView extends View {
     constructor(el) {
         super();
         this.setElement(el);
-        this.layer = null;
+        this.isDrawingActivated = true;
+        this.layer = {
+            adminLayer: null,
+            collaboratorLayer: null,
+        };
         this.stage = null;
         this.canvas = null;
         this.image = null;
@@ -101,6 +136,10 @@ class DrawAreaView extends View {
         setMouseListener(this);
     }
 
+    setDrawingActivated(active) {
+        this.isDrawingActivated = active;
+    }
+
     getStageAsBase64() {
         if (this.stage !== undefined && this.stage !== null) {
             return this.stage.toDataURL({
@@ -114,14 +153,13 @@ class DrawAreaView extends View {
         let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
             return new Promise(
-                function(resolve, reject) {
+                function (resolve, reject) {
                     instance.stage.toImage({
                         callback: function (img) {
                             resolve(img);
                         },
                     });
-                }
-            );
+                });
 
         }
         return null;
@@ -160,7 +198,8 @@ class DrawAreaView extends View {
     }
 
     addLine(data) {
-        let newLine = new Konva.Line({
+        let isAdminLine = data.adminLine,
+            newLine = new Konva.Line({
             points: [
                 data.line[0].x * this.stage.width(),
                 data.line[0].y * this.stage.height(),
@@ -175,23 +214,39 @@ class DrawAreaView extends View {
             tension: 1.0,
             globalCompositeOperation: data.penRubber,
         });
-        this.layer.add(newLine);
-        this.layer.batchDraw();
+
+        if (isAdminLine || this.layer.collaboratorLayer === null) {
+            this.layer.adminLayer.add(newLine);
+            this.layer.adminLayer.batchDraw();
+        } else {
+            this.layer.collaboratorLayer.add(newLine);
+            this.layer.collaboratorLayer.batchDraw();
+        }
     }
 
-    undoLine(data) {
+    undoLine(data, isMultiLayer) {
         for (let id of data) {
             let line = this.stage.findOne("#" + id);
             if (line !== undefined) {
                 line.destroy();
             }
         }
-        this.layer.batchDraw();
+        if (isMultiLayer) {
+            this.layer.adminLayer.batchDraw();
+            this.layer.collaboratorLayer.batchDraw();
+        } else {
+            this.layer.adminLayer.batchDraw();
+        }
     }
 
-    clearCanvas() {
-        this.stage.destroyChildren();
-        setupKonvaJS(this);
+    clearCanvas(data) {
+        if (data.isNewSketch || data.userRole === Config.CHANNEL_ROLE_ADMIN) {
+            this.stage.destroyChildren();
+            setupKonvaJS(this, data.multilayer);
+        } else if (data.userRole === Config.CHANNEL_ROLE_COLLABORATOR) {
+            clearAndSetupCollaboratorLayer(this);
+        }
+
         setMouseListener(this);
     }
 }

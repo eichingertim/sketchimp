@@ -370,7 +370,28 @@ body {
 .sketch-history-list {
     list-style-type: none;
     margin: 0;
+    width: 100%;
     padding: 8px;
+    overflow:hidden;
+    overflow-y:scroll;
+}
+
+.fullscreen-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(70, 70, 70, 0.9);
+    display: flex;
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+}
+
+.sketch-history-list-img {
+    margin: 2px;
 }
 
 .sketch-history-list-item {

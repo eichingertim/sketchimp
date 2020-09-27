@@ -1,6 +1,6 @@
-import View from "./View.js";
-import { Event } from "../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import View from "../View.js";
+import { Event } from "../../utils/Observable.js";
+import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 class JoinNewChannelEvent extends Event {
     constructor(id) {
@@ -10,16 +10,18 @@ class JoinNewChannelEvent extends Event {
 }
 
 class CreateChannelEvent extends Event {
-    constructor(name, sketchName) {
-        super(EventKeys.CREATE_CHANNEL_SUBMIT, {name: name, sketchName: sketchName});
+    constructor(name, sketchName, isMultiLayer) {
+        super(EventKeys.CREATE_CHANNEL_SUBMIT, {name: name, sketchName: sketchName, isMultiLayer: isMultiLayer});
     }
 }
 
 function onSubmitChannelClick(createChannelDialogView, data) {
     event.preventDefault();
     let channelName = createChannelDialogView.el.querySelector("#r_name").value,
-        sketchName = createChannelDialogView.el.querySelector("#r_sketch_name").value;
-    createChannelDialogView.notifyAll(new CreateChannelEvent(channelName, sketchName));
+        sketchName = createChannelDialogView.el.querySelector("#r_sketch_name").value,
+        decision = createChannelDialogView.el.querySelector("input[name='layer']:checked").value;
+
+    createChannelDialogView.notifyAll(new CreateChannelEvent(channelName, sketchName, (decision === "multi-layer")));
 }
 
 function onSubmitChannelJoin(createChannelDialogView, data) {
