@@ -1,4 +1,6 @@
-class PublicFeedView{
+import PublicFeedCard from "./PublicFeedCard.js";
+
+/*class PublicFeedView{
     constructor(node){
         this.node = node;
         this.id = node.id;
@@ -12,38 +14,40 @@ class PublicFeedView{
         this.downvoteButton.addEventListener("click", onDislikeClick.bind(this));
     }
 
-}
+}*/
 
-function onLikeClick(){
-    console.log("click like; sketch:" + this.id);
-    let xhr = new XMLHttpRequest(),
+function onLikeClick(event){
+    console.log("click like; sketch:" + event.data);
+    /*let xhr = new XMLHttpRequest(),
         url = "/api/sketch/upvote/" + this.id;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     /*xhr.onload = function() {
         //instance.notifyAll(new SketchSavedEvent());
     };*/
-    xhr.send();
+    //xhr.send();
 
 }
 
-function onDislikeClick(){
-    console.log("click like; sketch:" + this.id);
-    let xhr = new XMLHttpRequest(),
+function onDislikeClick(event){
+    console.log("click like; sketch:" + event.data);
+    /*let xhr = new XMLHttpRequest(),
         url = "/api/sketch/downvote/" + this.id;
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     /*xhr.onload = function() {
         //instance.notifyAll(new SketchSavedEvent());
     };*/
-    xhr.send();
+    //xhr.send();
 }
 
 function setupCardList(cardsItem){
     let cardList = [],
     cards = cardsItem.children;
     for(let i = 0; i < cards.length; i++){
-        let singleCard = new PublicFeedView(cards[i]);
+        let singleCard = new PublicFeedCard(cards[i]);
+        singleCard.addEventListener("Like", onLikeClick);
+        singleCard.addEventListener("Dislike", onDislikeClick);
         cardList.push(singleCard);
     }
     return cardList;

@@ -23,6 +23,10 @@ const Config = {
         RUBBER_OPERATION: "destination-out",
         DEFAULT_PNG_NAME: "sketch-export.png",
         SKETCH_HISTORY_ITEM_HEIGHT: 30,
+        PATH_LIKE_ICON_INACTIVE: "/app/assets/thumb_up-white-18dp.svg",
+        PATH_LIKE_ICON_ACTIVE: "/app/assets/thumb_up-white-18dp-active.svg",
+        PATH_DISLIKE_ICON_INACTIVE: "/app/assets/thumb_down-white-18dp.svg",
+        PATH_DISLIKE_ICON_ACTIVE: "/app/assets/thumb_down-18dp-active.svg",
     },
 
     EventKeys = {
