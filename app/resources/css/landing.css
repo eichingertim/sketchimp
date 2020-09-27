@@ -1,4 +1,8 @@
 
+body {
+    width: 100%;
+}
+
 .landing-main {
     color: black;
 }
@@ -24,8 +28,21 @@
     margin: 20px 0;
 }
 
+.grid-container {
+    padding: 50px 0;
+}
+
 .grid-container .text-box {
     padding: 60px 0px 0px 80px;
+}
+
+.grid-container .row {
+    padding: 100px 50px;
+}
+
+.grid-container hr {
+    width: 40%;
+    border: 1px solid #999999;
 }
 
 .grid-container .img-box .img {
@@ -67,4 +84,31 @@ section .row {
     width: 100%;
     bottom: 0;
     color: white;
+}
+
+.scroll-indicator {
+    width: 0;
+    left: 50%;
+    bottom: 0;
+    position: relative;
+    z-index: 2;
+    margin-left: -40px;
+    border-top: 20px solid white;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    animation: indicate 1.5s linear infinite;
+}
+
+.scroll-indicator::before {
+    width: 30px;
+    display: block;
+    position: absolute;
+    text-align: center;
+    font: .75em 'Arial';
+    bottom: 25px; left: -40px;
+}
+
+@keyframes indicate {
+      0% { bottom: 10% }
+    100% { bottom: -10%; opacity: 0 }
 }
