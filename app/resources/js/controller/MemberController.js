@@ -1,25 +1,19 @@
-import { Event, Observable } from "../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
 
-class MemberDataLoadedEvent extends Event {
-    constructor(data) {
-        super(EventKeys.DATA_OF_ONE_MEMBER_LOADED, data);
-    }
-}
+class MemberController {
 
-class MemberController extends Observable {
-    constructor() {
-        super();
-    }
+    static fetchMemberData(url) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(Config.HTTP_GET, url, true);
+                xhr.onload = function() {
+                    resolve(this.response);
+                };
+                xhr.send();
+            }
+        );
 
-    fetchMemberData(url) {
-        let xhr = new XMLHttpRequest(),
-            instance = this;
-        xhr.open(Config.HTTP_GET, url, true);
-        xhr.onload = function() {
-            instance.notifyAll(new MemberDataLoadedEvent(this.response));
-        };
-        xhr.send();
     }
 }
 

@@ -198,9 +198,8 @@ class DrawAreaView extends View {
     }
 
     addLine(data) {
-        let isAdminLine = data.adminLine;
-
-        let newLine = new Konva.Line({
+        let isAdminLine = data.adminLine,
+            newLine = new Konva.Line({
             points: [
                 data.line[0].x * this.stage.width(),
                 data.line[0].y * this.stage.height(),

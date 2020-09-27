@@ -27,9 +27,9 @@ class MemberListView extends View {
     }
 
     updateMembers(channelMembers) {
-        /*let memberTemplate = document.querySelector("#member-template");
+        let memberTemplate = document.querySelector("#member-template");
         this.el.innerHTML = "";
-        data.members.forEach(user => {
+        channelMembers.forEach(user => {
             let clone = memberTemplate.content.cloneNode(true),
                 anchor = clone.querySelector("a");
             anchor.href = "/api/user/" + user.id;
@@ -37,7 +37,7 @@ class MemberListView extends View {
             anchor.style = (user.online) ? "color:green;" : "color:red";
             this.el.appendChild(clone);
             setListener(this);
-        });*/
+        });
     }
 }
 

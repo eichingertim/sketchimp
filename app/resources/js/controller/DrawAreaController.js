@@ -37,17 +37,14 @@ function createUUID() {
 
 class DrawAreaController extends Observable {
 
-    constructor(socket, userId) {
+    constructor(socket) {
         super();
-        this.userId = userId;
-        this.channelId = null;
         this.socket = socket;
     }
 
     join(channelId) {
         let instance = this;
-        this.channelId = channelId;
-        this.socket.emit(SocketKeys.SUBSCRIBE, this.channelId);
+        this.socket.emit(SocketKeys.SUBSCRIBE, channelId);
 
         this.socket.on(SocketKeys.LINE_DRAWN, function (data) {
             instance.notifyAll(new LineDrawnEvent(data));
@@ -58,35 +55,26 @@ class DrawAreaController extends Observable {
         });
 
         this.socket.on(SocketKeys.CLEAR_CANVAS, function (data) {
-            console.log(data);
             instance.notifyAll(new ClearCanvasEvent(data));
         });
 
     }
 
-    emitClearCanvas(isNewSketch, currentChannelRole, multilayer, creatorId) {
-        if (this.channelId !== null) {
-            this.socket.emit(SocketKeys.CLEAR_CANVAS, {
-                channelId: this.channelId,
-                isNewSketch: isNewSketch,
-                userRole: currentChannelRole,
-                multilayer: multilayer,
-                creatorId: creatorId,
-            });
-        }
+    emitClearCanvas(data) {
+        this.socket.emit(SocketKeys.CLEAR_CANVAS, data);
     }
 
-    emitLine(data, multilayer, currentChannelRole) {
-        if (this.channelId !== null && currentChannelRole !== Config.CHANNEL_ROLE_VIEWER) {
+    emitLine(data) {
+        if (data.channelId !== null && data.currentChannelRole !== Config.CHANNEL_ROLE_VIEWER) {
             this.socket.emit(SocketKeys.LINE_DRAWN, {
-                channelId: this.channelId,
-                userId: this.userId,
+                channelId: data.channelId,
+                userId: data.userId,
                 lineId: createUUID(),
-                line: [data.mouse.pos, data.mouse.posPrev],
-                color: data.color,
-                penRubber: data.penRubber,
-                size: data.size,
-                adminLine: getMarkedAsAdminLine(multilayer, currentChannelRole),
+                line: [data.lineData.mouse.pos, data.lineData.mouse.posPrev],
+                color: data.lineData.color,
+                penRubber: data.lineData.penRubber,
+                size: data.lineData.size,
+                adminLine: getMarkedAsAdminLine(data.multilayer, data.currentChannelRole),
             });
         }
 

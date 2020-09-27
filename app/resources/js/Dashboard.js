@@ -14,13 +14,32 @@ import TopBarView from "./ui/dashboard/TopBarView.js";
 import UserModel from "./models/UserModel.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 
-let drawAreaView, drawAreaController, toolboxView, memberListView, memberController,
-    channelListView, channelController, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, sketchController, createSketchDialogView, topBarView;
+let drawAreaView, drawAreaController, toolboxView, memberListView,
+    channelListView, channelInfoDialogView, createChannelDialogView,
+    saveLoadView, createSketchDialogView, topBarView;
 
-function onChannelDataForEnteringLoaded(dashboard, event) {
-    let channel = event.data.channel;
+/**
+ * builds needed data for the drawAreaController, to emit the new line
+ * @param dashboard current dashboard instance
+ * @param event line emit event
+ */
+function onLineEmit(dashboard, event) {
+    let emitLineData = {
+        channelId: this.channel.channelId,
+        userId: this.user.userId,
+        lineData: event.data,
+        multilayer: dashboard.channel.currentSketch.multilayer,
+        currentChannelRole: dashboard.channel.currentChannelRole,
+    };
+    drawAreaController.emitLine(emitLineData);
+}
 
+/**
+ * gets called, when someone enters a channel
+ * @param dashboard current dashboard instance
+ * @param channel corresponding channel-data
+ */
+function onChannelDataForEnteringLoaded(dashboard, channel) {
     if (channel.creatorId === dashboard.user.userId) {
         dashboard.user.currentChannelRole = Config.CHANNEL_ROLE_ADMIN;
     } else {
@@ -45,76 +64,92 @@ function onChannelDataForEnteringLoaded(dashboard, event) {
     }
 }
 
-function onCreateChannelDataLoaded(dashboard, event) {
-    let channelData = event.data.data;
-
-    channelListView.addNewChannel(channelData);
-    createChannelDialogView.clearAfterSubmit();
-    onChannelDataForEnteringLoaded(dashboard, event);
-}
-
-function onLeaveChannelDataLoaded() {
-    channelInfoDialogView.toggleVisibility();
-    window.location.reload();
-}
-
-function onJoinNewChannelDataLoaded() {
-    createChannelDialogView.clearAfterSubmit();
-    window.location.reload();
-}
-
-/*
- * Member Event Methods
+/**
+ * Gets called, when a new channel was created
+ * @param dashboard current dashboard instance
+ * @param channel new channel data
  */
-
-function onCreateSketchDataLoaded(dashboard, event) {
-    let sketchData = event.data.data;
-
-    createSketchDialogView.clearAfterSubmit();
-    drawAreaController.emitClearCanvas(true, dashboard.user.currentChannelRole, sketchData.multilayer, dashboard.channel.creatorId);
-    //drawAreaController.emitClearCanvas(null, sketchData, null, null);
-    topBarView.clearSketchHistory();
-    sketchController.loadHistory(dashboard.channel.channelId);
+function onCreateChannelDataLoaded(dashboard, channel) {
+    channelListView.addNewChannel(channel);
+    createChannelDialogView.clearAfterSubmit();
+    onChannelDataForEnteringLoaded(dashboard, channel);
 }
 
-function onMemberDataLoaded(data) {
-    console.log(data);
-}
-
+/**
+ * Starts process to export current sketch as png and download it
+ */
 function onSketchExportClick() {
     let base64Uri = drawAreaView.getStageAsBase64();
-    sketchController.exportSketch(base64Uri, Config.DEFAULT_PNG_NAME);
+    SketchController.exportSketch(base64Uri, Config.DEFAULT_PNG_NAME);
     saveLoadView.setSketchExported();
 }
 
+/**
+ * Executes script to finalize current sketch and creates a new
+ * @param dashboard current dashboard instance
+ * @param event sketch create event
+ */
 function onSketchCreateClick(dashboard, event) {
     drawAreaView.getStageAsPNG().then(function (imageTarget) {
         let newSketchName = event.data.name,
             isMultiLayer = event.data.isMultiLayer;
-        sketchController.finalizeSketch(dashboard.channel.channelId, imageTarget.src, newSketchName, isMultiLayer);
+        SketchController.finalizeSketch(dashboard.channel.channelId, imageTarget.src, newSketchName, isMultiLayer)
+            .then((newSketchData) => {
+                let clearCanvasData = {
+                    channelId: dashboard.channel.channelId,
+                    isNewSketch: true,
+                    userRole: dashboard.user.currentChannelRole,
+                    multilayer: newSketchData.multilayer,
+                    creatorId: dashboard.channel.creatorId,
+
+                };
+            createSketchDialogView.clearAfterSubmit();
+            drawAreaController.emitClearCanvas(clearCanvasData);
+            topBarView.clearSketchHistory();
+            SketchController.loadHistory(dashboard.channel.channelId).then((sketches) => {
+                topBarView.addSketchHistory(sketches);
+            });
+        });
     });
 }
 
+/**
+ * Shows clicked sketch-history-item as fullscreen
+ * @param dashboard
+ * @param event
+ */
 function onHistoryItemClick(dashboard, event) {
     drawAreaView.setDrawingActivated(false);
     topBarView.showImageFullscreen(event.data);
 }
 
-function onSketchHistoryLoaded(event) {
-    let sketches = event.data.sketches;
-    topBarView.addSketchHistory(sketches);
-}
-
+/**
+ * toggles sketch-history fullscreen and activates drawing
+ */
 function onFullScreenCloseClick() {
     topBarView.closeFullScreen();
     drawAreaView.setDrawingActivated(true);
 }
 
-function onPublishSketchBtnClick(event) {
+/**
+ * publishes current sketch-history sketch in fullscreen
+ * @param dashboard current dashboard instance
+ * @param event {@link EventKeys.PUBLISH_SKETCH_CLICK}
+ */
+function onPublishSketchBtnClick(dashboard, event) {
     let sketchId = event.data.sketchId;
-    sketchController.publishSketch(sketchId);
+    SketchController.publishSketch(sketchId).then(() => {
+        topBarView.finishedPublishing();
+        topBarView.clearSketchHistory();
+        SketchController.loadHistory(dashboard.channel.channelId).then((sketches) => {
+            topBarView.addSketchHistory(sketches);
+        });
+    });
 }
 
+/**
+ * Calculates Canvas Size -> Responsive
+ */
 function configureDivSizes() {
     let mainContent = document.querySelector(".dashboard-main-content-container"),
         canvasContainer = document.querySelector(".dashboard-canvas"),
@@ -167,70 +202,102 @@ class Dashboard {
         createSketchDialogView = new CreateSketchDialogView(createSketchDialog);
         topBarView = new TopBarView(topBar);
 
-        drawAreaController = new DrawAreaController(this.socket, this.user.userId);
-        memberController = new MemberController();
-        channelController = new ChannelController();
-        sketchController = new SketchController(this.socket);
-
+        drawAreaController = new DrawAreaController(this.socket);
     }
 
+    /**
+     * Registering all listeners for the corresponding views and controller
+     */
     setListeners() {
-        let instance = this;
-        drawAreaView.addEventListener(EventKeys.LINE_READY_FOR_EMIT, (event) => drawAreaController.emitLine(event.data, instance.channel.currentSketch.multilayer, instance.channel.currentChannelRole));
+        this.setDrawAreaListener(this);
+        this.setToolboxListener(this);
+        this.setChannelTopAndRightBarListener(this);
+        this.setDialogListener(this);
+    }
 
-        toolboxView.addEventListener(EventKeys.COLOR_CHANGE_CLICK, (event) => drawAreaView.updateColor(event.data.color));
-        toolboxView.addEventListener(EventKeys.PEN_RUBBER_SWITCH_CLICK, (event) => drawAreaView.switchPenRubber(event.data.item));
-        toolboxView.addEventListener(EventKeys.SIZE_CHANGE_CLICK, (event) => drawAreaView.updateSize(event.data.size));
-
-        drawAreaController.addEventListener(EventKeys.LINE_DRAWN_RECEIVED, (event) => drawAreaView.addLine(event.data));
+    setDrawAreaListener(instance) {
+        drawAreaView.addEventListener(EventKeys.LINE_READY_FOR_EMIT, onLineEmit.bind(this, instance));
+        drawAreaController.addEventListener(EventKeys.LINE_DRAWN_RECEIVED, (event) =>
+            drawAreaView.addLine(event.data));
         drawAreaController.addEventListener(EventKeys.CLEAR_RECEIVED, (event) => {
             drawAreaView.clearCanvas(event.data);
         });
-        drawAreaController.addEventListener(EventKeys.LINE_UNDO_RECEIVED, (event) => drawAreaView.undoLine(event.data, instance.channel.currentSketch.multilayer));
+        drawAreaController.addEventListener(EventKeys.LINE_UNDO_RECEIVED, (event) =>
+            drawAreaView.undoLine(event.data, instance.channel.currentSketch.multilayer));
+    }
 
-        channelController.addEventListener(EventKeys.CHANNEL_DATA_LOADED, onChannelDataForEnteringLoaded.bind(this, instance));
-        channelController.addEventListener(EventKeys.CREATED_CHANNEL_DATA_LOADED, onCreateChannelDataLoaded.bind(this, instance));
-        channelController.addEventListener(EventKeys.LEAVE_CHANNEL_DATA_LOADED, onLeaveChannelDataLoaded.bind(this));
-        channelController.addEventListener(EventKeys.JOIN_NEW_CHANNEL_DATA_LOADED, onJoinNewChannelDataLoaded.bind(this));
-
-        memberController.addEventListener(EventKeys.DATA_OF_ONE_MEMBER_LOADED, onMemberDataLoaded.bind(this));
-
-        sketchController.addEventListener(EventKeys.SKETCH_SAVED_IN_DB, () => saveLoadView.setSketchSaved());
-        sketchController.addEventListener(EventKeys.FINALIZED_AND_CREATED_SKETCH, onCreateSketchDataLoaded.bind(this, instance));
-        sketchController.addEventListener(EventKeys.LOADED_SKETCH_HISTORY_FOR_CHANNEL, onSketchHistoryLoaded.bind(this));
-        sketchController.addEventListener(EventKeys.PUBLISH_SKETCH_FINISHED, () => {
-            topBarView.finishedPublishing();
-            topBarView.clearSketchHistory();
-            sketchController.loadHistory(instance.channel.channelId);
-        });
-
+    setToolboxListener(instance) {
+        toolboxView.addEventListener(EventKeys.COLOR_CHANGE_CLICK, (event) => drawAreaView.updateColor(event.data.color));
+        toolboxView.addEventListener(EventKeys.PEN_RUBBER_SWITCH_CLICK, (event) => drawAreaView.switchPenRubber(event.data.item));
+        toolboxView.addEventListener(EventKeys.SIZE_CHANGE_CLICK, (event) => drawAreaView.updateSize(event.data.size));
         toolboxView.addEventListener(EventKeys.CLEAR_CANVAS_CLICK, () => {
-            drawAreaController.emitClearCanvas(false, this.user.currentChannelRole, this.channel.currentSketch.multilayer, this.channel.creatorId);
-        });
-        toolboxView.addEventListener(EventKeys.UNDO_CLICK, () => drawAreaController.emitUndoLine(instance.channel.channelId, instance.user.userId));
+            let clearCanvasData = {
+                channelId: instance.channel.channelId,
+                isNewSketch: false,
+                userRole: instance.user.currentChannelRole,
+                multilayer: instance.channel.currentSketch.multilayer,
+                creatorId: instance.channel.creatorId,
 
-        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CLICK, (event) => channelController.fetchChannelData(event.data.url));
+            };
+            drawAreaController.emitClearCanvas(clearCanvasData);
+        });
+        toolboxView.addEventListener(EventKeys.UNDO_CLICK, () =>
+            drawAreaController.emitUndoLine(instance.channel.channelId, instance.user.userId));
+    }
+
+    setDialogListener(instance) {
+        //ChannelInfoDialog
+        channelInfoDialogView.addEventListener(EventKeys.LEAVE_CHANNEL_CLICK, (event) => ChannelController.leaveChannel(event.data.id)
+            .then(() => {
+                channelInfoDialogView.toggleVisibility();
+                window.location.reload();
+            }));
+
+        //CreateChannelAndSketchDialog
+        createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => ChannelController.createChannel(event.data)
+            .then((channel) => {
+                onCreateChannelDataLoaded(instance, channel);
+            }));
+        createChannelDialogView.addEventListener(EventKeys.JOIN_CHANNEL_SUBMIT, (event) => ChannelController.joinNewChannel(event.data.id)
+            .then(() => {
+                createChannelDialogView.clearAfterSubmit();
+                window.location.reload();
+            }));
+
+        //CreateSketchDialog
+        createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+    }
+
+    setChannelTopAndRightBarListener(instance) {
+
+        //LeftBar Channels
+        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CLICK, (event) => ChannelController.fetchChannelData(event.data.url)
+            .then((channel) => {
+                onChannelDataForEnteringLoaded(instance, channel);
+            }));
+
         channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CREATE_CLICK, () => createChannelDialogView.toggleVisibility());
 
-        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => memberController.fetchMemberData(event.url));
+        //RightBar Members
+        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.url).then((memberData) => {
+            console.log(memberData);
+        }));
 
-        channelInfoDialogView.addEventListener(EventKeys.LEAVE_CHANNEL_CLICK, (event) => channelController.leaveChannel(event.data.id));
-
-        createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => channelController.createChannel(event.data));
-        createChannelDialogView.addEventListener(EventKeys.JOIN_CHANNEL_SUBMIT, (event) => channelController.joinNewChannel(event.data.id));
-
-        saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () => sketchController.saveSketch(instance.channel.channelId));
+        //RightBar Save/Publish/Export Buttons
+        saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () => SketchController.saveSketch(instance.socket, instance.channel.channelId).then(() => {
+            saveLoadView.setSketchSaved();
+        }));
         saveLoadView.addEventListener(EventKeys.SKETCH_FINALIZE_CLICK, () => createSketchDialogView.toggleVisibility());
         saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
 
-        createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
-
+        //TopBar with SketchHistory
         topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
         topBarView.addEventListener(EventKeys.FULLSCREEN_CLOSE_CLICK, onFullScreenCloseClick.bind(this));
-        topBarView.addEventListener(EventKeys.PUBLISH_SKETCH_CLICK, onPublishSketchBtnClick.bind(this));
+        topBarView.addEventListener(EventKeys.PUBLISH_SKETCH_CLICK, onPublishSketchBtnClick.bind(this, instance));
     }
 
     onJoin(channel) {
+        let instance = this;
         if (channel.channelName !== undefined) {
             this.channel = channel;
 
@@ -238,9 +305,14 @@ class Dashboard {
             drawAreaView.creatorId = channel.creatorId;
             drawAreaView.clearCanvas({isNewSketch: true, multilayer: channel.currentSketch.multilayer, userRole: this.user.currentChannelRole});
             topBarView.clearSketchHistory();
-            sketchController.loadHistory(channel.channelId);
+            SketchController.loadHistory(channel.channelId).then((sketches) => {
+                topBarView.addSketchHistory(sketches);
+            });
         } else {
-            channelController.fetchChannelData("/api/channel/" + channel.channelId);
+            ChannelController.fetchChannelData(Config.API_URL_CHANNEL + channel.channelId)
+                .then((channel) => {
+                    onChannelDataForEnteringLoaded(instance, channel);
+            });
         }
     }
 
