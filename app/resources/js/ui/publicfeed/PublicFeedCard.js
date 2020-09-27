@@ -7,6 +7,21 @@ function initButtons(cardView){
     cardView.upvoteButton.addEventListener("click", onLikeButtonClick.bind(cardView));
     cardView.downvoteButton = cardView.element.querySelector(".dislikebutton");
     cardView.downvoteButton.addEventListener("click", onDislikeButtonClick.bind(cardView));
+    initButtonStatus(cardView);
+}
+
+function initButtonStatus(cardView){
+    if(cardView.upvoteButton.src === Config.PATH_LIKE_ICON_ACTIVE){
+        cardView.upvote = true;
+    }else {
+        cardView.upvote = false;
+    }
+
+    if(cardView.downvoteButton.src === Config.PATH_DISLIKE_ICON_ACTIVE){
+        cardView.downvote = true;
+    }else {
+        cardView.downvote = false;
+    }
 }
 
 function onLikeButtonClick(){
