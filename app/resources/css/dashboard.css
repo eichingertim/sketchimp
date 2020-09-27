@@ -207,6 +207,10 @@ body {
     background-color: rgba(68, 198, 129, 0.3);
 }
 
+.member {
+    cursor: pointer;
+}
+
 .member-title {
     font-size: 18px;
     color: white;

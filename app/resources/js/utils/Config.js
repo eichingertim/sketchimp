@@ -11,6 +11,7 @@ const Config = {
         API_URL_CURRENT_SKETCH: "/api/sketch/current/",
         API_URL_FINALIZE_SKETCH: "/api/sketch/finalize-create/",
         API_URL_FINALIZED_SKETCHES: "/api/sketch/all-finalized/",
+        API_URL_DELETE_CHANNEL: "/api/channel/delete/",
         HTTP_POST: "POST",
         HTTP_GET: "GET",
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
@@ -28,6 +29,7 @@ const Config = {
         CHANNEL_ROLE_ADMIN: "admins",
         CHANNEL_ROLE_COLLABORATOR: "collaborators",
         CHANNEL_ROLE_VIEWER: "viewers",
+        DELAY_SHOW_SUCCESS: 3000,
     },
 
     EventKeys = {
@@ -36,6 +38,7 @@ const Config = {
         CLEAR_RECEIVED: "ClearCanvas",
 
         LEAVE_CHANNEL_CLICK: "LeaveChannelClick",
+        DELETE_CHANNEL_CLICK: "DeleteChannelClick",
         CHANNEL_ITEM_CLICK: "ChannelItemClick",
         CHANNEL_ITEM_CREATE_CLICK: "JoinServerClick",
 
@@ -61,6 +64,8 @@ const Config = {
         HISTORY_ITEM_CLICK: "HistoryItemClick",
         FULLSCREEN_CLOSE_CLICK: "FullScreenCloseClick",
         PUBLISH_SKETCH_CLICK: "PublishSketchClick",
+
+        NEW_SKETCH_RECEIVED: "NewSketchReceived",
     },
 
     SocketKeys = {
@@ -70,6 +75,8 @@ const Config = {
         LINE_UNDO: "undo",
         CLEAR_CANVAS: "clear-canvas",
         CHANNEL_LINE_HISTORY: "getLineHistory",
+        DELETE_CHANNEL: "delete-channel",
+        NEW_SKETCH: "new-sketch",
 
     };
 

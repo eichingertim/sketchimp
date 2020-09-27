@@ -51,24 +51,36 @@ class SaveLoadView extends View {
     }
 
     setSketchSaved() {
-        let btnSave = this.el.querySelector("#save");
+        let btnSave = this.el.querySelector("#save"),
+            tmp = btnSave.innerHTML;
 
-        //TODO: just show couple seconds
         btnSave.innerHTML = "Successfully saved";
+
+        setTimeout(function(){
+            btnSave.innerHTML = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
     }
 
     setSketchFinalized() {
-        let btnFinalizeAndCreate = this.el.querySelector("#save-publish");
+        let btnFinalizeAndCreate = this.el.querySelector("#save-publish"),
+            tmp = btnFinalizeAndCreate.innerHTML;
 
-        //TODO: just show couple seconds
         btnFinalizeAndCreate.innerHTML = "Successfully Finalized";
+
+        setTimeout(function(){
+            btnFinalizeAndCreate.innerHTML = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
     }
 
     setSketchExported() {
-        let btnExportDownload = this.el.querySelector("#export-download");
+        let btnExportDownload = this.el.querySelector("#export-download"),
+            tmp = btnExportDownload.innerHTML;
 
-        //TODO: just show couple seconds
         btnExportDownload.innerHTML = "Successfully Exported";
+
+        setTimeout(function(){
+            btnExportDownload.innerHTML = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
     }
 }
 
