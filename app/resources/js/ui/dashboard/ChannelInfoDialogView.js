@@ -26,6 +26,7 @@ class ChannelInfoDialogView extends View {
     }
 
     updateInfo(channel) {
+        console.log(channel);
         this.el.querySelector(".info-channel-name").textContent = channel.channelName;
         this.el.querySelector(".info-channel-id").textContent = channel.channelId;
         this.el.querySelector(".info-channel-creation").textContent = channel.creationDate;
