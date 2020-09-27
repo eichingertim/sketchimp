@@ -23,6 +23,9 @@ const Config = {
         RUBBER_OPERATION: "destination-out",
         DEFAULT_PNG_NAME: "sketch-export.png",
         SKETCH_HISTORY_ITEM_HEIGHT: 30,
+        CHANNEL_ROLE_ADMIN: "admins",
+        CHANNEL_ROLE_COLLABORATOR: "collaborators",
+        CHANNEL_ROLE_VIEWER: "viewers",
     },
 
     EventKeys = {

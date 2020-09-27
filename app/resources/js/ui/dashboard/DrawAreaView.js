@@ -5,7 +5,6 @@ import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 function getMarkedAsAdminLine(drawAreaView) {
 
     if (drawAreaView.isMultiLayer) {
-        console.log(drawAreaView.currentUserRole);
         return drawAreaView.currentUserRole === "admins";
     }
     return true;
@@ -13,6 +12,7 @@ function getMarkedAsAdminLine(drawAreaView) {
 }
 
 function checkAndNotifyForDrawing(drawAreaView) {
+
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
         .posPrev) {
 
@@ -148,14 +148,6 @@ class DrawAreaView extends View {
 
         setupKonvaJS(this);
         setMouseListener(this);
-    }
-
-    setCreatorId(creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    setMultiLayer(isMultiLayer) {
-        this.isMultiLayer = isMultiLayer;
     }
 
     setDrawingActivated(active) {

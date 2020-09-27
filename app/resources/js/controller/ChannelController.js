@@ -1,9 +1,11 @@
 import { Event, Observable } from "../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import ChannelModel from "../models/ChannelModel.js";
+import SketchModel from "../models/SketchModel.js";
 
 class ChannelDataLoadedEvent extends Event {
-    constructor(data, sketchData) {
-        super(EventKeys.CHANNEL_DATA_LOADED, {data: data, sketchData: sketchData});
+    constructor(channel) {
+        super(EventKeys.CHANNEL_DATA_LOADED, {channel: channel});
     }
 }
 
@@ -38,12 +40,16 @@ class ChannelController extends Observable {
             instance = this;
         xhr.open(Config.HTTP_GET, url, true);
         xhr.onload = function() {
-            let data = JSON.parse(this.response).data,
+            let data = JSON.parse(this.response).data, channel,
                 xhrSketch = new XMLHttpRequest();
+            if (data) {
+                channel = new ChannelModel(data.id, data.name, data.creation, data.creator.id, data.creator.name, data.members);
+            }
             xhrSketch.open(Config.HTTP_GET, "/api/sketch/current/" + data.id, true);
             xhrSketch.onload = function () {
                 let sketchData = JSON.parse(this.response).data;
-                instance.notifyAll(new ChannelDataLoadedEvent(data, sketchData));
+                channel.currentSketch = new SketchModel(sketchData.id, sketchData.name, sketchData.multilayer);
+                instance.notifyAll(new ChannelDataLoadedEvent(channel));
             };
             xhrSketch.send();
         };

@@ -26,7 +26,7 @@ class MemberListView extends View {
         setListener(this);
     }
 
-    updateMembers(data) {
+    updateMembers(channelMembers) {
         /*let memberTemplate = document.querySelector("#member-template");
         this.el.innerHTML = "";
         data.members.forEach(user => {
