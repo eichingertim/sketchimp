@@ -1,44 +1,32 @@
 import PublicFeedCard from "./PublicFeedCard.js";
+import Config from "../../utils/Config.js";
 
-/*class PublicFeedView{
-    constructor(node){
-        this.node = node;
-        this.id = node.id;
-        this.setupClickListener();
-    }
-
-    setupClickListener(){
-        this.upvoteButton = this.node.querySelector(".likebutton");
-        this.upvoteButton.addEventListener("click", onLikeClick.bind(this));
-        this.downvoteButton = this.node.querySelector(".dislikebutton");
-        this.downvoteButton.addEventListener("click", onDislikeClick.bind(this));
-    }
-
-}*/
+var cardsItem = document.getElementById("cards"),
+cardObjects = setupCardList(cardsItem);
 
 function onLikeClick(event){
     console.log("click like; sketch:" + event.data);
-    /*let xhr = new XMLHttpRequest(),
-        url = "/api/sketch/upvote/" + this.id;
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "text/html");
-    /*xhr.onload = function() {
-        //instance.notifyAll(new SketchSavedEvent());
-    };*/
-    //xhr.send();
-
+    if(event.data){
+        sendClickActionToApi(Config.API_URL_SKETCH_LIKE + event.data);
+    }
 }
 
 function onDislikeClick(event){
-    console.log("click like; sketch:" + event.data);
-    /*let xhr = new XMLHttpRequest(),
-        url = "/api/sketch/downvote/" + this.id;
+    console.log("click dislike; sketch:" + event.data);
+    if(event.data){
+        sendClickActionToApi(Config.API_URL_SKETCH_DISLIKE + event.data);
+    }
+}
+
+function sendClickActionToApi(url){
+    let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
-    /*xhr.onload = function() {
+    xhr.onload = function() {
         //instance.notifyAll(new SketchSavedEvent());
-    };*/
-    //xhr.send();
+    };
+    console.log("send:" + url);
+    xhr.send();
 }
 
 function setupCardList(cardsItem){
@@ -52,7 +40,3 @@ function setupCardList(cardsItem){
     }
     return cardList;
 }
-
-var cardsItem = document.getElementById("cards"),
-cardObjects = setupCardList(cardsItem),
-userId = "5f6cb652a60f930330f6ca81";
