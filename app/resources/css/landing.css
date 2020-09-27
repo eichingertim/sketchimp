@@ -1,5 +1,5 @@
 
-.landing-main * {
+.landing-main {
     color: black;
 }
 @media (max-width: 768px) {
@@ -25,7 +25,7 @@
 }
 
 .grid-container .text-box {
-    padding: 20px;
+    padding: 60px 0px 0px 80px;
 }
 
 .grid-container .img-box .img {
@@ -60,7 +60,7 @@ section .row {
     padding: 30px 0 30px;
 }
 
-footer {
+ footer {
     background-color: #111111;
     padding-top: 20px;
     position: static;
