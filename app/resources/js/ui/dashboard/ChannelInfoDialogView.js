@@ -25,11 +25,11 @@ class ChannelInfoDialogView extends View {
         setListener(this);
     }
 
-    updateInfo(data) {
-        this.el.querySelector(".info-channel-name").textContent = data.name;
-        this.el.querySelector(".info-channel-id").textContent = data.id;
-        this.el.querySelector(".info-channel-creation").textContent = data.creation;
-        this.el.querySelector(".info-channel-creator").textContent = data.creator;
+    updateInfo(channel) {
+        this.el.querySelector(".info-channel-name").textContent = channel.channelName;
+        this.el.querySelector(".info-channel-id").textContent = channel.channelId;
+        this.el.querySelector(".info-channel-creation").textContent = channel.creationDate;
+        this.el.querySelector(".info-channel-creator").textContent = channel.creatorName;
     }
 }
 
