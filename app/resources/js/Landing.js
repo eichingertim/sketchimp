@@ -1,5 +1,5 @@
 var app,
-    navBar = document.querySelector(".landing-top-bar"),
+    navBar = document.querySelector(".navigation-top"),
     landingContainer = document.querySelector(".landing-main-container");
 
 function OilPainting(){
