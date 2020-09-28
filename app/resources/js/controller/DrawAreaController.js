@@ -19,6 +19,12 @@ class ClearCanvasEvent extends Event {
     }
 }
 
+class NewSketchEvent extends Event {
+    constructor(data) {
+        super(EventKeys.NEW_SKETCH_RECEIVED, data);
+    }
+}
+
 function getMarkedAsAdminLine(isMultiLayer, userRole) {
     if (isMultiLayer) {
         return userRole === Config.CHANNEL_ROLE_ADMIN;
@@ -46,6 +52,14 @@ class DrawAreaController extends Observable {
         let instance = this;
         this.socket.emit(SocketKeys.SUBSCRIBE, channelId);
 
+        this.socket.on(SocketKeys.DELETE_CHANNEL, function (data) {
+            window.location.reload();
+        });
+
+        this.socket.on(SocketKeys.NEW_SKETCH, function (data) {
+           instance.notifyAll(new NewSketchEvent(data));
+        });
+
         this.socket.on(SocketKeys.LINE_DRAWN, function (data) {
             instance.notifyAll(new LineDrawnEvent(data));
         });
@@ -62,6 +76,15 @@ class DrawAreaController extends Observable {
 
     emitClearCanvas(data) {
         this.socket.emit(SocketKeys.CLEAR_CANVAS, data);
+    }
+
+    emitNewSketch(channelId, sketchId, sketchName, sketchMultiLayer) {
+        this.socket.emit(SocketKeys.NEW_SKETCH, {
+            channelId: channelId,
+            sketchId: sketchName,
+            sketchName: sketchName,
+            sketchMultiLayer: sketchMultiLayer,
+        });
     }
 
     emitLine(data) {

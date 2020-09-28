@@ -185,15 +185,15 @@ class DrawAreaView extends View {
         let bigContainer = document.querySelector(".dashboard-canvas");
 
         if (bigContainer.offsetWidth > Config.CANVAS_WIDTH) {
-            this.el.style.maxWidth = (Config.CANVAS_WIDTH + Config.CANVAS_SIZE_OFFSET).toString();
+            this.el.style.maxWidth = (Config.CANVAS_WIDTH + Config.CANVAS_SIZE_OFFSET).toString() + "px";
         } else {
-            this.el.style.maxWidth = bigContainer.offsetWidth;
+            this.el.style.maxWidth = bigContainer.offsetWidth + "px";
         }
 
         if (bigContainer.offsetHeight > Config.CANVAS_HEIGHT) {
-            this.el.style.maxHeight = (Config.CANVAS_HEIGHT + Config.CANVAS_SIZE_OFFSET).toString();
+            this.el.style.maxHeight = (Config.CANVAS_HEIGHT + Config.CANVAS_SIZE_OFFSET).toString() + "px";
         } else {
-            this.el.style.maxHeight = bigContainer.offsetHeight;
+            this.el.style.maxHeight = bigContainer.offsetHeight + "px";
         }
     }
 

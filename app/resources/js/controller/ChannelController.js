@@ -100,7 +100,21 @@ class ChannelController {
                 xhr.send();
             }
         );
+    }
 
+    static deleteChannel(socket, channelId) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(Config.HTTP_POST, Config.API_URL_DELETE_CHANNEL + channelId, true);
+                xhr.withCredentials = true;
+                xhr.onload = function() {
+                    socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId});
+                    resolve();
+                };
+                xhr.send();
+            }
+        );
     }
 }
 
