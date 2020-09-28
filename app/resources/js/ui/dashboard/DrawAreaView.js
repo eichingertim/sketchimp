@@ -63,8 +63,8 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
 
     // eslint-disable-next-line no-undef
-
     drawAreaView.layer.adminLayer = new Konva.Layer();
+    drawAreaView.layer.backgroundLayer = new Konva.Layer();
     if (isMultiLayer) {
         drawAreaView.layer.collaboratorLayer = new Konva.Layer();
     } else {
@@ -81,6 +81,7 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.canvas.width = Config.CANVAS_WIDTH;
     drawAreaView.canvas.height = Config.CANVAS_HEIGHT;
     drawAreaView.canvas.style.background = "#fffff";
+    drawAreaView.stage.add(drawAreaView.layer.backgroundLayer);
     drawAreaView.stage.add(drawAreaView.layer.adminLayer);
     if (isMultiLayer) {
         drawAreaView.stage.add(drawAreaView.layer.collaboratorLayer);
@@ -93,12 +94,14 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
         y: 0,
     });
 
+    //drawAreaView.layer.backgroundLayer.add(background);
     drawAreaView.layer.adminLayer.add(drawAreaView.image);
 
     if (isMultiLayer) {
         drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
     }
     drawAreaView.stage.draw();
+
 
     drawAreaView.context = drawAreaView.canvas.getContext("2d");
     drawAreaView.context.strokeStyle = Config.DEFAULT_PEN_COLOR;
@@ -120,6 +123,7 @@ class DrawAreaView extends View {
         this.layer = {
             adminLayer: null,
             collaboratorLayer: null,
+            backgroundLayer: null,
         };
         this.stage = null;
         this.canvas = null;
@@ -134,6 +138,19 @@ class DrawAreaView extends View {
 
         setupKonvaJS(this);
         setMouseListener(this);
+    }
+
+    setTemplate(url) {
+        let instance = this;
+        Konva.Image.fromURL(url, function (node) {
+            node.setAttrs({
+                x: 0,
+                y: 0,
+            });
+            instance.layer.backgroundLayer.destroyChildren();
+            instance.layer.backgroundLayer.add(node);
+            instance.layer.backgroundLayer.batchDraw();
+        });
     }
 
     setDrawingActivated(active) {

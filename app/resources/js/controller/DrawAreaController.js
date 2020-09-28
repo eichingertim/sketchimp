@@ -25,6 +25,12 @@ class NewSketchEvent extends Event {
     }
 }
 
+class TemplateReceivedEvent extends Event {
+    constructor(data) {
+        super(EventKeys.TEMPLATE_RECEIVED, data);
+    }
+}
+
 function getMarkedAsAdminLine(isMultiLayer, userRole) {
     if (isMultiLayer) {
         return userRole === Config.CHANNEL_ROLE_ADMIN;
@@ -56,6 +62,10 @@ class DrawAreaController extends Observable {
             window.location.reload();
         });
 
+        this.socket.on(SocketKeys.TEMPLATE, function (data) {
+            instance.notifyAll(new TemplateReceivedEvent(data));
+        });
+
         this.socket.on(SocketKeys.NEW_SKETCH, function (data) {
            instance.notifyAll(new NewSketchEvent(data));
         });
@@ -72,6 +82,10 @@ class DrawAreaController extends Observable {
             instance.notifyAll(new ClearCanvasEvent(data));
         });
 
+    }
+
+    emitTemplate(channelId, templateUrl) {
+        this.socket.emit(SocketKeys.TEMPLATE, {channelId: channelId, templateUrl: templateUrl});
     }
 
     emitClearCanvas(data) {
