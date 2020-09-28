@@ -15,6 +15,12 @@ class CreateChannelEvent extends Event {
     }
 }
 
+class CloseDialogClick extends Event {
+    constructor() {
+        super(EventKeys.CLOSE_CREATE_CHANNEL_DIALOG, null);
+    }
+}
+
 function onSubmitChannelClick(createChannelDialogView, data) {
     event.preventDefault();
     let channelName = createChannelDialogView.el.querySelector("#r_name").value,
@@ -30,11 +36,17 @@ function onSubmitChannelJoin(createChannelDialogView, data) {
     createChannelDialogView.notifyAll(new JoinNewChannelEvent(channelId));
 }
 
+function onDialogCloseClick(createChannelDialogView, data) {
+    createChannelDialogView.notifyAll(new CloseDialogClick());
+}
+
 function setListener(createChannelDialogView) {
     createChannelDialogView.el.querySelector(".submit-channel-creation")
         .addEventListener("click", onSubmitChannelClick.bind(this, createChannelDialogView));
     createChannelDialogView.el.querySelector(".submit-channel-join")
         .addEventListener("click", onSubmitChannelJoin.bind(this, createChannelDialogView));
+    createChannelDialogView.el.querySelector("#create-channel-close")
+        .addEventListener("click", onDialogCloseClick.bind(this, createChannelDialogView));
 }
 
 class CreateChannelDialogView extends View {

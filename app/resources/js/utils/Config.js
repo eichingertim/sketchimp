@@ -78,6 +78,12 @@ const Config = {
         TEMPLATE_RECEIVED: "TemplateReceived",
 
         SAVE_SETTINGS_CLICK: "SaveSettingsClick",
+
+        CLOSE_INFO_DIALOG: "CloseInfoDialog",
+        CLOSE_ADMIN_DIALOG: "CloseAdminDialog",
+        CLOSE_CREATE_SKETCH_DIALOG: "CloseCreateSketchDialog",
+        CLOSE_CREATE_CHANNEL_DIALOG: "CloseCreateChannelDialog",
+
     },
 
     SocketKeys = {

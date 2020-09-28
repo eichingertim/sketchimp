@@ -14,6 +14,12 @@ class DeleteChannelClickEvent extends Event {
     }
 }
 
+class CloseInfoDialogEvent extends Event {
+    constructor() {
+        super(EventKeys.CLOSE_INFO_DIALOG, null);
+    }
+}
+
 function onLeaveChannelClick(channelInfoDialogView, data) {
     channelInfoDialogView.notifyAll(new LeaveChannelClickEvent());
 }
@@ -22,11 +28,17 @@ function onDeleteChannelClick(channelInfoDialogView, data) {
     channelInfoDialogView.notifyAll(new DeleteChannelClickEvent());
 }
 
+function onDialogCloseClick(channelInfoDialogView, data) {
+    channelInfoDialogView.notifyAll(new CloseInfoDialogEvent());
+}
+
 function setListener(channelInfoDialogView) {
     channelInfoDialogView.el.querySelector(".leave-channel")
         .addEventListener("click", onLeaveChannelClick.bind(this, channelInfoDialogView));
     channelInfoDialogView.el.querySelector(".delete-channel")
         .addEventListener("click", onDeleteChannelClick.bind(this, channelInfoDialogView));
+    channelInfoDialogView.el.querySelector("#channel-info-close")
+        .addEventListener("click", onDialogCloseClick.bind(this, channelInfoDialogView));
 }
 
 class ChannelInfoDialogView extends View {
