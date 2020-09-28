@@ -3,15 +3,16 @@ import { Event } from "../../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 class SketchCreateEvent extends Event {
-    constructor(name) {
-        super(EventKeys.CREATE_SKETCH_SUBMIT, {name: name});
+    constructor(name, isMultiLayer) {
+        super(EventKeys.CREATE_SKETCH_SUBMIT, {name: name, isMultiLayer: isMultiLayer});
     }
 }
 
 function onSketchSubmitClick(createSketchDialogView, data) {
     event.preventDefault();
-    let name = createSketchDialogView.el.querySelector("#sketch_name").value;
-    createSketchDialogView.notifyAll(new SketchCreateEvent(name));
+    let name = createSketchDialogView.el.querySelector("#sketch_name").value,
+        decision = createSketchDialogView.el.querySelector("input[name='layer']:checked").value;
+    createSketchDialogView.notifyAll(new SketchCreateEvent(name, (decision === "multi-layer")));
 }
 
 function setListeners(createSketchDialogView) {

@@ -5,6 +5,7 @@ import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
         .posPrev) {
+
         let data = {
             mouse: drawAreaView.mouse,
             color: drawAreaView.context.strokeStyle,
@@ -47,11 +48,28 @@ function setMouseListener(drawAreaView) {
     });
 }
 
-function setupKonvaJS(drawAreaView) {
+function clearAndSetupCollaboratorLayer(drawAreaView) {
+    drawAreaView.layer.collaboratorLayer.destroyChildren();
+    drawAreaView.image = new Konva.Image({
+        image: drawAreaView.canvas,
+        x: 0,
+        y: 0,
+    });
+    drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
+    drawAreaView.stage.draw();
+}
+
+function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
 
     // eslint-disable-next-line no-undef
-    drawAreaView.layer = new Konva.Layer();
+    drawAreaView.layer.adminLayer = new Konva.Layer();
+    drawAreaView.layer.backgroundLayer = new Konva.Layer();
+    if (isMultiLayer) {
+        drawAreaView.layer.collaboratorLayer = new Konva.Layer();
+    } else {
+        drawAreaView.layer.collaboratorLayer = null;
+    }
 
     // eslint-disable-next-line no-undef
     drawAreaView.stage = new Konva.Stage({
@@ -63,7 +81,11 @@ function setupKonvaJS(drawAreaView) {
     drawAreaView.canvas.width = Config.CANVAS_WIDTH;
     drawAreaView.canvas.height = Config.CANVAS_HEIGHT;
     drawAreaView.canvas.style.background = "#fffff";
-    drawAreaView.stage.add(drawAreaView.layer);
+    drawAreaView.stage.add(drawAreaView.layer.backgroundLayer);
+    drawAreaView.stage.add(drawAreaView.layer.adminLayer);
+    if (isMultiLayer) {
+        drawAreaView.stage.add(drawAreaView.layer.collaboratorLayer);
+    }
 
     // eslint-disable-next-line no-undef
     drawAreaView.image = new Konva.Image({
@@ -72,8 +94,14 @@ function setupKonvaJS(drawAreaView) {
         y: 0,
     });
 
-    drawAreaView.layer.add(drawAreaView.image);
+    //drawAreaView.layer.backgroundLayer.add(background);
+    drawAreaView.layer.adminLayer.add(drawAreaView.image);
+
+    if (isMultiLayer) {
+        drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
+    }
     drawAreaView.stage.draw();
+
 
     drawAreaView.context = drawAreaView.canvas.getContext("2d");
     drawAreaView.context.strokeStyle = Config.DEFAULT_PEN_COLOR;
@@ -92,7 +120,11 @@ class DrawAreaView extends View {
         super();
         this.setElement(el);
         this.isDrawingActivated = true;
-        this.layer = null;
+        this.layer = {
+            adminLayer: null,
+            collaboratorLayer: null,
+            backgroundLayer: null,
+        };
         this.stage = null;
         this.canvas = null;
         this.image = null;
@@ -106,6 +138,19 @@ class DrawAreaView extends View {
 
         setupKonvaJS(this);
         setMouseListener(this);
+    }
+
+    setTemplate(url) {
+        let instance = this;
+        Konva.Image.fromURL(url, function (node) {
+            node.setAttrs({
+                x: 0,
+                y: 0,
+            });
+            instance.layer.backgroundLayer.destroyChildren();
+            instance.layer.backgroundLayer.add(node);
+            instance.layer.backgroundLayer.batchDraw();
+        });
     }
 
     setDrawingActivated(active) {
@@ -125,14 +170,13 @@ class DrawAreaView extends View {
         let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
             return new Promise(
-                function(resolve, reject) {
+                function (resolve, reject) {
                     instance.stage.toImage({
                         callback: function (img) {
                             resolve(img);
                         },
                     });
-                }
-            );
+                });
 
         }
         return null;
@@ -158,20 +202,21 @@ class DrawAreaView extends View {
         let bigContainer = document.querySelector(".dashboard-canvas");
 
         if (bigContainer.offsetWidth > Config.CANVAS_WIDTH) {
-            this.el.style.maxWidth = (Config.CANVAS_WIDTH + Config.CANVAS_SIZE_OFFSET).toString();
+            this.el.style.maxWidth = (Config.CANVAS_WIDTH + Config.CANVAS_SIZE_OFFSET).toString() + "px";
         } else {
-            this.el.style.maxWidth = bigContainer.offsetWidth;
+            this.el.style.maxWidth = bigContainer.offsetWidth + "px";
         }
 
         if (bigContainer.offsetHeight > Config.CANVAS_HEIGHT) {
-            this.el.style.maxHeight = (Config.CANVAS_HEIGHT + Config.CANVAS_SIZE_OFFSET).toString();
+            this.el.style.maxHeight = (Config.CANVAS_HEIGHT + Config.CANVAS_SIZE_OFFSET).toString() + "px";
         } else {
-            this.el.style.maxHeight = bigContainer.offsetHeight;
+            this.el.style.maxHeight = bigContainer.offsetHeight + "px";
         }
     }
 
     addLine(data) {
-        let newLine = new Konva.Line({
+        let isAdminLine = data.adminLine,
+            newLine = new Konva.Line({
             points: [
                 data.line[0].x * this.stage.width(),
                 data.line[0].y * this.stage.height(),
@@ -186,23 +231,39 @@ class DrawAreaView extends View {
             tension: 1.0,
             globalCompositeOperation: data.penRubber,
         });
-        this.layer.add(newLine);
-        this.layer.batchDraw();
+
+        if (isAdminLine || this.layer.collaboratorLayer === null) {
+            this.layer.adminLayer.add(newLine);
+            this.layer.adminLayer.batchDraw();
+        } else {
+            this.layer.collaboratorLayer.add(newLine);
+            this.layer.collaboratorLayer.batchDraw();
+        }
     }
 
-    undoLine(data) {
+    undoLine(data, isMultiLayer) {
         for (let id of data) {
             let line = this.stage.findOne("#" + id);
             if (line !== undefined) {
                 line.destroy();
             }
         }
-        this.layer.batchDraw();
+        if (isMultiLayer) {
+            this.layer.adminLayer.batchDraw();
+            this.layer.collaboratorLayer.batchDraw();
+        } else {
+            this.layer.adminLayer.batchDraw();
+        }
     }
 
-    clearCanvas() {
-        this.stage.destroyChildren();
-        setupKonvaJS(this);
+    clearCanvas(data) {
+        if (data.isNewSketch || data.userRole === Config.CHANNEL_ROLE_ADMIN) {
+            this.stage.destroyChildren();
+            setupKonvaJS(this, data.multilayer);
+        } else if (data.userRole === Config.CHANNEL_ROLE_COLLABORATOR) {
+            clearAndSetupCollaboratorLayer(this);
+        }
+
         setMouseListener(this);
     }
 }

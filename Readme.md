@@ -4,34 +4,34 @@ Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benu
 
 ## Team
 
-1. Tim Eichinger - tim1.eichinger@stud.uni-regensburg.de
+1. [Tim Eichinger](https://github.com/eichingertim) - tim1.eichinger@stud.uni-regensburg.de
   * Komponenten: 
-    * Socketio 
+    * Websocket 
     * Zeichenkomponente+Toolbox
     * Dashboard Frontend
     * Sketch-History
-2. Tobias Dollhofer - tobias.dollhofer@stud.uni-regensburg.de
+2. [Tobias Dollhofer](https://github.com/tobiasdollhofer) - tobias.dollhofer@stud.uni-regensburg.de
   * Komponenten: 
-    * Sketchfunktionalität (Datenbankmodel, Upload) 
+    * Sketchfunktionalität Backend (Datenbankmodel, Upload) 
     * Publicfeed Kartendesign 
     * Web- und Datenbankhosting
     * Logo-Design
-3. Lukas Schauhuber - lukas.schauhuber@stud.uni-regensburg.de
+3. [Lukas Schauhuber](https://github.com/luggaesch) - lukas.schauhuber@stud.uni-regensburg.de
   * Komponenten: 
-    * Backendrouting und Konfiguration
+    * Backendrouting und Express-Konfiguration
     * Datenbank, Modelle User und Channel
     * Authentifizierung
     * Channelsystem
     * Frontend Landing- und PublicFeed
     * View Engine
     * Dateiupload
-    * Public .me Domain registriert
-4. Timon Lorenz
+    * Domainregistrierung
+4. [Timon Lorenz](https://github.com/TimmensOne)
 5. Jonas Ernst
 
 ## Setup und Ausführen der Anwendung
 
-Die App wird vom Projektteam unter der Domain http angeboten.
+Die App wird vom Projektteam unter der Domain http://sketchimp.me angeboten.
 Zusätzlich besteht die Möglichkeit, das Projekt direkt auf einem eigenen Webserver auszuführen.
 Allerdings ist zu beachten, dass, ohne Anpassung der Datenbank-Verbindung, die Bild-Referenzen nicht geladen werden können, da die Quelldateien nur auf dem gehosteten Webserver vorliegen. Die reguläre Datenbank-URL liegt unter `/lib/config/Constants.js` als Konstante vor.
 

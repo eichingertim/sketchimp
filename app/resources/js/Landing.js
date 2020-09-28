@@ -1,5 +1,6 @@
 var app,
-    navBar = document.querySelector(".landing-top-bar"),
+    navBar = document.querySelector(".navigation-top"),
+    scrollIndicator = document.querySelector(".scroll-indicator"),
     landingContainer = document.querySelector(".landing-main-container");
 
 function OilPainting(){
@@ -78,11 +79,15 @@ function OilPainting(){
     };	
 }
 window.onscroll = function() {
+    if (this.document.body.scrollTop >= 50 || this.document.documentElement.scrollTop >= 50) {
+        scrollIndicator.classList.add("hidden");
+    }
     if (document.body.scrollTop >= landingContainer.offsetHeight || document.documentElement.scrollTop >= landingContainer.offsetHeight) {
       navBar.classList.add("scroll");
     } else {
       navBar.classList.remove("scroll");
     }
+
   };
 
 app = new OilPainting();

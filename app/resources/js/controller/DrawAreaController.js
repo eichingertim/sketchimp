@@ -14,9 +14,28 @@ class LineUndoEvent extends Event {
 }
 
 class ClearCanvasEvent extends Event {
-    constructor() {
-        super(EventKeys.CLEAR_RECEIVED, null);
+    constructor(data) {
+        super(EventKeys.CLEAR_RECEIVED, data);
     }
+}
+
+class NewSketchEvent extends Event {
+    constructor(data) {
+        super(EventKeys.NEW_SKETCH_RECEIVED, data);
+    }
+}
+
+class TemplateReceivedEvent extends Event {
+    constructor(data) {
+        super(EventKeys.TEMPLATE_RECEIVED, data);
+    }
+}
+
+function getMarkedAsAdminLine(isMultiLayer, userRole) {
+    if (isMultiLayer) {
+        return userRole === Config.CHANNEL_ROLE_ADMIN;
+    }
+    return true;
 }
 
 function createUUID() {
@@ -30,17 +49,26 @@ function createUUID() {
 
 class DrawAreaController extends Observable {
 
-    constructor(socket, userId) {
+    constructor(socket) {
         super();
-        this.userId = userId;
-        this.channelId = null;
         this.socket = socket;
     }
 
     join(channelId) {
         let instance = this;
-        this.channelId = channelId;
-        this.socket.emit(SocketKeys.SUBSCRIBE, this.channelId);
+        this.socket.emit(SocketKeys.SUBSCRIBE, channelId);
+
+        this.socket.on(SocketKeys.DELETE_CHANNEL, function (data) {
+            window.location.reload();
+        });
+
+        this.socket.on(SocketKeys.TEMPLATE, function (data) {
+            instance.notifyAll(new TemplateReceivedEvent(data));
+        });
+
+        this.socket.on(SocketKeys.NEW_SKETCH, function (data) {
+           instance.notifyAll(new NewSketchEvent(data));
+        });
 
         this.socket.on(SocketKeys.LINE_DRAWN, function (data) {
             instance.notifyAll(new LineDrawnEvent(data));
@@ -50,38 +78,50 @@ class DrawAreaController extends Observable {
             instance.notifyAll(new LineUndoEvent(data));
         });
 
-        this.socket.on(SocketKeys.CLEAR_CANVAS, function () {
-            instance.notifyAll(new ClearCanvasEvent());
+        this.socket.on(SocketKeys.CLEAR_CANVAS, function (data) {
+            instance.notifyAll(new ClearCanvasEvent(data));
         });
 
     }
 
-    emitClearCanvas() {
-        if (this.channelId !== null) {
-            this.socket.emit(SocketKeys.CLEAR_CANVAS, {channelId: this.channelId});
-        }
+    emitTemplate(channelId, templateUrl) {
+        this.socket.emit(SocketKeys.TEMPLATE, {channelId: channelId, templateUrl: templateUrl});
+    }
+
+    emitClearCanvas(data) {
+        this.socket.emit(SocketKeys.CLEAR_CANVAS, data);
+    }
+
+    emitNewSketch(channelId, sketchId, sketchName, sketchMultiLayer) {
+        this.socket.emit(SocketKeys.NEW_SKETCH, {
+            channelId: channelId,
+            sketchId: sketchName,
+            sketchName: sketchName,
+            sketchMultiLayer: sketchMultiLayer,
+        });
     }
 
     emitLine(data) {
-        if (this.channelId !== null) {
+        if (data.channelId !== null && data.currentChannelRole !== Config.CHANNEL_ROLE_VIEWER) {
             this.socket.emit(SocketKeys.LINE_DRAWN, {
-                channelId: this.channelId,
-                userId: this.userId,
+                channelId: data.channelId,
+                userId: data.userId,
                 lineId: createUUID(),
-                line: [data.mouse.pos, data.mouse.posPrev],
-                color: data.color,
-                penRubber: data.penRubber,
-                size: data.size,
+                line: [data.lineData.mouse.pos, data.lineData.mouse.posPrev],
+                color: data.lineData.color,
+                penRubber: data.lineData.penRubber,
+                size: data.lineData.size,
+                adminLine: getMarkedAsAdminLine(data.multilayer, data.currentChannelRole),
             });
         }
 
     }
 
-    undoLine() {
-        if (this.channelId !== null) {
+    emitUndoLine(channelId, userId) {
+        if (channelId !== null) {
             this.socket.emit(SocketKeys.LINE_UNDO, {
-                channelId: this.channelId,
-                userId: this.userId,
+                channelId: channelId,
+                userId: userId,
             });
         }
     }

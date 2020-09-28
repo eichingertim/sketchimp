@@ -1,6 +1,6 @@
 var grid = document.querySelector(".cards"),
-    navBar = document.querySelector(".landing-top-bar"),
-    topContainer = document.querySelector(".landing-main-container"),
+    navBar = document.querySelector(".navigation-top"),
+    topContainer = document.querySelector(".banner-content"),
 msnry = new Masonry(grid, {
     itemSelector: ".card",
     columnWidth: 150,
