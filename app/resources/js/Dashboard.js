@@ -151,8 +151,7 @@ function onPublishSketchBtnClick(dashboard, event) {
 }
 
 function onSaveAdminSettingsLoaded() {
-    //ich brauche
-    //channelId, channelName, Users & Roles
+    //
     const settings = adminSettingsDialogView.getSettings();
     console.log(settings);
     adminSettingsDialogView.hide();
@@ -196,9 +195,8 @@ class Dashboard {
             channelInfoDialogView.toggleVisibility();
         });
 
-        //not yet in own classes
         document.querySelector(".admin-settings-icon").addEventListener("click", function() {
-            adminSettingsDialogView.resetValues();
+            adminSettingsDialogView.updateValues();
             adminSettingsDialogView.toggleVisibility();
         });
     }

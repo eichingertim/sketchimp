@@ -8,7 +8,7 @@ class SaveSettingsClickEvent extends Event {
     }
 }
 
-let channelId, channelName, users, userId, userName, userRole;
+let channelId, channelName, users;
 
 function onSaveSettingsClick(adminSettingsDialogView, data) {
     adminSettingsDialogView.notifyAll(new SaveSettingsClickEvent(data));
@@ -17,7 +17,31 @@ function onSaveSettingsClick(adminSettingsDialogView, data) {
 function setListener(adminSettingsDialogView) {
     adminSettingsDialogView.el.querySelector(".save-settings")
         .addEventListener("click", onSaveSettingsClick.bind(this, adminSettingsDialogView));
-}
+    //
+    Array.from(adminSettingsDialogView.el.querySelectorAll(".member-item")).forEach(member => {
+        member.querySelector(".admin").addEventListener("click", () => {
+            member.querySelector(".role-tag").textContent = "admin";
+        });
+        member.querySelector(".collaborator").addEventListener("click", () => {
+            member.querySelector(".role-tag").textContent = "collaborator";
+        });
+        member.querySelector(".observer").addEventListener("click", () => {
+            member.querySelector(".role-tag").textContent = "observer";
+        });
+    });
+    // adminSettingsDialogView.el.querySelector(".admin")
+    //     .addEventListener("click", () => {
+    //         adminSettingsDialogView.el.querySelector(".role-tag").textContent = "admin";
+    //     });
+    // adminSettingsDialogView.el.querySelector(".collaborator")
+    //     .addEventListener("click", () => {
+    //         adminSettingsDialogView.el.querySelector(".role-tag").textContent = "collaborator";
+    //     });
+    // adminSettingsDialogView.el.querySelector(".observer")
+    //     .addEventListener("click", () => {
+    //         adminSettingsDialogView.el.querySelector(".role-tag").textContent = "observer";
+    //     });
+    }
 
 class AdminSettingsDialogView extends View {
     constructor(el) {
@@ -26,30 +50,32 @@ class AdminSettingsDialogView extends View {
         setListener(this);
     }
 
-    resetValues() {
+    updateValues() {
         this.el.querySelector(".form-control").value = channelName;
+        Array.from(this.el.querySelectorAll(".member-item")).forEach((member, index) => {
+            member.querySelector(".role-tag").textContent = users[index].role;
+        });
+        //this.el.querySelector(".role-tag").textContent = users;
     }
 
     setSettings(channel) {
         channelId = channel.channelId;
         channelName = channel.channelName;
-        
-        console.log(channel.channelName);
+        users = channel.members.map(member => {
+            return {id: member.id, name: member.username, role: member.role};
+        });
     }
 
     getSettings() {
-    //ich brauche
-    //channelId, channelName, Users & Roles
-        let users, channelName, channelId, userId, userRole, userList, name;
-        channelName = this.el.querySelector(".form-control").value;
-        //channelId = this.el.querySelector(".channel-name").textContent;
-        userList = this.el.querySelectorAll(".member-item");
-        users = Array.from(userList).map(element => {
-            name = element.querySelector(".member").textContent;
-            return { name: name, role: "todo" };
+        let userList, name, role, id;
+        userList = Array.from(this.el.querySelectorAll(".member-item")).map((element, index) => {
+            name = element.querySelector(".member");
+            role = element.querySelector(".role-tag");
+            //Annahme das Liste immer gleich aufgebaut ist!!!
+            id = users[index].id;
+            return { id: id, name: name.textContent, role: role.textContent };
         });
-
-        return { channelName, users };
+        return { channelId, channelName, userList };
     }
 }
 
