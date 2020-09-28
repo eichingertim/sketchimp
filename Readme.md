@@ -10,6 +10,7 @@ Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benu
     * Zeichenkomponente+Toolbox
     * Dashboard Frontend
     * Sketch-History
+    * Sketch-Export und Vorlagen Import
 2. [Tobias Dollhofer](https://github.com/tobiasdollhofer) - tobias.dollhofer@stud.uni-regensburg.de
   * Komponenten: 
     * Sketchfunktionalität Backend (Datenbankmodel, Upload) 
