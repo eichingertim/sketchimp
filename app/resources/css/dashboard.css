@@ -55,10 +55,37 @@ body {
 }
 
 .channels-container-outer {
-    height: 100%;
     padding: 1vw;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: var(--dashboard-canvas);
+}
+
+.nav-shortcut {
+    background-color: #242424;
+    width: 85%;
+    border-radius: 50%;
+    padding: 15px;
+    height: auto;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.nav-shortcut:hover {
+    border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.dashboard-nav-shortcuts {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    flex-direction: column;
+    padding-bottom: 10px;
 }
 
 .dashboard-main-content-container {
