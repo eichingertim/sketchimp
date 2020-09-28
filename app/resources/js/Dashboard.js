@@ -216,7 +216,7 @@ class Dashboard {
             saveLoad = document.querySelector(".container-load-and-publish"),
             createSketchDialog = document.querySelector(".create-sketch-container"),
             adminSettingsDialog = document.querySelector(".admin-settings"),
-            topBar = document.querySelector(".container-top-bar-history-inner");
+            topBar = document.querySelector(".container-top-bar-history-inner"),
             templateDialog = document.querySelector(".choose-template-container");
 
         drawAreaView = new DrawAreaView(container);

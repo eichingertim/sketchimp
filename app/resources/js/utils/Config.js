@@ -76,6 +76,8 @@ const Config = {
         IMPORT_TEMPLATE_CLICK: "ImportTemplateClick",
         TEMPLATE_SELECTED: "TemplateSelected",
         TEMPLATE_RECEIVED: "TemplateReceived",
+
+        SAVE_SETTINGS_CLICK: "SaveSettingsClick",
     },
 
     SocketKeys = {
