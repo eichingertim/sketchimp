@@ -151,15 +151,14 @@ function onPublishSketchBtnClick(dashboard, event) {
 }
 
 function onSaveAdminSettingsLoaded() {
-    //
     const settings = adminSettingsDialogView.getSettings();
     console.log(settings);
     adminSettingsDialogView.hide();
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/admin-settings");
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.send(JSON.stringify(settings));
+    //const xhr = new XMLHttpRequest();
+    //xhr.open("POST", "/api/admin-settings");
+    //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    //xhr.send(JSON.stringify(settings));
 }
 
 /**

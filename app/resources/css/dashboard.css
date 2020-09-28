@@ -194,6 +194,20 @@ body {
     cursor: pointer;
 }
 
+.admin-settings-icon {
+    cursor: pointer;
+}
+
+.role-list {
+    list-style-type: none;
+    padding: 0
+}
+
+.role-tag {
+    padding: 4px;
+    color: #343434;
+}
+
 .flat-accent-button {
     color: var(--accent);
     padding: 8px;

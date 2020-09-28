@@ -21,36 +21,30 @@ function setListener(adminSettingsDialogView) {
     Array.from(adminSettingsDialogView.el.querySelectorAll(".member-item")).forEach(member => {
         member.querySelector(".admin").addEventListener("click", () => {
             let element = member.querySelector(".role-tag");
-            element.textContent = "Admin";
-            setLabelColor(element, "Admin");
-            //element.classList.remove("label-info","label-danger");
-            //element.classList.add("label-success");
+            setLabelColor(element, "admin");
         });
         member.querySelector(".collaborator").addEventListener("click", () => {
             let element = member.querySelector(".role-tag");
-            element.textContent = "Collaborator";
-            setLabelColor(element, "Collaborator");
-            //element.classList.remove("label-success", "label-success");
-            //element.classList.add("label-info");
+            setLabelColor(element, "collaborators");
         });
         member.querySelector(".observer").addEventListener("click", () => {
             let element = member.querySelector(".role-tag");
-            element.textContent = "Observer";
             setLabelColor(element, "Observer");
-            //element.classList.remove("label-success", "label-info");
-            //element.classList.add("label-danger");
         });
     });
 }
 
 function setLabelColor (element, role) {
-    if(role === "Admin"){
+    if(role === "admin"){
+        element.textContent = "Admin";
         element.classList.remove("label-info","label-danger");
         element.classList.add("label-success");
-    } else if(role === "Collaborator"){
-        element.classList.remove("label-success", "label-success");
+    } else if(role === "collaborators"){
+        element.textContent = "Collaborator";
+        element.classList.remove("label-success", "label-danger");
         element.classList.add("label-info");
     } else {
+        element.textContent = "Observer";
         element.classList.remove("label-success", "label-info");
         element.classList.add("label-danger");
     }
@@ -66,7 +60,6 @@ class AdminSettingsDialogView extends View {
     updateValues() {
         this.el.querySelector(".form-control").value = channelName;
         Array.from(this.el.querySelectorAll(".member-item")).forEach((member, index) => {
-            member.querySelector(".role-tag").textContent = users[index].role;
             setLabelColor(member.querySelector(".role-tag"), users[index].role);
         });
     }
@@ -84,7 +77,6 @@ class AdminSettingsDialogView extends View {
         userList = Array.from(this.el.querySelectorAll(".member-item")).map((element, index) => {
             name = element.querySelector(".member");
             role = element.querySelector(".role-tag");
-            //Annahme das Liste immer gleich aufgebaut ist!!!
             id = users[index].id;
             return { id: id, name: name.textContent, role: role.textContent };
         });
