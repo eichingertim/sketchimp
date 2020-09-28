@@ -1,5 +1,5 @@
 import View from "../View.js";
-import { Event } from "../../utils/Observable.js";
+import {Event} from "../../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 class LeaveChannelClickEvent extends Event {
@@ -32,6 +32,15 @@ function onDialogCloseClick(channelInfoDialogView, data) {
     channelInfoDialogView.notifyAll(new CloseInfoDialogEvent());
 }
 
+function copy2Clipboard(str) {
+    let ta = document.createElement("textarea");
+    ta.value = str;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+}
+
 function setListener(channelInfoDialogView) {
     channelInfoDialogView.el.querySelector(".leave-channel")
         .addEventListener("click", onLeaveChannelClick.bind(this, channelInfoDialogView));
@@ -39,6 +48,23 @@ function setListener(channelInfoDialogView) {
         .addEventListener("click", onDeleteChannelClick.bind(this, channelInfoDialogView));
     channelInfoDialogView.el.querySelector("#channel-info-close")
         .addEventListener("click", onDialogCloseClick.bind(this, channelInfoDialogView));
+    channelInfoDialogView.el.querySelector(".profile-image-overlay").addEventListener("click", () => {
+        channelInfoDialogView.el.querySelector("#channel-upload").click();
+    });
+    channelInfoDialogView.el.querySelector("#channel-upload").addEventListener("change", (event) => {
+        channelInfoDialogView.el.querySelector("#selected-file").innerHTML = event.target.value;
+        channelInfoDialogView.el.querySelector("#btn-upload-channel").style.visibility = "visible";
+    });
+
+    let btnCopyChannelId = channelInfoDialogView.el.querySelector(".copy-channel-id");
+    btnCopyChannelId.addEventListener("click", () => {
+        copy2Clipboard(channelInfoDialogView.el.querySelector(".info-channel-id").textContent);
+        let tmp = btnCopyChannelId.innerHTML;
+        btnCopyChannelId.innerHTML = "Successfully copied";
+        setTimeout(function () {
+            btnCopyChannelId.innerHTML = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
+    });
 }
 
 class ChannelInfoDialogView extends View {
