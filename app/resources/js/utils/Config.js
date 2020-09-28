@@ -66,6 +66,10 @@ const Config = {
         PUBLISH_SKETCH_CLICK: "PublishSketchClick",
 
         NEW_SKETCH_RECEIVED: "NewSketchReceived",
+
+        IMPORT_TEMPLATE_CLICK: "ImportTemplateClick",
+        TEMPLATE_SELECTED: "TemplateSelected",
+        TEMPLATE_RECEIVED: "TemplateReceived",
     },
 
     SocketKeys = {
@@ -77,6 +81,7 @@ const Config = {
         CHANNEL_LINE_HISTORY: "getLineHistory",
         DELETE_CHANNEL: "delete-channel",
         NEW_SKETCH: "new-sketch",
+        TEMPLATE: "template",
 
     };
 

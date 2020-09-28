@@ -11,13 +11,14 @@ import SaveLoadView from "./ui/dashboard/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
 import CreateSketchDialogView from "./ui/dashboard/CreateSketchDialogView.js";
 import TopBarView from "./ui/dashboard/TopBarView.js";
+import ChooseTemplateDialogView from "./ui/dashboard/ChooseTemplateDialogView.js";
 import UserModel from "./models/UserModel.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 import SketchModel from "./models/SketchModel.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView,
     channelListView, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, createSketchDialogView, topBarView;
+    saveLoadView, createSketchDialogView, topBarView, chooseTemplateDialogView;
 
 /**
  * builds needed data for the drawAreaController, to emit the new line
@@ -195,7 +196,8 @@ class Dashboard {
             createChannelDialog = document.querySelector(".create-channel-container"),
             saveLoad = document.querySelector(".container-load-and-publish"),
             createSketchDialog = document.querySelector(".create-sketch-container"),
-            topBar = document.querySelector(".container-top-bar-history-inner");
+            topBar = document.querySelector(".container-top-bar-history-inner"),
+            templateDialog = document.querySelector(".choose-template-container");
 
         drawAreaView = new DrawAreaView(container);
         toolboxView = new ToolboxView(toolbox);
@@ -206,6 +208,7 @@ class Dashboard {
         saveLoadView = new SaveLoadView(saveLoad);
         createSketchDialogView = new CreateSketchDialogView(createSketchDialog);
         topBarView = new TopBarView(topBar);
+        chooseTemplateDialogView = new ChooseTemplateDialogView(templateDialog);
 
         drawAreaController = new DrawAreaController(this.socket);
     }
@@ -235,6 +238,13 @@ class Dashboard {
                 topBarView.clearSketchHistory();
                 topBarView.addSketchHistory(sketches);
             });
+        });
+        drawAreaController.addEventListener(EventKeys.TEMPLATE_RECEIVED, (event) => {
+            if (event.data.templateUrl !== null) {
+                drawAreaView.setTemplate(event.data.templateUrl);
+                drawAreaView.setDrawingActivated(true);
+                chooseTemplateDialogView.hide();
+            }
         });
     }
 
@@ -266,10 +276,10 @@ class Dashboard {
             }));
         channelInfoDialogView.addEventListener(EventKeys.DELETE_CHANNEL_CLICK, () =>
             ChannelController.deleteChannel(instance.socket, instance.channel.channelId)
-            .then(() => {
-                channelInfoDialogView.toggleVisibility();
-                window.location.reload();
-            }));
+                .then(() => {
+                    channelInfoDialogView.toggleVisibility();
+                    window.location.reload();
+                }));
 
         //CreateChannelAndSketchDialog
         createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => ChannelController.createChannel(event.data)
@@ -284,6 +294,10 @@ class Dashboard {
 
         //CreateSketchDialog
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+
+        chooseTemplateDialogView.addEventListener(EventKeys.TEMPLATE_SELECTED, (event) => {
+            drawAreaController.emitTemplate(instance.channel.channelId, event.data.url);
+        });
     }
 
     setChannelTopAndRightBarListener(instance) {
@@ -311,6 +325,10 @@ class Dashboard {
             }
         });
         saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
+        saveLoadView.addEventListener(EventKeys.IMPORT_TEMPLATE_CLICK, () => {
+            drawAreaView.setDrawingActivated(false);
+            chooseTemplateDialogView.toggleVisibility();
+        });
 
         //TopBar with SketchHistory
         topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
@@ -325,7 +343,11 @@ class Dashboard {
 
             drawAreaController.join(channel.channelId);
             drawAreaView.creatorId = channel.creatorId;
-            drawAreaView.clearCanvas({isNewSketch: true, multilayer: channel.currentSketch.multilayer, userRole: this.user.currentChannelRole});
+            drawAreaView.clearCanvas({
+                isNewSketch: true,
+                multilayer: channel.currentSketch.multilayer,
+                userRole: this.user.currentChannelRole,
+            });
             topBarView.clearSketchHistory();
             SketchController.loadHistory(channel.channelId).then((sketches) => {
                 topBarView.addSketchHistory(sketches);
@@ -334,7 +356,7 @@ class Dashboard {
             ChannelController.fetchChannelData(Config.API_URL_CHANNEL + channel.channelId)
                 .then((channel) => {
                     onChannelDataForEnteringLoaded(instance, channel);
-            });
+                });
         }
     }
 
