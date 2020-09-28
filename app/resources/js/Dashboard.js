@@ -10,7 +10,7 @@ import CreateChannelDialogView from "./ui/dashboard/CreateChannelDialogView.js";
 import SaveLoadView from "./ui/dashboard/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
 import CreateSketchDialogView from "./ui/dashboard/CreateSketchDialogView.js";
-import AdminSettingsDialogView from "./ui/AdminSettingsDialogView.js";
+import AdminSettingsDialogView from "./ui/dashboard/AdminSettingsDialogView.js";
 import TopBarView from "./ui/dashboard/TopBarView.js";
 import UserModel from "./models/UserModel.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
@@ -63,6 +63,8 @@ function onChannelDataForEnteringLoaded(dashboard, channel) {
         dashboard.onLeave();
         dashboard.onJoin(channel);
     }
+
+    adminSettingsDialogView.setSettings(channel);
 }
 
 /**
@@ -148,8 +150,17 @@ function onPublishSketchBtnClick(dashboard, event) {
     });
 }
 
-function onSaveAdminSettingsLoaded(event) {
+function onSaveAdminSettingsLoaded() {
+    //ich brauche
+    //channelId, channelName, Users & Roles
+    const settings = adminSettingsDialogView.getSettings();
+    console.log(settings);
     adminSettingsDialogView.hide();
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/admin-settings");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(settings));
 }
 
 /**
@@ -187,6 +198,7 @@ class Dashboard {
 
         //not yet in own classes
         document.querySelector(".admin-settings-icon").addEventListener("click", function() {
+            adminSettingsDialogView.resetValues();
             adminSettingsDialogView.toggleVisibility();
         });
     }
@@ -278,6 +290,9 @@ class Dashboard {
 
         //CreateSketchDialog
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+
+        //AdminSettingsDialog
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
     }
 
     setChannelTopAndRightBarListener(instance) {
@@ -304,7 +319,6 @@ class Dashboard {
 
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
 
-        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
         //TopBar with SketchHistory
         topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
         topBarView.addEventListener(EventKeys.FULLSCREEN_CLOSE_CLICK, onFullScreenCloseClick.bind(this));
