@@ -160,12 +160,15 @@ font-size: 0.8em;
 top: 80%;
 }
 
-.likebutton{
+.likebutton, .dislikebutton{
 height: 1em;
+cursor: pointer;
+transition: .3s;
 }
 
-.dislikebutton{
-height: 1em;
+.likebutton:hover, .dislikebutton:hover{
+    height: 1.3em;
+    transition: .3s;
 }
 
 footer {

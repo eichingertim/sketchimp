@@ -25,23 +25,11 @@ function initButtonStatus(cardView){
 }
 
 function onLikeButtonClick(){
-    if(this.upvote){
-        this.setLikeInactive();
-    }else{
-        this.setLikeActive();
-        this.setDislikeInactive();
-    }
     let likeEvent = new LikeButtonEvent(this.id);
     this.notifyAll(likeEvent);
 }
 
 function onDislikeButtonClick(){
-    if(this.downvote){
-        this.setDislikeInactive();
-    }else{
-        this.setDislikeActive();
-        this.setLikeInactive();
-    }
     let dislikeEvent = new DislikeButtonEvent(this.id);
     this.notifyAll(dislikeEvent);
 }
@@ -86,6 +74,11 @@ class PublicFeedCard extends View{
     setDislikeInactive(){
         this.downvoteButton.src = Config.PATH_DISLIKE_ICON_INACTIVE;
         this.downvote = false;
+    }
+
+    resetButtons(){
+        this.setLikeInactive();
+        this.setDislikeInactive();
     }
 }
 

@@ -2,17 +2,15 @@ import PublicFeedCard from "./PublicFeedCard.js";
 import Config from "../../utils/Config.js";
 
 var cardsItem = document.getElementById("cards"),
-cardObjects = setupCardList(cardsItem);
+cards = setupCardList(cardsItem);
 
 function onLikeClick(event){
-    console.log("click like; sketch:" + event.data);
     if(event.data){
         sendClickActionToApi(Config.API_URL_SKETCH_LIKE + event.data);
     }
 }
 
 function onDislikeClick(event){
-    console.log("click dislike; sketch:" + event.data);
     if(event.data){
         sendClickActionToApi(Config.API_URL_SKETCH_DISLIKE + event.data);
     }
@@ -23,9 +21,10 @@ function sendClickActionToApi(url){
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
-        //instance.notifyAll(new SketchSavedEvent());
+        let data = JSON.parse(this.response).data,
+        sketchCard = getSketchCardForId(data.id);
+        handleLikeStatus(sketchCard, data);
     };
-    console.log("send:" + url);
     xhr.send();
 }
 
@@ -39,4 +38,23 @@ function setupCardList(cardsItem){
         cardList.push(singleCard);
     }
     return cardList;
+}
+
+function getSketchCardForId(id){
+    for(let i = 0; i < cards.length; i++){
+        if(cards[i].id === id){
+            return cards[i];
+        }
+    }
+    return null;
+}
+
+function handleLikeStatus(sketchCard, responseData){
+    sketchCard.resetButtons();
+    if(responseData.userUpvote){
+        sketchCard.setLikeActive();
+    }
+    if(responseData.userDownvote){
+        sketchCard.setDislikeActive();
+    }
 }
