@@ -221,6 +221,20 @@ body {
     cursor: pointer;
 }
 
+.admin-settings-icon {
+    cursor: pointer;
+}
+
+.role-list {
+    list-style-type: none;
+    padding: 0
+}
+
+.role-tag {
+    padding: 4px;
+    color: #343434;
+}
+
 .flat-accent-button {
     color: var(--accent);
     padding: 8px;
@@ -477,4 +491,8 @@ body {
     align-items: center;
     background-color: #FFFFFF;
     height: 100%;
+}
+
+#admin-settings-dialog .member-item {
+    display: block;
 }

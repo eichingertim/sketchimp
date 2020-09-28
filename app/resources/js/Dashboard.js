@@ -10,6 +10,7 @@ import CreateChannelDialogView from "./ui/dashboard/CreateChannelDialogView.js";
 import SaveLoadView from "./ui/dashboard/SaveLoadView.js";
 import SketchController from "./controller/SketchController.js";
 import CreateSketchDialogView from "./ui/dashboard/CreateSketchDialogView.js";
+import AdminSettingsDialogView from "./ui/dashboard/AdminSettingsDialogView.js";
 import TopBarView from "./ui/dashboard/TopBarView.js";
 import ChooseTemplateDialogView from "./ui/dashboard/ChooseTemplateDialogView.js";
 import UserModel from "./models/UserModel.js";
@@ -18,7 +19,7 @@ import SketchModel from "./models/SketchModel.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView,
     channelListView, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, createSketchDialogView, topBarView, chooseTemplateDialogView;
+    saveLoadView, createSketchDialogView, adminSettingsDialogView, topBarView, chooseTemplateDialogView;
 
 /**
  * builds needed data for the drawAreaController, to emit the new line
@@ -64,6 +65,8 @@ function onChannelDataForEnteringLoaded(dashboard, channel) {
         dashboard.onLeave();
         dashboard.onJoin(channel);
     }
+
+    adminSettingsDialogView.setSettings(channel);
 }
 
 /**
@@ -153,6 +156,17 @@ function onPublishSketchBtnClick(dashboard, event) {
     });
 }
 
+function onSaveAdminSettingsLoaded() {
+    const settings = adminSettingsDialogView.getSettings();
+    console.log(settings);
+    adminSettingsDialogView.hide();
+
+    //const xhr = new XMLHttpRequest();
+    //xhr.open("POST", "/api/admin-settings");
+    //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    //xhr.send(JSON.stringify(settings));
+}
+
 /**
  * Calculates Canvas Size -> Responsive
  */
@@ -185,6 +199,11 @@ class Dashboard {
         document.querySelector(".channel-info-icon").addEventListener("click", function () {
             channelInfoDialogView.toggleVisibility();
         });
+
+        document.querySelector(".admin-settings-icon").addEventListener("click", function() {
+            adminSettingsDialogView.updateValues();
+            adminSettingsDialogView.toggleVisibility();
+        });
     }
 
     initUIAndController() {
@@ -196,7 +215,8 @@ class Dashboard {
             createChannelDialog = document.querySelector(".create-channel-container"),
             saveLoad = document.querySelector(".container-load-and-publish"),
             createSketchDialog = document.querySelector(".create-sketch-container"),
-            topBar = document.querySelector(".container-top-bar-history-inner"),
+            adminSettingsDialog = document.querySelector(".admin-settings"),
+            topBar = document.querySelector(".container-top-bar-history-inner");
             templateDialog = document.querySelector(".choose-template-container");
 
         drawAreaView = new DrawAreaView(container);
@@ -207,6 +227,7 @@ class Dashboard {
         createChannelDialogView = new CreateChannelDialogView(createChannelDialog);
         saveLoadView = new SaveLoadView(saveLoad);
         createSketchDialogView = new CreateSketchDialogView(createSketchDialog);
+        adminSettingsDialogView = new AdminSettingsDialogView(adminSettingsDialog);
         topBarView = new TopBarView(topBar);
         chooseTemplateDialogView = new ChooseTemplateDialogView(templateDialog);
 
@@ -295,6 +316,9 @@ class Dashboard {
         //CreateSketchDialog
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
 
+        //AdminSettingsDialog
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
+      
         chooseTemplateDialogView.addEventListener(EventKeys.TEMPLATE_SELECTED, (event) => {
             drawAreaController.emitTemplate(instance.channel.channelId, event.data.url);
         });
@@ -329,6 +353,8 @@ class Dashboard {
             drawAreaView.setDrawingActivated(false);
             chooseTemplateDialogView.toggleVisibility();
         });
+
+        createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
 
         //TopBar with SketchHistory
         topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
