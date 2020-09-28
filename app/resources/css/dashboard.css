@@ -76,6 +76,7 @@ body {
 
 .nav-shortcut:hover {
     border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .dashboard-nav-shortcuts {
