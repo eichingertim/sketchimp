@@ -20,6 +20,12 @@ class ExportEvent extends Event {
     }
 }
 
+class ImportTemplateEvent extends Event {
+    constructor() {
+        super(EventKeys.IMPORT_TEMPLATE_CLICK, null);
+    }
+}
+
 function onSaveClick(saveLoadView, data) {
     saveLoadView.notifyAll(new SaveEvent());
 }
@@ -32,14 +38,20 @@ function onExportSketchAndDownload(saveLoadView, data) {
     saveLoadView.notifyAll(new ExportEvent());
 }
 
+function onImportTemplateClick(saveLoadView, data) {
+    saveLoadView.notifyAll(new ImportTemplateEvent());
+}
+
 function setListeners(saveLoadView) {
     let btnSave = saveLoadView.el.querySelector("#save"),
         btnFinalizeAndCreate = saveLoadView.el.querySelector("#save-publish"),
-        btnExportDownload = saveLoadView.el.querySelector("#export-download");
+        btnExportDownload = saveLoadView.el.querySelector("#export-download"),
+        btnLoadTemplate = saveLoadView.el.querySelector("#import-template");
 
     btnSave.addEventListener("click", onSaveClick.bind(this, saveLoadView));
     btnFinalizeAndCreate.addEventListener("click", onFinalizeAndCreateNew.bind(this, saveLoadView));
     btnExportDownload.addEventListener("click", onExportSketchAndDownload.bind(this, saveLoadView));
+    btnLoadTemplate.addEventListener("click", onImportTemplateClick.bind(this, saveLoadView));
 }
 
 class SaveLoadView extends View {
@@ -51,24 +63,36 @@ class SaveLoadView extends View {
     }
 
     setSketchSaved() {
-        let btnSave = this.el.querySelector("#save");
+        let btnSave = this.el.querySelector("#save"),
+            tmp = btnSave.value;
 
-        //TODO: just show couple seconds
-        btnSave.innerHTML = "Successfully saved";
+        btnSave.value = "Successfully saved";
+
+        setTimeout(function(){
+            btnSave.value = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
     }
 
     setSketchFinalized() {
-        let btnFinalizeAndCreate = this.el.querySelector("#save-publish");
+        let btnFinalizeAndCreate = this.el.querySelector("#save-publish"),
+            tmp = btnFinalizeAndCreate.value;
 
-        //TODO: just show couple seconds
-        btnFinalizeAndCreate.innerHTML = "Successfully Finalized";
+        btnFinalizeAndCreate.value = "Successfully Finalized";
+
+        setTimeout(function(){
+            btnFinalizeAndCreate.value = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
     }
 
     setSketchExported() {
-        let btnExportDownload = this.el.querySelector("#export-download");
+        let btnExportDownload = this.el.querySelector("#export-download"),
+            tmp = btnExportDownload.value;
 
-        //TODO: just show couple seconds
-        btnExportDownload.innerHTML = "Successfully Exported";
+        btnExportDownload.value = "Successfully Exported";
+
+        setTimeout(function(){
+            btnExportDownload.value = tmp;
+        }, Config.DELAY_SHOW_SUCCESS);
     }
 }
 

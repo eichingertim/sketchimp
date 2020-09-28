@@ -1,41 +1,30 @@
-class PublicFeedView{
-    constructor(node){
-        this.node = node;
-        this.id = node.id;
-        this.setupClickListener();
-    }
+import PublicFeedCard from "./PublicFeedCard.js";
+import Config from "../../utils/Config.js";
 
-    setupClickListener(){
-        this.upvoteButton = this.node.querySelector(".likebutton");
-        this.upvoteButton.addEventListener("click", onLikeClick.bind(this));
-        this.downvoteButton = this.node.querySelector(".dislikebutton");
-        this.downvoteButton.addEventListener("click", onDislikeClick.bind(this));
-    }
+var cardsItem = document.getElementById("cards"),
+cards = setupCardList(cardsItem);
 
+function onLikeClick(event){
+    if(event.data){
+        sendClickActionToApi(Config.API_URL_SKETCH_LIKE + event.data);
+    }
 }
 
-function onLikeClick(){
-    console.log("click like; sketch:" + this.id);
-    let xhr = new XMLHttpRequest(),
-        url = "/api/sketch/upvote/" + this.id;
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "text/html");
-    /*xhr.onload = function() {
-        //instance.notifyAll(new SketchSavedEvent());
-    };*/
-    xhr.send();
-
+function onDislikeClick(event){
+    if(event.data){
+        sendClickActionToApi(Config.API_URL_SKETCH_DISLIKE + event.data);
+    }
 }
 
-function onDislikeClick(){
-    console.log("click like; sketch:" + this.id);
-    let xhr = new XMLHttpRequest(),
-        url = "/api/sketch/downvote/" + this.id;
+function sendClickActionToApi(url){
+    let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
-    /*xhr.onload = function() {
-        //instance.notifyAll(new SketchSavedEvent());
-    };*/
+    xhr.onload = function() {
+        let data = JSON.parse(this.response).data,
+        sketchCard = getSketchCardForId(data.id);
+        handleLikeStatus(sketchCard, data);
+    };
     xhr.send();
 }
 
@@ -43,12 +32,29 @@ function setupCardList(cardsItem){
     let cardList = [],
     cards = cardsItem.children;
     for(let i = 0; i < cards.length; i++){
-        let singleCard = new PublicFeedView(cards[i]);
+        let singleCard = new PublicFeedCard(cards[i]);
+        singleCard.addEventListener("Like", onLikeClick);
+        singleCard.addEventListener("Dislike", onDislikeClick);
         cardList.push(singleCard);
     }
     return cardList;
 }
 
-var cardsItem = document.getElementById("cards"),
-cardObjects = setupCardList(cardsItem),
-userId = "5f6cb652a60f930330f6ca81";
+function getSketchCardForId(id){
+    for(let i = 0; i < cards.length; i++){
+        if(cards[i].id === id){
+            return cards[i];
+        }
+    }
+    return null;
+}
+
+function handleLikeStatus(sketchCard, responseData){
+    sketchCard.resetButtons();
+    if(responseData.userUpvote){
+        sketchCard.setLikeActive();
+    }
+    if(responseData.userDownvote){
+        sketchCard.setDislikeActive();
+    }
+}

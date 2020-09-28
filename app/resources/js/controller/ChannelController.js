@@ -16,7 +16,7 @@ class ChannelController {
             xhr.onload = function() {
                 let data = JSON.parse(this.response).data, channel;
                 if (data) {
-                    channel = new ChannelModel(data.id, data.name, data.creation, data.creator.id, data.creator.name, data.members);
+                    channel = new ChannelModel(data.id, data.name, data.creator.id, data.creator.username, data.creation, data.members);
                 }
                 xhrSketch.open(Config.HTTP_GET, Config.API_URL_CURRENT_SKETCH + data.id, true);
                 xhrSketch.onload = function () {
@@ -47,7 +47,7 @@ class ChannelController {
                         channel;
 
                     if (channelData) {
-                        channel = new ChannelModel(channelData.id, channelData.name, channelData.creation, channelData.creator.id, channelData.creator.name, channelData.members);
+                        channel = new ChannelModel(channelData.id, channelData.name, channelData.creator.id, channelData.creator.username, channelData.creation, channelData.members);
                     }
 
                     xhrSketch.open(Config.HTTP_POST, Config.API_URL_NEW_SKETCH + channelData.id, true);
@@ -100,7 +100,21 @@ class ChannelController {
                 xhr.send();
             }
         );
+    }
 
+    static deleteChannel(socket, channelId) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest();
+                xhr.open(Config.HTTP_POST, Config.API_URL_DELETE_CHANNEL + channelId, true);
+                xhr.withCredentials = true;
+                xhr.onload = function() {
+                    socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId});
+                    resolve();
+                };
+                xhr.send();
+            }
+        );
     }
 }
 

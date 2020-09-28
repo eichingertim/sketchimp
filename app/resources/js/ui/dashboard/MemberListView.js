@@ -8,8 +8,9 @@ class MemberItemClickEvent extends Event {
     }
 }
 
-function onMemberClick(memberListView, data) {
-    memberListView.notifyAll(new MemberItemClickEvent(data.href));
+function onMemberClick(memberListView, event) {
+    event.preventDefault();
+    memberListView.notifyAll(new MemberItemClickEvent(event.target.id));
 }
 
 function setListener(memberListView) {
@@ -19,6 +20,15 @@ function setListener(memberListView) {
     });
 }
 
+function appendCreatorToList(channel, memberTemplate, memberListView) {
+    let clone = memberTemplate.content.cloneNode(true),
+        anchor = clone.querySelector("span");
+    anchor.id = "/api/user/" + channel.creatorId;
+    anchor.textContent = channel.creatorName;
+    anchor.style = "color:green;";
+    memberListView.el.appendChild(clone);
+}
+
 class MemberListView extends View {
     constructor(el) {
         super();
@@ -26,18 +36,19 @@ class MemberListView extends View {
         setListener(this);
     }
 
-    updateMembers(channelMembers) {
+    updateMembers(channel) {
         let memberTemplate = document.querySelector("#member-template");
         this.el.innerHTML = "";
-        channelMembers.forEach(user => {
+        appendCreatorToList(channel, memberTemplate, this);
+        channel.members.forEach(user => {
             let clone = memberTemplate.content.cloneNode(true),
-                anchor = clone.querySelector("a");
-            anchor.href = "/api/user/" + user.id;
+                anchor = clone.querySelector("span");
+            anchor.id = "/api/user/" + user.id;
             anchor.textContent = user.username;
-            anchor.style = (user.online) ? "color:green;" : "color:red";
+            anchor.style = (user.online) ? "color:green;" : "color:red;";
             this.el.appendChild(clone);
-            setListener(this);
         });
+        setListener(this);
     }
 }
 
