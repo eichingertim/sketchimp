@@ -148,10 +148,22 @@ font-size: 0.8em;
 top: 80%;
 }
 
-.likebutton{
+.likebutton, .dislikebutton{
 height: 1em;
+cursor: pointer;
+transition: .3s;
 }
 
-.dislikebutton{
-height: 1em;
+.likebutton:hover, .dislikebutton:hover{
+    height: 1.3em;
+    transition: .3s;
+}
+
+footer {
+  background-color: var(--dark-grey);
+  padding-top: 20px;
+  position: static;
+  width:100%;
+  bottom: 0;
+  color: white;
 }
