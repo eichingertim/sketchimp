@@ -59,7 +59,7 @@ class CreateChannelDialogView extends View {
     clearAfterSubmit() {
         this.el.querySelector("#r_name").value = "";
         this.el.querySelector("#r_join").value = "";
-        this.toggleVisibility();
+        this.hide();
     }
 
 }
