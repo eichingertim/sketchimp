@@ -84,6 +84,10 @@ const Config = {
         CLOSE_CREATE_SKETCH_DIALOG: "CloseCreateSketchDialog",
         CLOSE_CREATE_CHANNEL_DIALOG: "CloseCreateChannelDialog",
 
+        CHANNEL_INFO_CLICK: "ChannelInfoClick",
+        ADMIN_SETTINGS_CLICK: "AdminSettingsClick",
+        MEMBER_KICK_CLICK: "MemberKickClick",
+
     },
 
     SocketKeys = {
@@ -96,6 +100,7 @@ const Config = {
         DELETE_CHANNEL: "delete-channel",
         NEW_SKETCH: "new-sketch",
         TEMPLATE: "template",
+        ADMIN_SETTINGS: "admin-settings",
 
     };
 

@@ -6,6 +6,18 @@ let fullScreenContainer = document.querySelector(".fullscreen-image"),
     closeFullscreen = fullScreenContainer.querySelector("#close-full-screen"),
     btnPublishSketch = fullScreenContainer.querySelector("#publish-to-public-feed");
 
+class ChannelInfoClick extends Event {
+    constructor() {
+        super(EventKeys.CHANNEL_INFO_CLICK, null);
+    }
+}
+
+class AdminSettingsClick extends Event {
+    constructor() {
+        super(EventKeys.ADMIN_SETTINGS_CLICK, null);
+    }
+}
+
 class HistoryItemClickEvent extends Event {
     constructor(image, sketchId, isPublished) {
         super(EventKeys.HISTORY_ITEM_CLICK, {image: image, sketchId: sketchId, isPublished: isPublished});
@@ -42,9 +54,15 @@ function onSketchHistoryItemClick(topBarView, data) {
 
 function setListener(topBarView) {
     let historyItems = topBarView.el.querySelectorAll(".sketch-history-list-item");
-
     historyItems.forEach(item => {
         item.addEventListener("click", onSketchHistoryItemClick.bind(this, topBarView));
+    });
+
+    topBarView.channelInfoButton.addEventListener("click", () => {
+        topBarView.notifyAll(new ChannelInfoClick());
+    });
+    topBarView.adminSettingsButton.addEventListener("click", () => {
+        topBarView.notifyAll(new AdminSettingsClick());
     });
 }
 
@@ -57,13 +75,23 @@ class TopBarView extends View {
     constructor(el) {
         super();
         this.setElement(el);
+        this.adminSettingsButton = this.el.querySelector(".admin-settings-icon");
+        this.channelInfoButton = this.el.querySelector(".channel-info-icon");
+        this.sketchHistoryList = this.el.querySelector(".sketch-history-list");
         setListener(this);
         setFullScreenListener(this);
     }
 
+    updateRoleVisibility(currentChannelRole) {
+        if (currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
+            this.adminSettingsButton.classList.remove("hidden");
+        } else {
+            this.adminSettingsButton.classList.add("hidden");
+        }
+    }
+
     clearSketchHistory() {
-        let sketchHistoryList = this.el.querySelector(".sketch-history-list");
-        sketchHistoryList.innerHTML = "";
+        this.sketchHistoryList.innerHTML = "";
     }
 
     addSketchHistory(sketches) {
