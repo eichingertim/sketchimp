@@ -120,6 +120,15 @@ footer {
   color: var(--white-font);
 }
 
+footer a {
+  color: var(--white-font) !important;
+  transition: opacity 0.25s ease-in-out;
+}
+
+footer a:hover {
+  opacity: 0.3;
+}
+
 /*
 Classes
 */
@@ -147,18 +156,35 @@ Classes
   height: 100%;
 }
 
-.navigation-logo-text:hover,.navigation-logo-text:focus,.navigation-logo-text.focus {
-  opacity: 60%;
+.navigation-logo-text {
+  opacity: 1;
+  color: var(--white-font) !important;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.navigation-logo-text:hover {
+  opacity: 0.3;
 }
 
 .navigation-logo-text span {
-  color: var(--teal-accent);
-  opacity: inherit;
+  color: var(--teal-accent) !important;
 }
 
 .navigation-buttons {
   display: flex;
   align-items: center;
+}
+
+.navigation-buttons a {
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  color: var(--white-font) !important;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.navigation-buttons a:hover {
+  opacity: 0.3;
 }
 
 .banner-content {
