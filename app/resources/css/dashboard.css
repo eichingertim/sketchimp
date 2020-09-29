@@ -217,6 +217,10 @@ body {
     margin-right: 20px;
 }
 
+.channel {
+    max-width: 100%;
+}
+
 .channel-info-icon {
     cursor: pointer;
 }
