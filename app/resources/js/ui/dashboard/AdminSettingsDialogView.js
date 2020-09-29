@@ -14,8 +14,6 @@ class CloseSettingsClickEvent extends Event {
     }
 }
 
-let channelId, channelName, users;
-
 function onSaveSettingsClick(adminSettingsDialogView, data) {
     adminSettingsDialogView.notifyAll(new SaveSettingsClickEvent(data));
 }
@@ -67,32 +65,35 @@ class AdminSettingsDialogView extends View {
         super();
         this.setElement(el);
         setListener(this);
+        this.channelId = null;
+        this.channelName = null;
+        this.user = null;
     }
 
     updateValues() {
-        this.el.querySelector(".form-control").value = channelName;
+        let instance = this;
+        this.el.querySelector(".form-control").value = this.channelName;
         Array.from(this.el.querySelectorAll(".member-item")).forEach((member, index) => {
-            setLabelColor(member.querySelector(".role-tag"), users[index].role);
+            setLabelColor(member.querySelector(".role-tag"), instance.users[index].role);
         });
     }
 
     setSettings(channel) {
-        channelId = channel.channelId;
-        channelName = channel.channelName;
-        users = channel.members.map(member => {
+        this.channelId = channel.channelId;
+        this.channelName = channel.channelName;
+        this.users = channel.members.map(member => {
             return { id: member.id, name: member.username, role: member.role };
         });
     }
 
     getSettings() {
-        let userList, name, role, id;
+        let userList, role, userId;
         userList = Array.from(this.el.querySelectorAll(".member-item")).map((element, index) => {
-            name = element.querySelector(".member");
+            userId = this.users[index].id;
             role = element.querySelector(".role-tag");
-            id = users[index].id;
-            return { id: id, name: name.textContent, role: role.textContent };
+            return { userId: userId, role: role.textContent };
         });
-        return { channelId, channelName, userList };
+        return { channelId: this.channelId, channelName: this.channelName, userList: userList };
     }
 }
 

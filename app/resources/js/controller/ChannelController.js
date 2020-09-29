@@ -102,6 +102,35 @@ class ChannelController {
         );
     }
 
+    static saveAdminSettings(settings) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhrChannel = new XMLHttpRequest(),
+                    bodyChannel = {channelName: settings.channelName},
+                    xhrMember = new XMLHttpRequest(),
+                bodyMember = {roleList: settings.userList};
+                xhrChannel.open(Config.HTTP_POST, "/api/channel/update/" + settings.channelId, true);
+                xhrChannel.withCredentials = true;
+                xhrChannel.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
+                xhrChannel.onload = function () {
+                    let channelData = JSON.parse(this.response).data;
+                    xhrMember.open(Config.HTTP_POST, "/api/channel/roles/" + settings.channelId, true);
+                    xhrMember.withCredentials = true;
+                    xhrMember.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
+                    xhrMember.onload = function () {
+                        let roleData = JSON.parse(this.response).data;
+                        console.log(channelData);
+                        console.log(roleData);
+                    };
+
+                    xhrMember.send(JSON.stringify(bodyMember));
+
+                };
+                xhrChannel.send(JSON.stringify(bodyChannel));
+            }
+        );
+    }
+
     static deleteChannel(socket, channelId) {
         return new Promise(
             function (resolve, reject) {

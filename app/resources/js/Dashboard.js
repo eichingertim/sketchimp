@@ -65,8 +65,6 @@ function onChannelDataForEnteringLoaded(dashboard, channel) {
         dashboard.onLeave();
         dashboard.onJoin(channel);
     }
-
-    adminSettingsDialogView.setSettings(channel);
 }
 
 /**
@@ -156,8 +154,11 @@ function onPublishSketchBtnClick(dashboard, event) {
     });
 }
 
-function onSaveAdminSettingsLoaded() {
+function onSaveAdminSettingsClicked() {
     const settings = adminSettingsDialogView.getSettings();
+    ChannelController.saveAdminSettings(settings).then((data) => {
+
+    });
     console.log(settings);
     adminSettingsDialogView.hide();
 
@@ -333,7 +334,7 @@ class Dashboard {
         });
 
         //AdminSettingsDialog
-        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsClicked(event));
         adminSettingsDialogView.addEventListener(EventKeys.CLOSE_ADMIN_DIALOG, () => {
             adminSettingsDialogView.hide();
             drawAreaView.setDrawingActivated(true);
@@ -388,7 +389,7 @@ class Dashboard {
         let instance = this;
         if (channel.channelName !== undefined) {
             this.channel = channel;
-
+            adminSettingsDialogView.setSettings(channel);
             drawAreaController.join(channel.channelId);
             drawAreaView.creatorId = channel.creatorId;
             drawAreaView.clearCanvas({

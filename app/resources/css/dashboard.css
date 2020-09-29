@@ -75,6 +75,22 @@ body {
     transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+.dropdown-menu {
+    margin: 0;
+    background-color: #343434;
+}
+
+.dropdown:hover .dropdown-menu {display: block;}
+
+.role-item {
+    max-width: 100%;
+}
+
+.role-item a {
+    color: #fff;
+    text-transform: capitalize;
+}
+
 .nav-shortcut:hover {
     border-radius: 10px;
 }
