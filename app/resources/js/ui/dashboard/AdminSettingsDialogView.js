@@ -8,15 +8,27 @@ class SaveSettingsClickEvent extends Event {
     }
 }
 
+class CloseSettingsClickEvent extends Event {
+    constructor() {
+        super(EventKeys.CLOSE_ADMIN_DIALOG, null);
+    }
+}
+
 let channelId, channelName, users;
 
 function onSaveSettingsClick(adminSettingsDialogView, data) {
     adminSettingsDialogView.notifyAll(new SaveSettingsClickEvent(data));
 }
 
+function onDialogCloseClick(adminSettingsDialogView, data) {
+    adminSettingsDialogView.notifyAll(new CloseSettingsClickEvent());
+}
+
 function setListener(adminSettingsDialogView) {
     adminSettingsDialogView.el.querySelector(".save-settings")
         .addEventListener("click", onSaveSettingsClick.bind(this, adminSettingsDialogView));
+    adminSettingsDialogView.el.querySelector("#admin-settings-close")
+        .addEventListener("click", onDialogCloseClick.bind(this, adminSettingsDialogView));
 
     Array.from(adminSettingsDialogView.el.querySelectorAll(".member-item")).forEach(member => {
         member.querySelector(".admin").addEventListener("click", () => {
