@@ -72,11 +72,19 @@ body {
     height: auto;
     margin-bottom: 15px;
     cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .nav-shortcut:hover {
     border-radius: 10px;
-    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.channel-info-icon {
+    cursor: pointer;
+    height: 50%;
+    width: auto;
+    bottom: 0;
+    margin-bottom: 0;
 }
 
 .dashboard-nav-shortcuts {
@@ -246,6 +254,10 @@ body {
 
 .admin-settings-icon {
     cursor: pointer;
+    height: 50%;
+    width: auto;
+    bottom: 0;
+    margin-bottom: 0;
 }
 
 .role-list {
@@ -278,6 +290,7 @@ body {
 .member-title {
     font-size: 18px;
     color: white;
+    text-transform: uppercase;
 }
 
 .personal-profile-icon {

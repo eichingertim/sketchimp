@@ -1,7 +1,7 @@
 var app,
     navBar = document.querySelector(".navigation-top"),
     scrollIndicator = document.querySelector(".scroll-indicator"),
-    landingContainer = document.querySelector(".landing-main-container");
+    hero = document.querySelector(".hero");
 
 function OilPainting(){
     
@@ -67,8 +67,8 @@ function OilPainting(){
         canvas = document.getElementById("canvas");
         context = canvas.getContext("2d");
         
-        width = window.innerWidth;
-        height = window.innerHeight;
+        width = hero.offsetWidth;
+        height = hero.offsetHeight;
         
         canvas.width = width;
         canvas.height = height;
@@ -77,12 +77,22 @@ function OilPainting(){
         canvas.addEventListener("click", MouseDown, false);
         canvas.addEventListener("dblclick", MouseDbl, false);	
     };	
+
+    window.onresize = function() {
+        let hiddenCanvas = document.createElement("canvas");
+        hiddenCanvas.width = canvas.width;
+        hiddenCanvas.height = canvas.height;
+        hiddenCanvas.getContext("2d").drawImage(canvas, 0, 0);
+        canvas.width = hero.offsetWidth;
+        canvas.height = hero.offsetHeight;
+        canvas.getContext("2d").drawImage(hiddenCanvas, 0, 0);
+    };
 }
 window.onscroll = function() {
     if (this.document.body.scrollTop >= 50 || this.document.documentElement.scrollTop >= 50) {
         scrollIndicator.classList.add("hidden");
     }
-    if (document.body.scrollTop >= landingContainer.offsetHeight || document.documentElement.scrollTop >= landingContainer.offsetHeight) {
+    if (document.body.scrollTop >= hero.offsetHeight -50 || document.documentElement.scrollTop >= hero.offsetHeight -50) {
       navBar.classList.add("scroll");
     } else {
       navBar.classList.remove("scroll");
