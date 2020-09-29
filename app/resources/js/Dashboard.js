@@ -197,12 +197,14 @@ class Dashboard {
         window.onresize = configureDivSizes;
 
         document.querySelector(".channel-info-icon").addEventListener("click", function () {
-            channelInfoDialogView.toggleVisibility();
+            drawAreaView.setDrawingActivated(false);
+            channelInfoDialogView.show();
         });
 
         document.querySelector(".admin-settings-icon").addEventListener("click", function() {
+            drawAreaView.setDrawingActivated(false);
             adminSettingsDialogView.updateValues();
-            adminSettingsDialogView.toggleVisibility();
+            adminSettingsDialogView.show();
         });
     }
 
@@ -292,15 +294,21 @@ class Dashboard {
         //ChannelInfoDialog
         channelInfoDialogView.addEventListener(EventKeys.LEAVE_CHANNEL_CLICK, () => ChannelController.leaveChannel(instance.channel.channelId)
             .then(() => {
-                channelInfoDialogView.toggleVisibility();
+                channelInfoDialogView.hide();
+                drawAreaView.setDrawingActivated(true);
                 window.location.reload();
             }));
         channelInfoDialogView.addEventListener(EventKeys.DELETE_CHANNEL_CLICK, () =>
             ChannelController.deleteChannel(instance.socket, instance.channel.channelId)
                 .then(() => {
-                    channelInfoDialogView.toggleVisibility();
+                    channelInfoDialogView.hide();
+                    drawAreaView.setDrawingActivated(true);
                     window.location.reload();
                 }));
+        channelInfoDialogView.addEventListener(EventKeys.CLOSE_INFO_DIALOG, () => {
+                channelInfoDialogView.hide();
+                drawAreaView.setDrawingActivated(true);
+            });
 
         //CreateChannelAndSketchDialog
         createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => ChannelController.createChannel(event.data)
@@ -312,12 +320,24 @@ class Dashboard {
                 createChannelDialogView.clearAfterSubmit();
                 window.location.reload();
             }));
+        createChannelDialogView.addEventListener(EventKeys.CLOSE_CREATE_CHANNEL_DIALOG, () => {
+            createChannelDialogView.hide();
+            drawAreaView.setDrawingActivated(true);
+        });
 
         //CreateSketchDialog
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+        createSketchDialogView.addEventListener(EventKeys.CLOSE_CREATE_SKETCH_DIALOG, () => {
+            createSketchDialogView.hide();
+            drawAreaView.setDrawingActivated(true);
+        });
 
         //AdminSettingsDialog
         adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
+        adminSettingsDialogView.addEventListener(EventKeys.CLOSE_ADMIN_DIALOG, () => {
+            adminSettingsDialogView.hide();
+            drawAreaView.setDrawingActivated(true);
+        });
       
         chooseTemplateDialogView.addEventListener(EventKeys.TEMPLATE_SELECTED, (event) => {
             drawAreaController.emitTemplate(instance.channel.channelId, event.data.url);
@@ -332,7 +352,10 @@ class Dashboard {
                 onChannelDataForEnteringLoaded(instance, channel);
             }));
 
-        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CREATE_CLICK, () => createChannelDialogView.toggleVisibility());
+        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CREATE_CLICK, () => {
+            drawAreaView.setDrawingActivated(false);
+            createChannelDialogView.show();
+        });
 
         //RightBar Members
         memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.url).then((memberData) => {
@@ -345,16 +368,15 @@ class Dashboard {
         }));
         saveLoadView.addEventListener(EventKeys.SKETCH_FINALIZE_CLICK, () => {
             if (instance.user.currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
-                createSketchDialogView.toggleVisibility();
+                drawAreaView.setDrawingActivated(false);
+                createSketchDialogView.show();
             }
         });
         saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
         saveLoadView.addEventListener(EventKeys.IMPORT_TEMPLATE_CLICK, () => {
             drawAreaView.setDrawingActivated(false);
-            chooseTemplateDialogView.toggleVisibility();
+            chooseTemplateDialogView.show();
         });
-
-        createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
 
         //TopBar with SketchHistory
         topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
@@ -375,6 +397,7 @@ class Dashboard {
                 userRole: this.user.currentChannelRole,
             });
             topBarView.clearSketchHistory();
+            drawAreaView.setDrawingActivated(true);
             SketchController.loadHistory(channel.channelId).then((sketches) => {
                 topBarView.addSketchHistory(sketches);
             });

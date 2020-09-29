@@ -8,6 +8,12 @@ class SketchCreateEvent extends Event {
     }
 }
 
+class DialogCloseEvent extends Event {
+    constructor() {
+        super(EventKeys.CLOSE_CREATE_SKETCH_DIALOG, null);
+    }
+}
+
 function onSketchSubmitClick(createSketchDialogView, data) {
     event.preventDefault();
     let name = createSketchDialogView.el.querySelector("#sketch_name").value,
@@ -15,9 +21,16 @@ function onSketchSubmitClick(createSketchDialogView, data) {
     createSketchDialogView.notifyAll(new SketchCreateEvent(name, (decision === "multi-layer")));
 }
 
+function onDialogCloseClick(createSketchDialogView, data) {
+    createSketchDialogView.notifyAll(new DialogCloseEvent());
+}
+
 function setListeners(createSketchDialogView) {
     let btnSubmit = createSketchDialogView.el.querySelector(".submit-sketch-create");
     btnSubmit.addEventListener("click", onSketchSubmitClick.bind(this, createSketchDialogView));
+
+    createSketchDialogView.el.querySelector("#create-sketch-close")
+        .addEventListener("click", onDialogCloseClick.bind(this, createSketchDialogView));
 }
 
 class CreateSketchDialogView extends View {

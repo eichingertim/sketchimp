@@ -214,15 +214,42 @@ body {
     height: 100%;
 }
 
-.title-info-container {
+.title-container {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
+.info-settings-container {
+    display: flex;
+    align-items: center;
+    justify-content:center}
+
+#channel-nav {
+    background-color: #242424;
+    border-radius: 50%;
+    padding: 10px;
+    height: auto;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+#channel-nav:hover {
+    border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
 .channel-title {
     font-size: 20px;
     margin-right: 20px;
+}
+
+.channel {
+    max-width: 100%;
+}
+
+.channel-info-icon {
+    cursor: pointer;
 }
 
 .admin-settings-icon {
@@ -500,6 +527,18 @@ body {
     align-items: center;
     background-color: #FFFFFF;
     height: 100%;
+}
+
+.dialog-container {
+    background: rgba(26, 26, 26, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    align-items: center;
 }
 
 #admin-settings-dialog .member-item {

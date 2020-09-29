@@ -105,11 +105,11 @@ class TopBarView extends View {
         imageTag.src = data.image;
         imageTag.id = data.sketchId;
 
-        fullScreenContainer.classList.toggle("hidden");
+        fullScreenContainer.classList.remove("hidden");
     }
 
     closeFullScreen() {
-        fullScreenContainer.classList.toggle("hidden");
+        fullScreenContainer.classList.add("hidden");
     }
 
 }
