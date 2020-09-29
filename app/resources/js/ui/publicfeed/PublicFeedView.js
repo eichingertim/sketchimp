@@ -2,7 +2,10 @@ import PublicFeedCard from "./PublicFeedCard.js";
 import Config from "../../utils/Config.js";
 
 var cardsItem = document.getElementById("cards"),
-cards = setupCardList(cardsItem);
+cards = setupCardList(cardsItem),
+sketchData;
+
+getAllPublished();
 
 function onLikeClick(event){
     if(event.data){
@@ -18,7 +21,7 @@ function onDislikeClick(event){
 
 function sendClickActionToApi(url){
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
+    xhr.open(Config.HTTP_POST, url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
         let data = JSON.parse(this.response).data,
@@ -57,4 +60,16 @@ function handleLikeStatus(sketchCard, responseData){
     if(responseData.userDownvote){
         sketchCard.setDislikeActive();
     }
+}
+
+function getAllPublished(){
+    let xhr = new XMLHttpRequest();
+    xhr.open(Config.HTTP_GET, Config.API_URL_SKETCH_ALL_PUBLISHED, true);
+    xhr.setRequestHeader("Content-Type", "text/html");
+    xhr.onload = function() {
+        let data = JSON.parse(this.response).data;
+        console.log(data);
+        sketchData = data;
+    };
+    xhr.send();
 }
