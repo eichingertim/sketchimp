@@ -6,21 +6,22 @@ function createNewCard(sketch, parentDiv, cardTemplate, counter){
     let clone = cardTemplate.content.cloneNode(true);
     clone.querySelector(".content-image").src = sketch.path;
     clone.querySelector(".card").id = sketch.id;
-    clone.querySelector(".content-title").innerHTML = sketch.name + sketch.votes;
+    clone.querySelector(".card-score").innerHTML = sketch.votes;
+    clone.querySelector(".content-title").innerHTML = sketch.name;
    
     parentDiv.appendChild(clone);
     clone = document.getElementById(sketch.id);
     switch(true){
-        case counter <= 10: 
+        case counter <= 5: 
             clone.classList.add("card--width5"); 
             break;
-        case counter <= 20: 
+        case counter <= 10: 
             clone.classList.add("card--width4"); 
             break; 
-        case counter <= 30: 
+        case counter <= 15: 
             clone.classList.add("card--width3"); 
             break; 
-        case counter <= 40: 
+        case counter <= 20: 
             clone.classList.add("card--width2"); 
             break;     
         default: 
@@ -46,9 +47,7 @@ function initButtons(cardView, sketch){
     cardView.upvoteButton.addEventListener("click", onLikeButtonClick.bind(cardView));
     cardView.downvoteButton.addEventListener("click", onDislikeButtonClick.bind(cardView)); 
     }
-    
 }
-
 
 function onLikeButtonClick(){
     let likeEvent = new LikeButtonEvent(this.id);
