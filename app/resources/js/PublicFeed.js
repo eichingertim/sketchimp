@@ -13,7 +13,7 @@ imagesLoaded(grid).on("progress", function() {
 });*/
 
 window.onscroll = function() {
-  if (document.body.scrollTop >= topContainer.offsetHeight || document.documentElement.scrollTop >= topContainer.offsetHeight) {
+  if (document.body.scrollTop >= topContainer.offsetHeight - 30 || document.documentElement.scrollTop >= topContainer.offsetHeight - 30) {
     navBar.classList.add("scroll");
   } else {
     navBar.classList.remove("scroll");

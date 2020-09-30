@@ -42,29 +42,36 @@ function copy2Clipboard(str) {
 }
 
 function setListener(channelInfoDialogView) {
-    channelInfoDialogView.el.querySelector(".leave-channel")
-        .addEventListener("click", onLeaveChannelClick.bind(this, channelInfoDialogView));
-    channelInfoDialogView.el.querySelector(".delete-channel")
-        .addEventListener("click", onDeleteChannelClick.bind(this, channelInfoDialogView));
-    channelInfoDialogView.el.querySelector("#channel-info-close")
-        .addEventListener("click", onDialogCloseClick.bind(this, channelInfoDialogView));
-    channelInfoDialogView.el.querySelector(".profile-image-overlay").addEventListener("click", () => {
-        channelInfoDialogView.el.querySelector("#channel-upload").click();
-    });
-    channelInfoDialogView.el.querySelector("#channel-upload").addEventListener("change", (event) => {
-        channelInfoDialogView.el.querySelector("#selected-file").innerHTML = event.target.value;
-        channelInfoDialogView.el.querySelector("#btn-upload-channel").style.visibility = "visible";
-    });
+    try {
+        channelInfoDialogView.el.querySelector(".leave-channel")
+            .addEventListener("click", onLeaveChannelClick.bind(this, channelInfoDialogView));
+        channelInfoDialogView.el.querySelector(".delete-channel")
+            .addEventListener("click", onDeleteChannelClick.bind(this, channelInfoDialogView));
+        channelInfoDialogView.el.querySelector("#channel-info-close")
+            .addEventListener("click", onDialogCloseClick.bind(this, channelInfoDialogView));
+        channelInfoDialogView.el.querySelector(".profile-image-overlay").addEventListener("click", () => {
+            channelInfoDialogView.el.querySelector("#channel-upload").click();
+        });
+        channelInfoDialogView.el.querySelector("#channel-upload").addEventListener("change", (event) => {
+            channelInfoDialogView.el.querySelector("#selected-file").innerHTML = event.target.value;
+            channelInfoDialogView.el.querySelector("#btn-upload-channel").style.visibility = "visible";
+        });
 
-    let btnCopyChannelId = channelInfoDialogView.el.querySelector(".copy-channel-id");
-    btnCopyChannelId.addEventListener("click", () => {
-        copy2Clipboard(channelInfoDialogView.el.querySelector(".info-channel-id").textContent);
-        let tmp = btnCopyChannelId.innerHTML;
-        btnCopyChannelId.innerHTML = "Successfully copied";
-        setTimeout(function () {
-            btnCopyChannelId.innerHTML = tmp;
-        }, Config.DELAY_SHOW_SUCCESS);
-    });
+
+
+        let btnCopyChannelId = channelInfoDialogView.el.querySelector(".copy-channel-id");
+        btnCopyChannelId.addEventListener("click", () => {
+            copy2Clipboard(channelInfoDialogView.el.querySelector(".info-channel-id").textContent);
+            let tmp = btnCopyChannelId.innerHTML;
+            btnCopyChannelId.innerHTML = "Successfully copied";
+            setTimeout(function () {
+                btnCopyChannelId.innerHTML = tmp;
+            }, Config.DELAY_SHOW_SUCCESS);
+        });
+    } catch (e) {
+        console.log("Error: Because first Channel Created");
+    }
+
 }
 
 class ChannelInfoDialogView extends View {
@@ -79,7 +86,7 @@ class ChannelInfoDialogView extends View {
         this.el.querySelector(".info-channel-id").textContent = channel.channelId;
         this.el.querySelector(".info-channel-creation").textContent = channel.creationDate;
         this.el.querySelector(".info-channel-creator").textContent = channel.creatorName;
-
+        this.el.querySelector("#form-upload-channel-icon").action = "/api/channel/upload/" + channel.channelId;
         if (isCreator) {
             this.el.querySelector(".leave-channel").classList.add("hidden");
             this.el.querySelector(".delete-channel").classList.remove("hidden");
