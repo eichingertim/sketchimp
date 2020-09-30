@@ -295,43 +295,6 @@ body {
     border-radius: inherit;
 }
 
-.profile-image-container {
-    margin-top: 15px;
-    position: relative;
-    width: 80%;
-    height: fit-content;
-    max-width: 80%;
-}
-
-#profile-upload {
-    visibility: hidden;
-}
-
-.profile-image {
-    max-width: 100%;
-    border-radius: 50%;
-}
-
-.profile-image-container:hover .profile-image-overlay{
-    opacity: 1;
-}
-
-.profile-image-overlay {
-    cursor: pointer;
-    background-color: rgba(26, 26, 26, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 100%;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    left: 0;
-    border-radius: 50%;
-    opacity: 0;
-}
-
 /*Channel Sidebar Section*/
 
 .dashboard-channels-container {
