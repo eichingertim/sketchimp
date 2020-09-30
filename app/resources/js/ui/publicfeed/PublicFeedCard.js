@@ -2,13 +2,30 @@ import Config from "../../utils/Config.js";
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 
-function createNewCard(sketch, parentDiv, cardTemplate){
+function createNewCard(sketch, parentDiv, cardTemplate, counter){
     let clone = cardTemplate.content.cloneNode(true);
     clone.querySelector(".content-image").src = sketch.path;
     clone.querySelector(".card").id = sketch.id;
-    clone.querySelector(".content-title").innerHTML = sketch.name;
+    clone.querySelector(".content-title").innerHTML = sketch.name + sketch.votes;
+   
     parentDiv.appendChild(clone);
     clone = document.getElementById(sketch.id);
+    switch(true){
+        case counter <= 10: 
+            clone.classList.add("card--width5"); 
+            break;
+        case counter <= 20: 
+            clone.classList.add("card--width4"); 
+            break; 
+        case counter <= 30: 
+            clone.classList.add("card--width3"); 
+            break; 
+        case counter <= 40: 
+            clone.classList.add("card--width2"); 
+            break;     
+        default: 
+            clone.classList.add("card--width1");                                 
+    }
     return clone;
 }
 
@@ -56,15 +73,13 @@ class DislikeButtonEvent extends Event{
 }
 
 class PublicFeedCard extends View{
-    constructor(sketch, parentDiv,  cardTemplate){
+    constructor(sketch, parentDiv, cardTemplate, counter){
         super();
-        this.element = createNewCard(sketch, parentDiv, cardTemplate);
+        this.element = createNewCard(sketch, parentDiv, cardTemplate, counter);
         this.id = sketch.id;
         this.upvote = sketch.userUpvote;
         this.downvote = sketch.userDownvote;
         initButtons(this, sketch);
-     
-        
     }
 
     setLikeActive(){

@@ -19,14 +19,15 @@ function createNext(){
     parentDiv.id = "cards-" + renderCounter;
     cardsItem.appendChild(parentDiv);
     for(let i = renderCounter; i < sketchData.length; i++){
-        if(i === renderCounter + 30){
+        if(i === renderCounter + 50){
             return;
         }
-        let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate);
+        let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate, i);
         singleCard.addEventListener("Like", onLikeClick);
         singleCard.addEventListener("Dislike", onDislikeClick);
         cardList.push(singleCard);
     }
+    renderCounter += 50;
 
     let masonry = new Masonry(parentDiv, {
         itemSelector: ".card",
@@ -109,6 +110,6 @@ function getAllPublished(){
 }
 
 function init(){
- 
     getAllPublished();
+    
 }
