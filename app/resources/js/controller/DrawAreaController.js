@@ -58,30 +58,18 @@ class DrawAreaController extends Observable {
         let instance = this;
         this.socket.emit(SocketKeys.SUBSCRIBE, channelId);
 
-        this.socket.on(SocketKeys.DELETE_CHANNEL, function (data) {
-            window.location.reload();
-        });
+        this.socket.on(SocketKeys.DELETE_CHANNEL, () => window.location.reload());
+        this.socket.on(SocketKeys.ADMIN_SETTINGS, () => window.location.reload());
+        this.socket.on(SocketKeys.TEMPLATE, (data) => instance.notifyAll(new TemplateReceivedEvent(data)));
+        this.socket.on(SocketKeys.NEW_SKETCH, (data) => instance.notifyAll(new NewSketchEvent(data)));
+        this.socket.on(SocketKeys.LINE_DRAWN, (data) => instance.notifyAll(new LineDrawnEvent(data)));
+        this.socket.on(SocketKeys.LINE_UNDO, (data) => instance.notifyAll(new LineUndoEvent(data)));
+        this.socket.on(SocketKeys.CLEAR_CANVAS, (data) => instance.notifyAll(new ClearCanvasEvent(data)));
 
-        this.socket.on(SocketKeys.TEMPLATE, function (data) {
-            instance.notifyAll(new TemplateReceivedEvent(data));
-        });
+    }
 
-        this.socket.on(SocketKeys.NEW_SKETCH, function (data) {
-           instance.notifyAll(new NewSketchEvent(data));
-        });
-
-        this.socket.on(SocketKeys.LINE_DRAWN, function (data) {
-            instance.notifyAll(new LineDrawnEvent(data));
-        });
-
-        this.socket.on(SocketKeys.LINE_UNDO, function (data) {
-            instance.notifyAll(new LineUndoEvent(data));
-        });
-
-        this.socket.on(SocketKeys.CLEAR_CANVAS, function (data) {
-            instance.notifyAll(new ClearCanvasEvent(data));
-        });
-
+    emitAdminSettingsChanged(channelId) {
+        this.socket.emit(SocketKeys.ADMIN_SETTINGS, {channelId: channelId});
     }
 
     emitTemplate(channelId, templateUrl) {

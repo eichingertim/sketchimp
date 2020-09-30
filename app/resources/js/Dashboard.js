@@ -45,6 +45,8 @@ function onLineEmit(dashboard, event) {
  * @param channel corresponding channel-data
  */
 function onChannelDataForEnteringLoaded(dashboard, channel) {
+    console.log(channel);
+
     if (channel.creatorId === dashboard.user.userId) {
         dashboard.user.currentChannelRole = Config.CHANNEL_ROLE_ADMIN;
     } else {
@@ -65,8 +67,6 @@ function onChannelDataForEnteringLoaded(dashboard, channel) {
         dashboard.onLeave();
         dashboard.onJoin(channel);
     }
-
-    adminSettingsDialogView.setSettings(channel);
 }
 
 /**
@@ -113,6 +113,7 @@ function onSketchCreateClick(dashboard, event) {
                     createSketchDialogView.clearAfterSubmit();
                     drawAreaController.emitClearCanvas(clearCanvasData);
                     drawAreaController.emitNewSketch(dashboard.channel.channelId, newSketchData.id, newSketchData.name, newSketchData.multilayer);
+                    drawAreaView.setDrawingActivated(true);
                     topBarView.clearSketchHistory();
                     SketchController.loadHistory(dashboard.channel.channelId).then((sketches) => {
                         topBarView.addSketchHistory(sketches);
@@ -156,15 +157,13 @@ function onPublishSketchBtnClick(dashboard, event) {
     });
 }
 
-function onSaveAdminSettingsLoaded() {
+function onSaveAdminSettingsClicked(dashboard, event) {
     const settings = adminSettingsDialogView.getSettings();
-    console.log(settings);
-    adminSettingsDialogView.hide();
-
-    //const xhr = new XMLHttpRequest();
-    //xhr.open("POST", "/api/admin-settings");
-    //xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    //xhr.send(JSON.stringify(settings));
+    ChannelController.saveAdminSettings(settings).then(() => {
+        drawAreaController.emitAdminSettingsChanged(dashboard.channel.channelId);
+        drawAreaView.setDrawingActivated(true);
+        adminSettingsDialogView.hide();
+    });
 }
 
 /**
@@ -195,15 +194,6 @@ class Dashboard {
 
         configureDivSizes();
         window.onresize = configureDivSizes;
-
-        document.querySelector(".channel-info-icon").addEventListener("click", function () {
-            channelInfoDialogView.toggleVisibility();
-        });
-
-        document.querySelector(".admin-settings-icon").addEventListener("click", function() {
-            adminSettingsDialogView.updateValues();
-            adminSettingsDialogView.toggleVisibility();
-        });
     }
 
     initUIAndController() {
@@ -292,15 +282,21 @@ class Dashboard {
         //ChannelInfoDialog
         channelInfoDialogView.addEventListener(EventKeys.LEAVE_CHANNEL_CLICK, () => ChannelController.leaveChannel(instance.channel.channelId)
             .then(() => {
-                channelInfoDialogView.toggleVisibility();
+                channelInfoDialogView.hide();
+                drawAreaView.setDrawingActivated(true);
                 window.location.reload();
             }));
         channelInfoDialogView.addEventListener(EventKeys.DELETE_CHANNEL_CLICK, () =>
             ChannelController.deleteChannel(instance.socket, instance.channel.channelId)
                 .then(() => {
-                    channelInfoDialogView.toggleVisibility();
+                    channelInfoDialogView.hide();
+                    drawAreaView.setDrawingActivated(true);
                     window.location.reload();
                 }));
+        channelInfoDialogView.addEventListener(EventKeys.CLOSE_INFO_DIALOG, () => {
+                channelInfoDialogView.hide();
+                drawAreaView.setDrawingActivated(true);
+            });
 
         //CreateChannelAndSketchDialog
         createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => ChannelController.createChannel(event.data)
@@ -312,12 +308,29 @@ class Dashboard {
                 createChannelDialogView.clearAfterSubmit();
                 window.location.reload();
             }));
+        createChannelDialogView.addEventListener(EventKeys.CLOSE_CREATE_CHANNEL_DIALOG, () => {
+            createChannelDialogView.hide();
+            drawAreaView.setDrawingActivated(true);
+        });
 
         //CreateSketchDialog
         createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
+        createSketchDialogView.addEventListener(EventKeys.CLOSE_CREATE_SKETCH_DIALOG, () => {
+            createSketchDialogView.hide();
+            drawAreaView.setDrawingActivated(true);
+        });
 
         //AdminSettingsDialog
-        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, (event) => onSaveAdminSettingsLoaded(event));
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, onSaveAdminSettingsClicked.bind(this, instance));
+        adminSettingsDialogView.addEventListener(EventKeys.CLOSE_ADMIN_DIALOG, () => {
+            adminSettingsDialogView.hide();
+            drawAreaView.setDrawingActivated(true);
+        });
+        adminSettingsDialogView.addEventListener(EventKeys.MEMBER_KICK_CLICK, (event) => {
+            ChannelController.kickMember(event.data.memberId, event.data.channelId).then(() => {
+                drawAreaController.emitAdminSettingsChanged(event.data.channelId);
+            });
+        });
       
         chooseTemplateDialogView.addEventListener(EventKeys.TEMPLATE_SELECTED, (event) => {
             drawAreaController.emitTemplate(instance.channel.channelId, event.data.url);
@@ -332,7 +345,10 @@ class Dashboard {
                 onChannelDataForEnteringLoaded(instance, channel);
             }));
 
-        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CREATE_CLICK, () => createChannelDialogView.toggleVisibility());
+        channelListView.addEventListener(EventKeys.CHANNEL_ITEM_CREATE_CLICK, () => {
+            drawAreaView.setDrawingActivated(false);
+            createChannelDialogView.show();
+        });
 
         //RightBar Members
         memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.url).then((memberData) => {
@@ -345,28 +361,37 @@ class Dashboard {
         }));
         saveLoadView.addEventListener(EventKeys.SKETCH_FINALIZE_CLICK, () => {
             if (instance.user.currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
-                createSketchDialogView.toggleVisibility();
+                drawAreaView.setDrawingActivated(false);
+                createSketchDialogView.show();
             }
         });
         saveLoadView.addEventListener(EventKeys.SKETCH_EXPORT_CLICK, onSketchExportClick.bind(this));
         saveLoadView.addEventListener(EventKeys.IMPORT_TEMPLATE_CLICK, () => {
             drawAreaView.setDrawingActivated(false);
-            chooseTemplateDialogView.toggleVisibility();
+            chooseTemplateDialogView.show();
         });
-
-        createSketchDialogView.addEventListener(EventKeys.CREATE_SKETCH_SUBMIT, onSketchCreateClick.bind(this, instance));
 
         //TopBar with SketchHistory
         topBarView.addEventListener(EventKeys.HISTORY_ITEM_CLICK, onHistoryItemClick.bind(this, instance));
         topBarView.addEventListener(EventKeys.FULLSCREEN_CLOSE_CLICK, onFullScreenCloseClick.bind(this));
         topBarView.addEventListener(EventKeys.PUBLISH_SKETCH_CLICK, onPublishSketchBtnClick.bind(this, instance));
+        topBarView.addEventListener(EventKeys.CHANNEL_INFO_CLICK, () => {
+            drawAreaView.setDrawingActivated(false);
+            channelInfoDialogView.show();
+        });
+        topBarView.addEventListener(EventKeys.ADMIN_SETTINGS_CLICK, () => {
+            drawAreaView.setDrawingActivated(false);
+            adminSettingsDialogView.updateValues(instance.channel, instance.user);
+            adminSettingsDialogView.show();
+        });
     }
 
     onJoin(channel) {
         let instance = this;
         if (channel.channelName !== undefined) {
             this.channel = channel;
-
+            topBarView.updateRoleVisibility(this.user.currentChannelRole);
+            adminSettingsDialogView.setSettings(channel);
             drawAreaController.join(channel.channelId);
             drawAreaView.creatorId = channel.creatorId;
             drawAreaView.clearCanvas({
@@ -375,9 +400,11 @@ class Dashboard {
                 userRole: this.user.currentChannelRole,
             });
             topBarView.clearSketchHistory();
+            drawAreaView.setDrawingActivated(true);
             SketchController.loadHistory(channel.channelId).then((sketches) => {
                 topBarView.addSketchHistory(sketches);
             });
+
         } else {
             ChannelController.fetchChannelData(Config.API_URL_CHANNEL + channel.channelId)
                 .then((channel) => {
