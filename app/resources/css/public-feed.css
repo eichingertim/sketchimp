@@ -167,3 +167,7 @@ footer {
   bottom: 0;
   color: white;
 }
+
+.hidden{
+    display: none;
+}

@@ -2,10 +2,46 @@ import PublicFeedCard from "./PublicFeedCard.js";
 import Config from "../../utils/Config.js";
 
 var cardsItem = document.getElementById("cards"),
-cards = setupCardList(cardsItem),
-sketchData;
+sketchData,
+cardList = [],
+renderCounter = 0,
+cardTemplate = document.querySelector("#card-template"),
+masonryInstances = [];
 
-getAllPublished();
+init();
+
+function createNext(){
+    if(sketchData.length <= renderCounter){
+        return;
+    }
+    let parentDiv = document.createElement("div");
+    parentDiv.classList.add("card-section");
+    parentDiv.id = "cards-" + renderCounter;
+    cardsItem.appendChild(parentDiv);
+    for(let i = renderCounter; i < sketchData.length; i++){
+        if(i === renderCounter + 30){
+            return;
+        }
+        let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate);
+        singleCard.addEventListener("Like", onLikeClick);
+        singleCard.addEventListener("Dislike", onDislikeClick);
+        cardList.push(singleCard);
+    }
+
+    let masonry = new Masonry(parentDiv, {
+        itemSelector: ".card",
+        columnWidth: 150,
+        fitWidth: true,
+    });
+
+    masonryInstances.push(masonry);
+
+    imagesLoaded(parentDiv).on("progress", function() {
+        for(let i = 0; i < masonryInstances.length; i++){
+            masonryInstances[i].layout();
+        }    
+    });
+}
 
 function onLikeClick(event){
     if(event.data){
@@ -24,29 +60,21 @@ function sendClickActionToApi(url){
     xhr.open(Config.HTTP_POST, url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
-        let data = JSON.parse(this.response).data,
-        sketchCard = getSketchCardForId(data.id);
-        handleLikeStatus(sketchCard, data);
+        try{
+            let data = JSON.parse(this.response).data,
+            sketchCard = getSketchCardForId(data.id);
+            handleLikeStatus(sketchCard, data);
+        }catch (e) {
+            console.log(e);
+        }
     };
     xhr.send();
 }
 
-function setupCardList(cardsItem){
-    let cardList = [],
-    cards = cardsItem.children;
-    for(let i = 0; i < cards.length; i++){
-        let singleCard = new PublicFeedCard(cards[i]);
-        singleCard.addEventListener("Like", onLikeClick);
-        singleCard.addEventListener("Dislike", onDislikeClick);
-        cardList.push(singleCard);
-    }
-    return cardList;
-}
-
 function getSketchCardForId(id){
-    for(let i = 0; i < cards.length; i++){
-        if(cards[i].id === id){
-            return cards[i];
+    for(let i = 0; i < cardList.length; i++){
+        if(cardList[i].id === id){
+            return cardList[i];
         }
     }
     return null;
@@ -67,9 +95,20 @@ function getAllPublished(){
     xhr.open(Config.HTTP_GET, Config.API_URL_SKETCH_ALL_PUBLISHED, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
-        let data = JSON.parse(this.response).data;
-        console.log(data);
-        sketchData = data;
+        try{
+            let data = JSON.parse(this.response).data;
+            sketchData = data;
+            if(sketchData){
+                createNext();
+            }
+        } catch(e){
+            console.log(e);
+        }
     };
     xhr.send();
+}
+
+function init(){
+ 
+    getAllPublished();
 }

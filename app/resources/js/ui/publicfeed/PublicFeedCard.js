@@ -2,27 +2,36 @@ import Config from "../../utils/Config.js";
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 
-function initButtons(cardView){
+function createNewCard(sketch, parentDiv, cardTemplate){
+    let clone = cardTemplate.content.cloneNode(true);
+    clone.querySelector(".content-image").src = sketch.path;
+    clone.querySelector(".card").id = sketch.id;
+    clone.querySelector(".content-title").innerHTML = sketch.name;
+    parentDiv.appendChild(clone);
+    clone = document.getElementById(sketch.id);
+    return clone;
+}
+
+function initButtons(cardView, sketch){
     cardView.upvoteButton = cardView.element.querySelector(".likebutton");
-    cardView.upvoteButton.addEventListener("click", onLikeButtonClick.bind(cardView));
     cardView.downvoteButton = cardView.element.querySelector(".dislikebutton");
-    cardView.downvoteButton.addEventListener("click", onDislikeButtonClick.bind(cardView));
-    initButtonStatus(cardView);
+    if(cardView.upvoteButton && cardView.downvoteButton){
+       if(sketch.userUpvote){
+        cardView.upvoteButton.src = "/app/assets/thumb_up-white-18dp-active.svg";
+        cardView.downvoteButton.src = "/app/assets/thumb_down-white-18dp.svg";
+    }else if(sketch.userDownvote){
+        cardView.upvoteButton.src = "/app/assets/thumb_up-white-18dp.svg";
+        cardView.downvoteButton.src = "/app/assets/thumb_down-18dp-active.svg";
+    }else{
+        cardView.upvoteButton.src = "/app/assets/thumb_up-white-18dp.svg";
+        cardView.downvoteButton.src = "/app/assets/thumb_down-white-18dp.svg";
+    }
+    cardView.upvoteButton.addEventListener("click", onLikeButtonClick.bind(cardView));
+    cardView.downvoteButton.addEventListener("click", onDislikeButtonClick.bind(cardView)); 
+    }
+    
 }
 
-function initButtonStatus(cardView){
-    if(cardView.upvoteButton.src === Config.PATH_LIKE_ICON_ACTIVE){
-        cardView.upvote = true;
-    }else {
-        cardView.upvote = false;
-    }
-
-    if(cardView.downvoteButton.src === Config.PATH_DISLIKE_ICON_ACTIVE){
-        cardView.downvote = true;
-    }else {
-        cardView.downvote = false;
-    }
-}
 
 function onLikeButtonClick(){
     let likeEvent = new LikeButtonEvent(this.id);
@@ -47,13 +56,15 @@ class DislikeButtonEvent extends Event{
 }
 
 class PublicFeedCard extends View{
-    constructor(element){
+    constructor(sketch, parentDiv,  cardTemplate){
         super();
-        this.element = element;
-        this.id = element.id;
-        initButtons(this);
-        this.upvote = false;
-        this.downvote = false;
+        this.element = createNewCard(sketch, parentDiv, cardTemplate);
+        this.id = sketch.id;
+        this.upvote = sketch.userUpvote;
+        this.downvote = sketch.userDownvote;
+        initButtons(this, sketch);
+     
+        
     }
 
     setLikeActive(){
