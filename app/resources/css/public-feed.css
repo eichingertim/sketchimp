@@ -181,11 +181,15 @@
     transition: .3s;
 }
 
+.hidden{
+    display: none;
+}
+  
 footer {
-    background-color: var(--dark-grey);
-    padding-top: 20px;
-    position: static;
-    width: 100%;
-    bottom: 0;
-    color: white;
+  background-color: var(--dark-grey);
+  padding-top: 20px;
+  position: static;
+  width:100%;
+  bottom: 0;
+  color: white;
 }

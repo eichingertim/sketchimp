@@ -14,6 +14,7 @@ const Config = {
         API_URL_SKETCH_LIKE: "/api/sketch/upvote/",
         API_URL_SKETCH_DISLIKE: "/api/sketch/downvote/",
         API_URL_DELETE_CHANNEL: "/api/channel/delete/",
+        API_URL_SKETCH_ALL_PUBLISHED: "/api/sketch/all-published",
         HTTP_POST: "POST",
         HTTP_GET: "GET",
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
