@@ -40,6 +40,7 @@ function setCardSize(card, sketchVotes, minMaxVotes){
     }
     card.style.width = cardSize + "px";
     card.querySelector(".card-score").style.width = scoreSize + "px";
+    card.querySelector(".card-score").style.height = scoreSize + "px";
 }
 
 function initButtons(cardView, sketch){
