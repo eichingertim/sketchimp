@@ -27,13 +27,19 @@ function setScore(card, votes){
 }
 
 function setCardSize(card, sketchVotes, minMaxVotes){
-    let size;
+    let cardSize,
+    scoreSize, 
+    factor;
     if(minMaxVotes.low === minMaxVotes.high){
-        size = 350;
+        cardSize = 350;
+        scoreSize = 60;
     }else{
-        size = 150 + 350 * ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
+        factor = ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
+        cardSize = 150 + 350 * factor;
+        scoreSize = 35 + 95 * factor;
     }
-    card.style.width = size + "px";
+    card.style.width = cardSize + "px";
+    card.querySelector(".card-score").style.width = scoreSize + "px";
 }
 
 function initButtons(cardView, sketch){

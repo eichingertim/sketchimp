@@ -28,6 +28,7 @@ function createNext(){
             itemSelector: ".card",
             columnWidth: 150,
             fitWidth: true,
+            originLeft: false,
         });
         imagesLoaded(parentDiv).on("progress", function() {
             masonry.layout();   
