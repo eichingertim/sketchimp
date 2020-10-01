@@ -27,20 +27,27 @@ function setScore(card, votes){
 }
 
 function setCardSize(card, sketchVotes, minMaxVotes){
-    let cardSize,
+    let card,
+    cardSize,
     scoreSize, 
+    fontSize,
     factor;
     if(minMaxVotes.low === minMaxVotes.high){
         cardSize = 350;
         scoreSize = 60;
+        fontSize = 16;
     }else{
         factor = ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
         cardSize = 150 + 350 * factor;
         scoreSize = 35 + 95 * factor;
+        fontSize = 12 + 12 * factor;
     }
     card.style.width = cardSize + "px";
-    card.querySelector(".card-score").style.width = scoreSize + "px";
-    card.querySelector(".card-score").style.height = scoreSize + "px";
+    card = card.querySelector(".card-score");
+    card.style.width = scoreSize + "px";
+    card.style.height = scoreSize + "px";
+    card.style.fontSize = fontSize + "px";
+
 }
 
 function initButtons(cardView, sketch){
