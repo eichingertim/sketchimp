@@ -7,6 +7,12 @@ function createNewCard(sketch, parentDiv, cardTemplate, counter){
     clone.querySelector(".content-image").src = sketch.path;
     clone.querySelector(".card").id = sketch.id;
     clone.querySelector(".card-score").innerHTML = sketch.votes;
+    if (sketch.votes < 0) {
+        clone.querySelector(".card-score").classList.add("negative");
+    } else if (sketch.votes > 0) {
+        clone.querySelector(".card-score").classList.add("positive");
+    }
+    clone.querySelector(".card-score").innerHTML = sketch.votes;
     clone.querySelector(".content-title").innerHTML = sketch.name;
    
     parentDiv.appendChild(clone);
