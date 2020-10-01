@@ -37,6 +37,7 @@ const Config = {
         CHANNEL_ROLE_COLLABORATOR: "collaborators",
         CHANNEL_ROLE_VIEWER: "viewers",
         DELAY_SHOW_SUCCESS: 3000,
+        PUBLIC_FEED_CARDS_PER_SECTION: 50,
     },
 
     EventKeys = {

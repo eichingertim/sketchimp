@@ -6,34 +6,43 @@ function createNewCard(sketch, parentDiv, cardTemplate, counter){
     let clone = cardTemplate.content.cloneNode(true);
     clone.querySelector(".content-image").src = sketch.path;
     clone.querySelector(".card").id = sketch.id;
-    clone.querySelector(".card-score").innerHTML = sketch.votes;
-    if (sketch.votes < 0) {
-        clone.querySelector(".card-score").classList.add("negative");
-    } else if (sketch.votes > 0) {
-        clone.querySelector(".card-score").classList.add("positive");
-    }
-    clone.querySelector(".card-score").innerHTML = sketch.votes;
-    clone.querySelector(".content-title").innerHTML = sketch.name;
-   
+    
+    clone.querySelector(".content-title").innerHTML = sketch.name;    
+    setScore(clone, sketch.votes);
     parentDiv.appendChild(clone);
+
     clone = document.getElementById(sketch.id);
+    
+    setCardSize(clone, counter);
+    return clone;
+}
+
+function setScore(card, votes){
+    card.querySelector(".card-score").innerHTML = votes;
+    if (votes < 0) {
+        card.querySelector(".card-score").classList.add("negative");
+    } else if (votes > 0) {
+        card.querySelector(".card-score").classList.add("positive");
+    }
+}
+
+function setCardSize(card,counter){
     switch(true){
         case counter <= 5: 
-            clone.classList.add("card--width5"); 
+            card.classList.add("card--width5"); 
             break;
         case counter <= 10: 
-            clone.classList.add("card--width4"); 
+            card.classList.add("card--width4"); 
             break; 
         case counter <= 15: 
-            clone.classList.add("card--width3"); 
+            card.classList.add("card--width3"); 
             break; 
         case counter <= 20: 
-            clone.classList.add("card--width2"); 
+            card.classList.add("card--width2"); 
             break;     
         default: 
-            clone.classList.add("card--width1");                                 
+            card.classList.add("card--width1");                                 
     }
-    return clone;
 }
 
 function initButtons(cardView, sketch){
@@ -105,6 +114,10 @@ class PublicFeedCard extends View{
     setDislikeInactive(){
         this.downvoteButton.src = Config.PATH_DISLIKE_ICON_INACTIVE;
         this.downvote = false;
+    }
+
+    setScore(votes){
+        setScore(this.element, votes);
     }
 
     resetButtons(){

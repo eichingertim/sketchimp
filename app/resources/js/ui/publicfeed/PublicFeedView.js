@@ -5,8 +5,7 @@ var cardsItem = document.getElementById("cards"),
 sketchData,
 cardList = [],
 renderCounter = 0,
-cardTemplate = document.querySelector("#card-template"),
-masonryInstances = [];
+cardTemplate = document.querySelector("#card-template");
 
 init();
 
@@ -14,12 +13,32 @@ function createNext(){
     if(sketchData.length <= renderCounter){
         return;
     }
+    let parentDiv = createParentDiv(),
+    masonry;
+
+    createCardsforNextSection(parentDiv);
+
+    masonry = new Masonry(parentDiv, {
+        itemSelector: ".card",
+        columnWidth: 150,
+        fitWidth: true,
+    });
+    imagesLoaded(parentDiv).on("progress", function() {
+        masonry.layout();   
+    });
+}
+
+function createParentDiv(){
     let parentDiv = document.createElement("div");
     parentDiv.classList.add("card-section");
     parentDiv.id = "cards-" + renderCounter;
     cardsItem.appendChild(parentDiv);
+    return parentDiv;
+}
+
+function createCardsforNextSection(parentDiv){
     for(let i = renderCounter; i < sketchData.length; i++){
-        if(i === renderCounter + 50){
+        if(i === renderCounter + Config.PUBLIC_FEED_CARDS_PER_SECTION){
             return;
         }
         let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate, i);
@@ -27,21 +46,7 @@ function createNext(){
         singleCard.addEventListener("Dislike", onDislikeClick);
         cardList.push(singleCard);
     }
-    renderCounter += 50;
-
-    let masonry = new Masonry(parentDiv, {
-        itemSelector: ".card",
-        columnWidth: 150,
-        fitWidth: true,
-    });
-
-    masonryInstances.push(masonry);
-
-    imagesLoaded(parentDiv).on("progress", function() {
-        for(let i = 0; i < masonryInstances.length; i++){
-            masonryInstances[i].layout();
-        }    
-    });
+    renderCounter += Config.PUBLIC_FEED_CARDS_PER_SECTION;
 }
 
 function onLikeClick(event){
@@ -64,7 +69,7 @@ function sendClickActionToApi(url){
         try{
             let data = JSON.parse(this.response).data,
             sketchCard = getSketchCardForId(data.id);
-            handleLikeStatus(sketchCard, data);
+            handleVoteResponse(sketchCard, data);
         }catch (e) {
             console.log(e);
         }
@@ -81,7 +86,8 @@ function getSketchCardForId(id){
     return null;
 }
 
-function handleLikeStatus(sketchCard, responseData){
+function handleVoteResponse(sketchCard, responseData){
+    sketchCard.setScore(responseData.votes);
     sketchCard.resetButtons();
     if(responseData.userUpvote){
         sketchCard.setLikeActive();
