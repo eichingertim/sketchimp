@@ -87,7 +87,7 @@ const Config = {
         CHANNEL_INFO_CLICK: "ChannelInfoClick",
         ADMIN_SETTINGS_CLICK: "AdminSettingsClick",
         MEMBER_KICK_CLICK: "MemberKickClick",
-
+        ACTIVE_USER_RECEIVED: "ActiveUserReceived",
     },
 
     SocketKeys = {
@@ -101,6 +101,7 @@ const Config = {
         NEW_SKETCH: "new-sketch",
         TEMPLATE: "template",
         ADMIN_SETTINGS: "admin-settings",
+        ACTIVE_USER: "active-users",
 
     };
 

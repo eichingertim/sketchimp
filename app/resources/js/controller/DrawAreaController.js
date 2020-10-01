@@ -25,6 +25,12 @@ class NewSketchEvent extends Event {
     }
 }
 
+class ActiveUserEvent extends Event {
+    constructor(data) {
+        super(EventKeys.ACTIVE_USER_RECEIVED, data);
+    }
+}
+
 class TemplateReceivedEvent extends Event {
     constructor(data) {
         super(EventKeys.TEMPLATE_RECEIVED, data);
@@ -54,9 +60,9 @@ class DrawAreaController extends Observable {
         this.socket = socket;
     }
 
-    join(channelId) {
+    join(channelId, userId) {
         let instance = this;
-        this.socket.emit(SocketKeys.SUBSCRIBE, channelId);
+        this.socket.emit(SocketKeys.SUBSCRIBE, {channelId: channelId, userId: userId});
 
         this.socket.on(SocketKeys.DELETE_CHANNEL, () => window.location.reload());
         this.socket.on(SocketKeys.ADMIN_SETTINGS, () => window.location.reload());
@@ -65,6 +71,9 @@ class DrawAreaController extends Observable {
         this.socket.on(SocketKeys.LINE_DRAWN, (data) => instance.notifyAll(new LineDrawnEvent(data)));
         this.socket.on(SocketKeys.LINE_UNDO, (data) => instance.notifyAll(new LineUndoEvent(data)));
         this.socket.on(SocketKeys.CLEAR_CANVAS, (data) => instance.notifyAll(new ClearCanvasEvent(data)));
+        this.socket.on(SocketKeys.ACTIVE_USER, (data) => {
+            instance.notifyAll(new ActiveUserEvent(data));
+        });
 
     }
 

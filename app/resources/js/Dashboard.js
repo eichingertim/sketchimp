@@ -257,6 +257,9 @@ class Dashboard {
                 chooseTemplateDialogView.hide();
             }
         });
+        drawAreaController.addEventListener(EventKeys.ACTIVE_USER_RECEIVED, (event) => {
+            memberListView.updateActiveState(event.data);
+        });
     }
 
     setToolboxListener(instance) {
@@ -392,7 +395,7 @@ class Dashboard {
             this.channel = channel;
             topBarView.updateRoleVisibility(this.user.currentChannelRole);
             adminSettingsDialogView.setSettings(channel);
-            drawAreaController.join(channel.channelId);
+            drawAreaController.join(channel.channelId, this.user.userId);
             drawAreaView.creatorId = channel.creatorId;
             drawAreaView.clearCanvas({
                 isNewSketch: true,
@@ -414,7 +417,7 @@ class Dashboard {
     }
 
     onLeave() {
-        this.socket.emit(SocketKeys.UNSUBSCRIBE, {channelId: this.channel.channelId});
+        this.socket.emit(SocketKeys.UNSUBSCRIBE, {channelId: this.channel.channelId, userId: this.user.userId});
     }
 
 }

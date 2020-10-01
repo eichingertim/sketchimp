@@ -25,7 +25,7 @@ function appendCreatorToList(channel, memberTemplate, memberListView) {
         anchor = clone.querySelector("span");
     anchor.id = "/api/user/" + channel.creatorId;
     anchor.textContent = channel.creatorName;
-    anchor.style = "color:green;";
+    anchor.style.color = "green";
     memberListView.el.appendChild(clone);
 }
 
@@ -34,6 +34,19 @@ class MemberListView extends View {
         super();
         this.setElement(el);
         setListener(this);
+    }
+
+    updateActiveState(data) {
+        let memberItems = this.el.querySelectorAll(".member-item");
+        memberItems.forEach((memberItem) => {
+            let username = memberItem.querySelector(".member"),
+            id = username.id.split("/").pop();
+            if (data.activeUsers.includes(id)) {
+                username.style.color = "green";
+            } else {
+                username.style.color = "red";
+            }
+        });
     }
 
     updateMembers(channel) {
@@ -45,7 +58,7 @@ class MemberListView extends View {
                 anchor = clone.querySelector("span");
             anchor.id = "/api/user/" + user.id;
             anchor.textContent = user.username;
-            anchor.style = (user.online) ? "color:green;" : "color:red;";
+            anchor.style.color = "red";
             this.el.appendChild(clone);
         });
         setListener(this);
