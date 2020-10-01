@@ -2,7 +2,7 @@ import Config from "../../utils/Config.js";
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 
-function createNewCard(sketch, parentDiv, cardTemplate, counter){
+function createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes){
     let clone = cardTemplate.content.cloneNode(true);
     clone.querySelector(".content-image").src = sketch.path;
     clone.querySelector(".card").id = sketch.id;
@@ -13,7 +13,7 @@ function createNewCard(sketch, parentDiv, cardTemplate, counter){
 
     clone = document.getElementById(sketch.id);
     
-    setCardSize(clone, counter);
+    setCardSize(clone, sketch.votes, minMaxVotes);
     return clone;
 }
 
@@ -26,23 +26,14 @@ function setScore(card, votes){
     }
 }
 
-function setCardSize(card,counter){
-    switch(true){
-        case counter <= 5: 
-            card.classList.add("card--width5"); 
-            break;
-        case counter <= 10: 
-            card.classList.add("card--width4"); 
-            break; 
-        case counter <= 15: 
-            card.classList.add("card--width3"); 
-            break; 
-        case counter <= 20: 
-            card.classList.add("card--width2"); 
-            break;     
-        default: 
-            card.classList.add("card--width1");                                 
+function setCardSize(card, sketchVotes, minMaxVotes){
+    let size;
+    if(minMaxVotes.low === minMaxVotes.high){
+        size = 350;
+    }else{
+        size = 250 + 250 * ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
     }
+    card.style.width = size;
 }
 
 function initButtons(cardView, sketch){
@@ -87,9 +78,9 @@ class DislikeButtonEvent extends Event{
 }
 
 class PublicFeedCard extends View{
-    constructor(sketch, parentDiv, cardTemplate, counter){
+    constructor(sketch, parentDiv, cardTemplate, minMaxVotes){
         super();
-        this.element = createNewCard(sketch, parentDiv, cardTemplate, counter);
+        this.element = createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes);
         this.id = sketch.id;
         this.upvote = sketch.userUpvote;
         this.downvote = sketch.userDownvote;

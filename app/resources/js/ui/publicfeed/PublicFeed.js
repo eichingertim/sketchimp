@@ -3,6 +3,7 @@ import Config from "../../utils/Config.js";
 
 var cardsItem = document.getElementById("cards"),
 sketchData,
+minMaxVotes,
 cardList = [],
 renderCounter = 0,
 cardTemplate = document.querySelector("#card-template"),
@@ -48,7 +49,7 @@ function createCardsforNextSection(parentDiv){
             renderCounter += Config.PUBLIC_FEED_CARDS_PER_SECTION;
             return;
         }
-        let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate, i);
+        let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate, minMaxVotes);
         singleCard.addEventListener("Like", onLikeClick);
         singleCard.addEventListener("Dislike", onDislikeClick);
         cardList.push(singleCard);
@@ -104,6 +105,22 @@ function handleVoteResponse(sketchCard, responseData){
     }
 }
 
+function getHighestAndLowestVotes(){
+    if(sketchData){
+        let lowest = 0,
+        highest = 0;
+
+        for(let i = 0; i < sketchData.length; i++){
+            if(sketchData[i].votes < lowest){
+                lowest = sketchData[i].votes;
+            }else if(sketchData[i].votes > highest){
+                highest = sketchData[i].votes;
+            }
+        }
+        return {low: lowest, high: highest};
+    }
+}
+
 function getAllPublished(){
     let xhr = new XMLHttpRequest();
     xhr.open(Config.HTTP_GET, Config.API_URL_SKETCH_ALL_PUBLISHED, true);
@@ -112,6 +129,7 @@ function getAllPublished(){
         try{
             let data = JSON.parse(this.response).data;
             sketchData = data;
+            minMaxVotes = getHighestAndLowestVotes();
             createNext();
         } catch(e){
             console.log(e);
