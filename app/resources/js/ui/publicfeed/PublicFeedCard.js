@@ -31,9 +31,9 @@ function setCardSize(card, sketchVotes, minMaxVotes){
     if(minMaxVotes.low === minMaxVotes.high){
         size = 350;
     }else{
-        size = 250 + 250 * ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
+        size = 150 + 350 * ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
     }
-    card.style.width = size;
+    card.style.width = size + "px";
 }
 
 function initButtons(cardView, sketch){
