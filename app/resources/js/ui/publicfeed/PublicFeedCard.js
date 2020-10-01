@@ -27,7 +27,7 @@ function setScore(card, votes){
 }
 
 function setCardSize(card, sketchVotes, minMaxVotes){
-    let card,
+    let cardElement,
     cardSize,
     scoreSize, 
     fontSize,
@@ -43,11 +43,10 @@ function setCardSize(card, sketchVotes, minMaxVotes){
         fontSize = 12 + 12 * factor;
     }
     card.style.width = cardSize + "px";
-    card = card.querySelector(".card-score");
-    card.style.width = scoreSize + "px";
-    card.style.height = scoreSize + "px";
-    card.style.fontSize = fontSize + "px";
-
+    cardElement = card.querySelector(".card-score");
+    cardElement.style.width = scoreSize + "px";
+    cardElement.style.height = scoreSize + "px";
+    cardElement.style.fontSize = fontSize + "px";
 }
 
 function initButtons(cardView, sketch){
