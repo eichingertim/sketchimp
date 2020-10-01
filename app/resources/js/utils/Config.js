@@ -37,6 +37,16 @@ const Config = {
         CHANNEL_ROLE_COLLABORATOR: "collaborators",
         CHANNEL_ROLE_VIEWER: "viewers",
         DELAY_SHOW_SUCCESS: 3000,
+        STATES: {
+            ACTIVE: "active",
+            INACTIVE: "inactive",
+            OFFLINE: "offline",
+        },
+        STATES_COLORS: {
+            ACTIVE: "#21AD50",
+            INACTIVE: "#D19917",
+            OFFLINE: "#DE6954",
+        },
     },
 
     EventKeys = {
@@ -88,7 +98,7 @@ const Config = {
         CHANNEL_INFO_CLICK: "ChannelInfoClick",
         ADMIN_SETTINGS_CLICK: "AdminSettingsClick",
         MEMBER_KICK_CLICK: "MemberKickClick",
-
+        ACTIVE_USER_RECEIVED: "ActiveUserReceived",
     },
 
     SocketKeys = {
@@ -102,6 +112,7 @@ const Config = {
         NEW_SKETCH: "new-sketch",
         TEMPLATE: "template",
         ADMIN_SETTINGS: "admin-settings",
+        ACTIVE_USER: "active-users",
 
     };
 
