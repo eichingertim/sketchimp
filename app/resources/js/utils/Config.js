@@ -36,6 +36,16 @@ const Config = {
         CHANNEL_ROLE_COLLABORATOR: "collaborators",
         CHANNEL_ROLE_VIEWER: "viewers",
         DELAY_SHOW_SUCCESS: 3000,
+        STATES: {
+            ACTIVE: "active",
+            INACTIVE: "inactive",
+            OFFLINE: "offline",
+        },
+        STATES_COLORS: {
+            ACTIVE: "#21AD50",
+            INACTIVE: "#D19917",
+            OFFLINE: "#DE6954",
+        },
     },
 
     EventKeys = {

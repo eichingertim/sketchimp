@@ -25,7 +25,7 @@ function appendCreatorToList(channel, memberTemplate, memberListView) {
         anchor = clone.querySelector("span");
     anchor.id = "/api/user/" + channel.creatorId;
     anchor.textContent = channel.creatorName;
-    anchor.style.color = "green";
+    anchor.style.color = Config.STATES_COLORS.OFFLINE;
     memberListView.el.appendChild(clone);
 }
 
@@ -41,10 +41,26 @@ class MemberListView extends View {
         memberItems.forEach((memberItem) => {
             let username = memberItem.querySelector(".member"),
             id = username.id.split("/").pop();
-            if (data.activeUsers.includes(id)) {
-                username.style.color = "green";
+            if (data.state !== undefined && data.state !== null) {
+                if (id === data.userId) {
+                    if (data.state === Config.STATES.ACTIVE) {
+                        username.style.color = Config.STATES_COLORS.ACTIVE;
+                    } else if (data.state === Config.STATES.INACTIVE){
+                        username.style.color = Config.STATES_COLORS.INACTIVE;
+                    } else {
+                        username.style.color = Config.STATES_COLORS.OFFLINE;
+                    }
+                }
             } else {
-                username.style.color = "red";
+                if (data.activeUsers[id] !== null && data.activeUsers[id] !== undefined) {
+                    if (data.activeUsers[id] === Config.STATES.ACTIVE) {
+                        username.style.color = Config.STATES_COLORS.ACTIVE;
+                    } else if (data.activeUsers[id] === Config.STATES.INACTIVE){
+                        username.style.color = Config.STATES_COLORS.INACTIVE;
+                    } else {
+                        username.style.color = Config.STATES_COLORS.OFFLINE;
+                    }
+                }
             }
         });
     }
@@ -58,7 +74,7 @@ class MemberListView extends View {
                 anchor = clone.querySelector("span");
             anchor.id = "/api/user/" + user.id;
             anchor.textContent = user.username;
-            anchor.style.color = "red";
+            anchor.style.color = Config.STATES_COLORS.OFFLINE;
             this.el.appendChild(clone);
         });
         setListener(this);
