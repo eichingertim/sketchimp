@@ -5,27 +5,33 @@ var cardsItem = document.getElementById("cards"),
 sketchData,
 cardList = [],
 renderCounter = 0,
-cardTemplate = document.querySelector("#card-template");
+cardTemplate = document.querySelector("#card-template"),
+navBar = document.querySelector(".navigation-top"),
+topContainer = document.querySelector(".banner-content"),
+footer = document.querySelector("footer"),
+cooldownActive = false;
 
 init();
 
 function createNext(){
-    if(sketchData.length <= renderCounter){
-        return;
-    }
-    let parentDiv = createParentDiv(),
-    masonry;
+    if(sketchData && !cooldownActive){
+        if(sketchData.length <= renderCounter){
+            return;
+        }
+        let parentDiv = createParentDiv(),
+        masonry;
 
-    createCardsforNextSection(parentDiv);
+        createCardsforNextSection(parentDiv);
 
-    masonry = new Masonry(parentDiv, {
-        itemSelector: ".card",
-        columnWidth: 150,
-        fitWidth: true,
-    });
-    imagesLoaded(parentDiv).on("progress", function() {
-        masonry.layout();   
-    });
+        masonry = new Masonry(parentDiv, {
+            itemSelector: ".card",
+            columnWidth: 150,
+            fitWidth: true,
+        });
+        imagesLoaded(parentDiv).on("progress", function() {
+            masonry.layout();   
+        });
+    } 
 }
 
 function createParentDiv(){
@@ -38,7 +44,8 @@ function createParentDiv(){
 
 function createCardsforNextSection(parentDiv){
     for(let i = renderCounter; i < sketchData.length; i++){
-        if(i === renderCounter + Config.PUBLIC_FEED_CARDS_PER_SECTION){
+        if(i >= renderCounter + Config.PUBLIC_FEED_CARDS_PER_SECTION){
+            renderCounter += Config.PUBLIC_FEED_CARDS_PER_SECTION;
             return;
         }
         let singleCard = new PublicFeedCard(sketchData[i], parentDiv, cardTemplate, i);
@@ -105,9 +112,7 @@ function getAllPublished(){
         try{
             let data = JSON.parse(this.response).data;
             sketchData = data;
-            if(sketchData){
-                createNext();
-            }
+            createNext();
         } catch(e){
             console.log(e);
         }
@@ -115,7 +120,27 @@ function getAllPublished(){
     xhr.send();
 }
 
+function initScrollBehaviour(){
+    window.onscroll = function() {
+        if (document.body.scrollTop >= topContainer.offsetHeight - 30 || document.documentElement.scrollTop >= topContainer.offsetHeight - 30) {
+          navBar.classList.add("scroll");
+        } else {
+          navBar.classList.remove("scroll");
+        }
+        let pageHeight = Math.max( document.body.scrollHeight, document.body.offsetHeight, 
+            document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
+        
+        if(document.documentElement.scrollTop + window.innerHeight > pageHeight - footer.offsetHeight){
+            createNext();
+            cooldownActive = true;
+            setTimeout(function(){
+                cooldownActive = false;
+            }, Config.LAZY_LOADING_COOLDOWN);
+        }
+    };
+}
+
 function init(){
     getAllPublished();
-    
+    initScrollBehaviour();
 }
