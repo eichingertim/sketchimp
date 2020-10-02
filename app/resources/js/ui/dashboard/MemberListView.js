@@ -3,14 +3,15 @@ import { Event } from "../../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 class MemberItemClickEvent extends Event {
-    constructor(href) {
-        super(EventKeys.MEMBER_ITEM_CLICK, {url: href});
+    constructor(data) {
+        super(EventKeys.MEMBER_ITEM_CLICK, {data: data});
     }
 }
 
 function onMemberClick(memberListView, event) {
     event.preventDefault();
-    memberListView.notifyAll(new MemberItemClickEvent(event.target.id));
+    memberListView.notifyAll(new MemberItemClickEvent(event));
+    console.log(event);
 }
 
 function setListener(memberListView) {

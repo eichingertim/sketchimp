@@ -16,10 +16,12 @@ import ChooseTemplateDialogView from "./ui/dashboard/ChooseTemplateDialogView.js
 import UserModel from "./models/UserModel.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 import SketchModel from "./models/SketchModel.js";
+import UserProfileDialogView from "./ui/dashboard/UserProfileDialogView.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView,
     channelListView, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, createSketchDialogView, adminSettingsDialogView, topBarView, chooseTemplateDialogView;
+    saveLoadView, createSketchDialogView, adminSettingsDialogView, topBarView, 
+    chooseTemplateDialogView, userProfileDialogView;
 
 /**
  * builds needed data for the drawAreaController, to emit the new line
@@ -181,6 +183,10 @@ function configureDivSizes() {
     drawAreaView.resizeViews();
 }
 
+function calculateUserProfilePosition(target) {
+    //irgendwie wird container.offsetWidth hier immer null
+}
+
 class Dashboard {
     constructor(socket, userId) {
 
@@ -205,9 +211,10 @@ class Dashboard {
             createChannelDialog = document.querySelector(".create-channel-container"),
             saveLoad = document.querySelector(".container-load-and-publish"),
             createSketchDialog = document.querySelector(".create-sketch-container"),
-            adminSettingsDialog = document.querySelector(".admin-settings"),
+            adminSettingsDialog = document.querySelector(".admin-settings-container"),
             topBar = document.querySelector(".container-top-bar-history-inner"),
-            templateDialog = document.querySelector(".choose-template-container");
+            templateDialog = document.querySelector(".choose-template-container"),
+            userProfileDialog = document.querySelector(".user-profile-container");
 
         drawAreaView = new DrawAreaView(container);
         toolboxView = new ToolboxView(toolbox);
@@ -220,6 +227,7 @@ class Dashboard {
         adminSettingsDialogView = new AdminSettingsDialogView(adminSettingsDialog);
         topBarView = new TopBarView(topBar);
         chooseTemplateDialogView = new ChooseTemplateDialogView(templateDialog);
+        userProfileDialogView = new UserProfileDialogView(userProfileDialog);
 
         drawAreaController = new DrawAreaController(this.socket);
     }
@@ -354,8 +362,16 @@ class Dashboard {
         });
 
         //RightBar Members
-        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.url).then((memberData) => {
-            console.log(memberData);
+        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
+            //calculateUserProfilePosition(event.data.data.target);
+            let container, coordinates;
+            coordinates = userProfileDialogView.setDialogPosition(event.data.data.target);
+            container = document.querySelector(".modal-user-profile");
+            container.style.left = (coordinates.x - container.offsetWidth) + 'px';
+            container.style.top = (coordinates.y ) + 'px';
+            userProfileDialogView.show();
+            //
+            console.log("member data",memberData);
         }));
 
         //RightBar Save/Publish/Export Buttons
