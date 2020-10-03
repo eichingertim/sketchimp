@@ -49,10 +49,6 @@ function onSizeItemClick(toolboxView, data) {
             item.style.border = "";
         }
     });
-    // console.log(data.target.style);
-    // data.target.style.borderWidth = "5px";
-    // data.target.style.borderColor = "red";
-    // console.log(data.target.style);
 }
 
 function onColorChanged(toolboxView, data) {
