@@ -1,0 +1,69 @@
+.container {
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.invite {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    padding: 7vw;
+    border-color: var(--teal-accent);
+    border-style: solid;
+    border-radius: 2%;
+    border-width: 1px;
+    transition: background-color 0.1s linear;
+    background-color: var(--dark-grey);
+}
+
+.invite:hover {
+    background-color: rgba(255,255,255,0.005);
+}
+
+.channel-icon img, .channel-icon a {
+    margin-top: 1vw;
+    margin: 0 6px 0;
+    width: 12vw; 
+    height: 12vw; 
+    border-radius: 60%;
+    -webkit-transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.channel-icon a {
+    background-color: var(--teal-accent);
+    font-family: "uni_sansheavy_caps", sans-serif;
+    font-size: 2vw;
+    color: #fff !important;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.channel-icon img:hover, .channel-icon a:hover {
+    border-radius: 20%;
+}
+
+.invite p {
+    text-align: center; 
+    margin-top: 20px; 
+    font-size: 1.5vw;
+}
+
+.invite button {
+    width: 100%; 
+    border-color: var(--teal-accent); 
+    border-style: solid; 
+    background-color: var(--dark-grey);
+    font-size: 1vw;
+}
+
+.invite button:hover {
+    color: white;
+    background-color: var(--teal-accent);
+}
