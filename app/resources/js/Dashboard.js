@@ -180,6 +180,7 @@ function configureDivSizes() {
     mainContent.style.maxWidth = "" + (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth) + "px";
     canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight) + "px";
 
+    userProfileDialogView.hide();
     drawAreaView.resizeViews();
 }
 
@@ -214,7 +215,7 @@ class Dashboard {
             adminSettingsDialog = document.querySelector(".admin-settings-container"),
             topBar = document.querySelector(".container-top-bar-history-inner"),
             templateDialog = document.querySelector(".choose-template-container"),
-            userProfileDialog = document.querySelector(".user-profile-container");
+            userProfileDialog = document.querySelector(".modal-user-profile");
 
         drawAreaView = new DrawAreaView(container);
         toolboxView = new ToolboxView(toolbox);
@@ -240,6 +241,9 @@ class Dashboard {
         this.setToolboxListener(this);
         this.setChannelTopAndRightBarListener(this);
         this.setDialogListener(this);
+        window.addEventListener("click", () => {
+            userProfileDialogView.hide();
+        })
     }
 
     setDrawAreaListener(instance) {
@@ -362,17 +366,19 @@ class Dashboard {
         });
 
         //RightBar Members
-        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
-            //calculateUserProfilePosition(event.data.data.target);
-            let container, coordinates;
-            coordinates = userProfileDialogView.setDialogPosition(event.data.data.target);
-            container = document.querySelector(".modal-user-profile");
-            container.style.left = (coordinates.x - container.offsetWidth) + 'px';
-            container.style.top = (coordinates.y ) + 'px';
-            userProfileDialogView.show();
-            //
-            console.log("member data",memberData);
-        }));
+        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => {
+            let eventType = event.data.data.type;
+            if (eventType === "mouseover") {
+                MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
+                    let clickedMemberTarget = event.data.data.target;
+                    userProfileDialogView.adjustPositionProperties(clickedMemberTarget);
+                    userProfileDialogView.fillWithData(memberData, instance.user.userId)
+                    userProfileDialogView.show();
+               });
+            } else {
+                userProfileDialogView.hide();
+            }  
+        });
 
         //RightBar Save/Publish/Export Buttons
         saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () => SketchController.saveSketch(instance.socket, instance.channel.channelId).then(() => {
