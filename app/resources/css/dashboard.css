@@ -228,10 +228,18 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
     padding: .7vw;
     align-items: center;
+}
+
+.toolbox-drawing-tools {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 @media (max-width: 400px) {
@@ -249,6 +257,21 @@ body {
     padding: 0;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.toolbox-action {
+    background-color: #242424;
+    width: 85%;
+    border-radius: 50%;
+    padding: 10px;
+    height: auto;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toolbox-action:hover {
+    border-radius: 10px;
 }
 
 .toolbox-expanded {

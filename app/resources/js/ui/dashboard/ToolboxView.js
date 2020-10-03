@@ -88,7 +88,7 @@ function initColorSlider() {
             },
         ],
         color: Config.DEFAULT_PEN_COLOR,
-        width: 100,
+        width: 80,
     });
 }
 
