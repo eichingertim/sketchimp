@@ -111,6 +111,9 @@
 .logo span {
     text-align: center; 
     font-size: 3vw;
+    font-family: "uni_sansheavy_caps", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .logo span span {
