@@ -33,8 +33,10 @@ function onDialogCloseClick(channelInfoDialogView, data) {
 }
 
 function copy2Clipboard(str) {
-    let ta = document.createElement("textarea");
-    ta.value = str;
+    let ta = document.createElement("textarea"),
+        link = window.location.origin + "/join/" + str;
+        console.log(link);
+    ta.value = link;
     document.body.appendChild(ta);
     ta.select();
     document.execCommand("copy");
@@ -56,8 +58,6 @@ function setListener(channelInfoDialogView) {
             channelInfoDialogView.el.querySelector("#selected-file").innerHTML = event.target.value;
             channelInfoDialogView.el.querySelector("#btn-upload-channel").style.visibility = "visible";
         });
-
-
 
         let btnCopyChannelId = channelInfoDialogView.el.querySelector(".copy-channel-id");
         btnCopyChannelId.addEventListener("click", () => {
@@ -83,7 +83,6 @@ class ChannelInfoDialogView extends View {
 
     updateInfo(channel, isCreator) {
         this.el.querySelector(".info-channel-name").textContent = channel.channelName;
-        this.el.querySelector(".info-channel-id").textContent = channel.channelId;
         this.el.querySelector(".info-channel-creation").textContent = channel.creationDate;
         this.el.querySelector(".info-channel-creator").textContent = channel.creatorName;
         this.el.querySelector("#form-upload-channel-icon").action = "/api/channel/upload/" + channel.channelId;

@@ -184,10 +184,6 @@ function configureDivSizes() {
     drawAreaView.resizeViews();
 }
 
-function calculateUserProfilePosition(target) {
-    //irgendwie wird container.offsetWidth hier immer null
-}
-
 class Dashboard {
     constructor(socket, userId) {
 
@@ -317,11 +313,6 @@ class Dashboard {
         createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => ChannelController.createChannel(event.data)
             .then((channel) => {
                 onCreateChannelDataLoaded(instance, channel);
-            }));
-        createChannelDialogView.addEventListener(EventKeys.JOIN_CHANNEL_SUBMIT, (event) => ChannelController.joinNewChannel(event.data.id)
-            .then(() => {
-                createChannelDialogView.clearAfterSubmit();
-                window.location.reload();
             }));
         createChannelDialogView.addEventListener(EventKeys.CLOSE_CREATE_CHANNEL_DIALOG, () => {
             createChannelDialogView.hide();
