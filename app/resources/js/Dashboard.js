@@ -366,12 +366,19 @@ class Dashboard {
         });
 
         //RightBar Members
-        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
-            let clickedMemberTarget = event.data.data.target;
-            userProfileDialogView.adjustPositionProperties(clickedMemberTarget);
-            userProfileDialogView.fillWithData(memberData, instance.user.userId)
-            userProfileDialogView.show();
-        }));
+        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => {
+            let eventType = event.data.data.type;
+            if (eventType === "mouseover") {
+                MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
+                    let clickedMemberTarget = event.data.data.target;
+                    userProfileDialogView.adjustPositionProperties(clickedMemberTarget);
+                    userProfileDialogView.fillWithData(memberData, instance.user.userId)
+                    userProfileDialogView.show();
+               });
+            } else {
+                userProfileDialogView.hide();
+            }  
+        });
 
         //RightBar Save/Publish/Export Buttons
         saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () => SketchController.saveSketch(instance.socket, instance.channel.channelId).then(() => {

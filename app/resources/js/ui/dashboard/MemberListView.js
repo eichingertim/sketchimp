@@ -11,14 +11,14 @@ class MemberItemClickEvent extends Event {
 function onMemberClick(memberListView, event) {
     event.preventDefault();
     memberListView.notifyAll(new MemberItemClickEvent(event));
-    console.log(event);
 }
 
 function setListener(memberListView) {
     let channelMembers = memberListView.el.querySelectorAll(".member");
     channelMembers.forEach(member => {
-        member.addEventListener("click", onMemberClick.bind(this, memberListView));
-    });
+        member.addEventListener("mouseover", onMemberClick.bind(this, memberListView));
+        member.addEventListener("mouseout", onMemberClick.bind(this, memberListView));
+    }); 
 }
 
 function appendCreatorToList(channel, memberTemplate, memberListView) {
