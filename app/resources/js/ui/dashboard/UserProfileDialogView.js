@@ -10,6 +10,7 @@ class UserProfileDialogView extends View {
         this.sharedChannels = this.el.querySelector("#sharedChannels");
         this.status = this.el.querySelector("#status");
         this.info = this.el.querySelector("#info");
+        this.avatar = this.el.querySelector(".profile-image");
     }
 
     adjustPositionProperties(target) {
@@ -36,6 +37,7 @@ class UserProfileDialogView extends View {
         this.score.innerHTML = memberData.score;
         this.status.innerHTML = memberData.status;
         this.info.innerHTML = memberData.info;
+        this.avatar.src = memberData.avatar;
     }
 }
 
