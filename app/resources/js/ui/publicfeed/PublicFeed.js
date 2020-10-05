@@ -1,5 +1,5 @@
 import PublicFeedCard from "./PublicFeedCard.js";
-import Config from "../../utils/Config.js";
+import Config, { PublicFeedDimensions } from "../../utils/Config.js";
 
 var cardsItem = document.getElementById("cards"),
 sketchData,
@@ -14,6 +14,7 @@ cooldownActive = false;
 
 init();
 
+// Method creates a new section with the next few cards to show
 function createNext(){
     if(sketchData && !cooldownActive){
         if(sketchData.length <= renderCounter){
@@ -24,18 +25,23 @@ function createNext(){
 
         createCardsforNextSection(parentDiv);
 
+        // script is linked in HTML but eslint can't recognize it
+        // eslint-disable-next-line no-undef
         masonry = new Masonry(parentDiv, {
             itemSelector: ".card",
             columnWidth: 150,
             fitWidth: true,
             originLeft: false,
         });
+        //callback for masonry
+        // eslint-disable-next-line no-undef
         imagesLoaded(parentDiv).on("progress", function() {
             masonry.layout();   
         });
     } 
 }
 
+// Method creates div for a new section and appends it to cardItems-Element
 function createParentDiv(){
     let parentDiv = document.createElement("div");
     parentDiv.classList.add("card-section");
@@ -44,9 +50,12 @@ function createParentDiv(){
     return parentDiv;
 }
 
+// Method creates cards and adds eventlistener for the next session
 function createCardsforNextSection(parentDiv){
     for(let i = renderCounter; i < sketchData.length; i++){
         if(i >= renderCounter + Config.PUBLIC_FEED_CARDS_PER_SECTION){
+            // stop if the maximum number of cards for this section was reached and 
+            // add the number of cards per section to counter
             renderCounter += Config.PUBLIC_FEED_CARDS_PER_SECTION;
             return;
         }
@@ -55,6 +64,7 @@ function createCardsforNextSection(parentDiv){
         singleCard.addEventListener("Dislike", onDislikeClick);
         cardList.push(singleCard);
     }
+    // add the number of cards per section to counter
     renderCounter += Config.PUBLIC_FEED_CARDS_PER_SECTION;
 }
 
@@ -70,6 +80,7 @@ function onDislikeClick(event){
     }
 }
 
+// Method sends a post-request to api and handles the vote action when returned from api
 function sendClickActionToApi(url){
     let xhr = new XMLHttpRequest();
     xhr.open(Config.HTTP_POST, url, true);
@@ -86,6 +97,7 @@ function sendClickActionToApi(url){
     xhr.send();
 }
 
+// Returns the card item from cardList with the requested id
 function getSketchCardForId(id){
     for(let i = 0; i < cardList.length; i++){
         if(cardList[i].id === id){
@@ -95,6 +107,7 @@ function getSketchCardForId(id){
     return null;
 }
 
+// Method handles front end actions from vote response (new Score value, upvote/downvote button appereance)
 function handleVoteResponse(sketchCard, responseData){
     sketchCard.setScore(responseData.votes);
     sketchCard.resetButtons();
@@ -106,6 +119,7 @@ function handleVoteResponse(sketchCard, responseData){
     }
 }
 
+// Method returns object with highes and lowest vote value
 function getHighestAndLowestVotes(){
     if(sketchData){
         let lowest = 0,
@@ -120,8 +134,10 @@ function getHighestAndLowestVotes(){
         }
         return {low: lowest, high: highest};
     }
+    return null;
 }
 
+// Method collects all published sketches from api and creates the first cards from it
 function getAllPublished(){
     let xhr = new XMLHttpRequest();
     xhr.open(Config.HTTP_GET, Config.API_URL_SKETCH_ALL_PUBLISHED, true);
@@ -141,14 +157,17 @@ function getAllPublished(){
 
 function initScrollBehaviour(){
     window.onscroll = function() {
-        if (document.body.scrollTop >= topContainer.offsetHeight - 30 || document.documentElement.scrollTop >= topContainer.offsetHeight - 30) {
+        // change navbar appereance when scrolled down
+        if (document.body.scrollTop >= topContainer.offsetHeight - PublicFeedDimensions.MENUBAR_OFFSET || 
+            document.documentElement.scrollTop >= topContainer.offsetHeight - PublicFeedDimensions.MENUBAR_OFFSET) {
           navBar.classList.add("scroll");
         } else {
           navBar.classList.remove("scroll");
         }
+
         let pageHeight = Math.max( document.body.scrollHeight, document.body.offsetHeight, 
             document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight );
-        
+        //Create next cards if scrolled to bottom of page
         if(document.documentElement.scrollTop + window.innerHeight > pageHeight - footer.offsetHeight){
             createNext();
             cooldownActive = true;

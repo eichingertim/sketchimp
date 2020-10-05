@@ -2,6 +2,7 @@ import {Config, PublicFeedDimensions} from "../../utils/Config.js";
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 
+// Method clones card from template and fills it with the information of the sketch
 function createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes){
     let clone = cardTemplate.content.cloneNode(true);
     clone.querySelector(".content-image").src = sketch.path;
@@ -13,10 +14,12 @@ function createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes){
 
     clone = document.getElementById(sketch.id);
     
+    //Setting card size depending on votes
     setCardSize(clone, sketch.votes, minMaxVotes);
     return clone;
 }
 
+// Method sets score to the front end view of the card
 function setScore(card, votes){
     card.querySelector(".card-score").innerHTML = votes;
     if (votes < 0) {
@@ -26,22 +29,26 @@ function setScore(card, votes){
     }
 }
 
+// Method calculates card size depending on its votes in relation to all other votes
 function setCardSize(card, sketchVotes, minMaxVotes){
     let scoreElement, cardSize, scoreSize, 
     fontSize, titleSize, factor;
     
+    // setting default size if all cards have the same votes
     if(minMaxVotes.low === minMaxVotes.high){
         cardSize = PublicFeedDimensions.CARD_DEFAULT;
         scoreSize = PublicFeedDimensions.SCORE_DEFAULT;
         fontSize = PublicFeedDimensions.SCOREFONT_DEFAULT;
         titleSize = PublicFeedDimensions.TITLE_DEFAULT;
     }else{
+        // calculating the factor in relation to all votes 
         factor = ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
         cardSize = PublicFeedDimensions.CARD_BASE + PublicFeedDimensions.CARD_MULTIPLICANT * factor;
         scoreSize = PublicFeedDimensions.SCORE_BASE + PublicFeedDimensions.SCORE_MULTIPLICANT * factor;
         fontSize = PublicFeedDimensions.SCOREFONT_BASE + PublicFeedDimensions.SCOREFONT_MULTIPLICANT * factor;
         titleSize = PublicFeedDimensions.TITLE_BASE + PublicFeedDimensions.TITLE_MULTIPLICANT * factor;
     }
+    // setting the sizes to the elements of the card
     card.style.width = cardSize + "px";
     scoreElement = card.querySelector(".card-score");
     scoreElement.style.width = scoreSize + "px";
@@ -51,6 +58,7 @@ function setCardSize(card, sketchVotes, minMaxVotes){
 
 }
 
+// Method adds the correct icon for the vote buttons and adds clicklistener
 function initButtons(cardView, sketch){
     cardView.upvoteButton = cardView.element.querySelector(".likebutton");
     cardView.downvoteButton = cardView.element.querySelector(".dislikebutton");

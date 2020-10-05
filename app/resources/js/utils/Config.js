@@ -120,6 +120,7 @@ const Config = {
         SCOREFONT_MULTIPLICANT: 12,
         TITLE_BASE: 20,
         TITLE_MULTIPLICANT: 20,
+        MENUBAR_OFFSET: 30,
     };
 
 export {Config, EventKeys, SocketKeys, PublicFeedDimensions};
