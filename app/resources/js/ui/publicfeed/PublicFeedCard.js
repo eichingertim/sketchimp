@@ -1,4 +1,4 @@
-import Config from "../../utils/Config.js";
+import {Config, PublicFeedDimensions} from "../../utils/Config.js";
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 
@@ -27,26 +27,28 @@ function setScore(card, votes){
 }
 
 function setCardSize(card, sketchVotes, minMaxVotes){
-    let cardElement,
-    cardSize,
-    scoreSize, 
-    fontSize,
-    factor;
+    let scoreElement, cardSize, scoreSize, 
+    fontSize, titleSize, factor;
+    
     if(minMaxVotes.low === minMaxVotes.high){
-        cardSize = 350;
-        scoreSize = 60;
-        fontSize = 16;
+        cardSize = PublicFeedDimensions.CARD_DEFAULT;
+        scoreSize = PublicFeedDimensions.SCORE_DEFAULT;
+        fontSize = PublicFeedDimensions.SCOREFONT_DEFAULT;
+        titleSize = PublicFeedDimensions.TITLE_DEFAULT;
     }else{
         factor = ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
-        cardSize = 150 + 350 * factor;
-        scoreSize = 35 + 95 * factor;
-        fontSize = 12 + 12 * factor;
+        cardSize = PublicFeedDimensions.CARD_BASE + PublicFeedDimensions.CARD_MULTIPLICANT * factor;
+        scoreSize = PublicFeedDimensions.SCORE_BASE + PublicFeedDimensions.SCORE_MULTIPLICANT * factor;
+        fontSize = PublicFeedDimensions.SCOREFONT_BASE + PublicFeedDimensions.SCOREFONT_MULTIPLICANT * factor;
+        titleSize = PublicFeedDimensions.TITLE_BASE + PublicFeedDimensions.TITLE_MULTIPLICANT * factor;
     }
     card.style.width = cardSize + "px";
-    cardElement = card.querySelector(".card-score");
-    cardElement.style.width = scoreSize + "px";
-    cardElement.style.height = scoreSize + "px";
-    cardElement.style.fontSize = fontSize + "px";
+    scoreElement = card.querySelector(".card-score");
+    scoreElement.style.width = scoreSize + "px";
+    scoreElement.style.height = scoreSize + "px";
+    scoreElement.style.fontSize = fontSize + "px";
+    card.querySelector(".content-title").style.fontSize = titleSize + "px";
+
 }
 
 function initButtons(cardView, sketch){

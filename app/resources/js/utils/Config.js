@@ -104,8 +104,23 @@ const Config = {
         NEW_SKETCH: "new-sketch",
         TEMPLATE: "template",
         ADMIN_SETTINGS: "admin-settings",
-
+    },
+    
+    PublicFeedDimensions = {
+        CARD_DEFAULT: 395,
+        SCORE_DEFAULT: 55,
+        SCOREFONT_DEFAULT: 20,
+        TITLE_DEFAULT: 30,
+        VOTEBUTTON_DEFAULT: 40,
+        CARD_BASE: 200,
+        CARD_MULTIPLICANT: 350,
+        SCORE_BASE: 40,
+        SCORE_MULTIPLICANT: 95,
+        SCOREFONT_BASE: 12,
+        SCOREFONT_MULTIPLICANT: 12,
+        TITLE_BASE: 20,
+        TITLE_MULTIPLICANT: 20,
     };
 
-export {Config, EventKeys, SocketKeys};
+export {Config, EventKeys, SocketKeys, PublicFeedDimensions};
 export default Config;
