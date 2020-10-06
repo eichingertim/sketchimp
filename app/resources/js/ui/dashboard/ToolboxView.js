@@ -41,11 +41,21 @@ function onDeleteForeverClick(toolboxView, data) {
 }
 
 function onSizeItemClick(toolboxView, data) {
-    toolboxView.notifyAll(new SizeChangeEvent(data.target.height));
+    toolboxView.notifyAll(new SizeChangeEvent(data.target.style.height.replace("px", "")));
+    toolboxView.sizeItems.forEach(item => {
+        if (item.id === data.target.id) {
+            item.style.border = "2px solid white";
+        } else {
+            item.style.border = "";
+        }
+    });
 }
 
 function onColorChanged(toolboxView, data) {
     toolboxView.notifyAll(new ColorChangeEvent(data.hexString));
+    toolboxView.sizeItems.forEach(item => {
+        item.style.backgroundColor = data.hexString;
+    });
 }
 
 function onPenRubberSwitch(toolboxView, data) {
@@ -55,19 +65,13 @@ function onPenRubberSwitch(toolboxView, data) {
 }
 
 function addClickListeners(toolboxView) {
-    const pen = toolboxView.el.querySelector("#toolbox-pen"),
-        rubber = toolboxView.el.querySelector("#toolbox-rubber"),
-        sizeItems = toolboxView.el.querySelectorAll(".toolbox-size-item"),
-        undo = toolboxView.el.querySelector("#toolbox-undo"),
-        deleteForever = toolboxView.el.querySelector("#toolbox-delete-forever");
-
-    pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
-    rubber.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
-    sizeItems.forEach((sizeItem) => {
+    toolboxView.pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
+    toolboxView.rubber.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
+    toolboxView.sizeItems.forEach((sizeItem) => {
         sizeItem.addEventListener("click", onSizeItemClick.bind(this, toolboxView));
     });
-    undo.addEventListener("click", onUndoClick.bind(this, toolboxView));
-    deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView));
+    toolboxView.undo.addEventListener("click", onUndoClick.bind(this, toolboxView));
+    toolboxView.deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView));
 
     toolboxView.colorPicker.on("color:change", onColorChanged.bind(this, toolboxView));
 }
@@ -88,7 +92,8 @@ function initColorSlider() {
             },
         ],
         color: Config.DEFAULT_PEN_COLOR,
-        width: 100,
+        width: 80,
+        layoutDirection: "horizontal",
     });
 }
 
@@ -98,11 +103,24 @@ class ToolboxView extends View {
         super();
         this.setElement(el);
         this.colorPicker = initColorSlider();
+        this.pen = this.el.querySelector("#toolbox-pen");
+        this.rubber = this.el.querySelector("#toolbox-rubber");
+        this.sizeItems = this.el.querySelectorAll(".toolbox-size-item");
+        this.reset();
+        this.undo = this.el.querySelector("#toolbox-undo");
+        this.deleteForever = this.el.querySelector("#toolbox-delete-forever");
+
         addClickListeners(this);
     }
 
     reset() {
         this.colorPicker.reset();
+        let instance = this;
+        this.sizeItems[0].style.border = "2px solid white"
+        this.notifyAll(new SizeChangeEvent(this.sizeItems[0].style.height));
+        this.sizeItems.forEach(item => {
+            item.style.backgroundColor = instance.colorPicker.color.hexString;
+        });
     }
 
     switchRubberPencil(id) {
