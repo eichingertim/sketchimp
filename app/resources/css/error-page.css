@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans");
 
 :root {
-    --dark-grey: #111111;
+    --darkest-grey: #111111;
     --white: #fff;
     --green: #12C2AA;
 }
@@ -9,7 +9,7 @@
 html,
 body {
     height: 100%;
-    background-color: var(--dark-grey);
+    background-color: var(--darkest-grey);
 }
 
 body {

@@ -16,7 +16,7 @@
     border-radius: 2%;
     border-width: 2px;
     transition: background-color 0.1s linear;
-    background-color: var(--dark-grey);
+    background-color: var(--darkest-grey);
 }
 
 .invite:hover {
@@ -59,7 +59,7 @@
     width: 100%; 
     border-color: var(--teal-accent); 
     border-style: solid; 
-    background-color: var(--dark-grey);
+    background-color: var(--darkest-grey);
     font-size: 1vw;
 }
 

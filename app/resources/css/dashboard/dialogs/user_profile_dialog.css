@@ -1,0 +1,62 @@
+.modal-user-profile {
+    max-width: 400px;
+    transform: scale(0.7);
+}
+
+.modal-user-profile .flex-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.modal-user-profile .flex-header {
+    background-color: var(--accent);
+    display: flex;
+    max-height: 30%;
+    min-width: 100%;
+}
+
+.flex-header .profile-image-container {
+    max-width: 30%;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.flex-header .profile-image {
+    max-height: 100%;
+    padding: 10px;
+}
+
+.flex-body {
+    padding: 15px;
+}
+
+.flex-body-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.profile-trophy {
+    display: flex;
+    align-items: center;
+}
+
+.panel-default {
+    border-color: var(--accent);
+}
+
+.panel-default .panel-heading {
+    background-color: var(--highlight);
+    border-color: var(--accent);
+}
+
+.panel-title {
+    color: white;
+}
+
+.panel-body {
+    background-color: var(--highlight);
+}
