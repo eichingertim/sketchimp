@@ -37,6 +37,8 @@ const Config = {
         CHANNEL_ROLE_COLLABORATOR: "collaborators",
         CHANNEL_ROLE_VIEWER: "viewers",
         DELAY_SHOW_SUCCESS: 3000,
+        PUBLIC_FEED_CARDS_PER_SECTION: 25,
+        LAZY_LOADING_COOLDOWN: 500,
         STATES: {
             ACTIVE: "active",
             INACTIVE: "inactive",
@@ -113,8 +115,25 @@ const Config = {
         TEMPLATE: "template",
         ADMIN_SETTINGS: "admin-settings",
         ACTIVE_USER: "active-users",
+    },
+    
+    PublicFeedDimensions = {
+        CARD_DEFAULT: 395,
+        SCORE_DEFAULT: 55,
+        SCOREFONT_DEFAULT: 20,
+        TITLE_DEFAULT: 30,
+        VOTEBUTTON_DEFAULT: 40,
+        CARD_BASE: 200,
+        CARD_MULTIPLICANT: 350,
+        SCORE_BASE: 40,
+        SCORE_MULTIPLICANT: 95,
+        SCOREFONT_BASE: 12,
+        SCOREFONT_MULTIPLICANT: 12,
+        TITLE_BASE: 20,
+        TITLE_MULTIPLICANT: 20,
+        MENUBAR_OFFSET: 30,
 
     };
 
-export {Config, EventKeys, SocketKeys};
+export {Config, EventKeys, SocketKeys, PublicFeedDimensions};
 export default Config;

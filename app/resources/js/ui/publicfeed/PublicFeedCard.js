@@ -1,41 +1,64 @@
-import Config from "../../utils/Config.js";
+import {Config, PublicFeedDimensions} from "../../utils/Config.js";
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 
-function createNewCard(sketch, parentDiv, cardTemplate, counter){
+// Method clones card from template and fills it with the information of the sketch
+function createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes){
     let clone = cardTemplate.content.cloneNode(true);
     clone.querySelector(".content-image").src = sketch.path;
     clone.querySelector(".card").id = sketch.id;
-    clone.querySelector(".card-score").innerHTML = sketch.votes;
-    if (sketch.votes < 0) {
-        clone.querySelector(".card-score").classList.add("negative");
-    } else if (sketch.votes > 0) {
-        clone.querySelector(".card-score").classList.add("positive");
-    }
-    clone.querySelector(".card-score").innerHTML = sketch.votes;
-    clone.querySelector(".content-title").innerHTML = sketch.name;
-   
+    
+    clone.querySelector(".content-title").innerHTML = sketch.name;    
+    setScore(clone, sketch.votes);
     parentDiv.appendChild(clone);
+
     clone = document.getElementById(sketch.id);
-    switch(true){
-        case counter <= 5: 
-            clone.classList.add("card--width5"); 
-            break;
-        case counter <= 10: 
-            clone.classList.add("card--width4"); 
-            break; 
-        case counter <= 15: 
-            clone.classList.add("card--width3"); 
-            break; 
-        case counter <= 20: 
-            clone.classList.add("card--width2"); 
-            break;     
-        default: 
-            clone.classList.add("card--width1");                                 
-    }
+    
+    //Setting card size depending on votes
+    setCardSize(clone, sketch.votes, minMaxVotes);
     return clone;
 }
 
+// Method sets score to the front end view of the card
+function setScore(card, votes){
+    card.querySelector(".card-score").innerHTML = votes;
+    if (votes < 0) {
+        card.querySelector(".card-score").classList.add("negative");
+    } else if (votes > 0) {
+        card.querySelector(".card-score").classList.add("positive");
+    }
+}
+
+// Method calculates card size depending on its votes in relation to all other votes
+function setCardSize(card, sketchVotes, minMaxVotes){
+    let scoreElement, cardSize, scoreSize, 
+    fontSize, titleSize, factor;
+    
+    // setting default size if all cards have the same votes
+    if(minMaxVotes.low === minMaxVotes.high){
+        cardSize = PublicFeedDimensions.CARD_DEFAULT;
+        scoreSize = PublicFeedDimensions.SCORE_DEFAULT;
+        fontSize = PublicFeedDimensions.SCOREFONT_DEFAULT;
+        titleSize = PublicFeedDimensions.TITLE_DEFAULT;
+    }else{
+        // calculating the factor in relation to all votes 
+        factor = ((sketchVotes - minMaxVotes.low) / (minMaxVotes.high - minMaxVotes.low));
+        cardSize = PublicFeedDimensions.CARD_BASE + PublicFeedDimensions.CARD_MULTIPLICANT * factor;
+        scoreSize = PublicFeedDimensions.SCORE_BASE + PublicFeedDimensions.SCORE_MULTIPLICANT * factor;
+        fontSize = PublicFeedDimensions.SCOREFONT_BASE + PublicFeedDimensions.SCOREFONT_MULTIPLICANT * factor;
+        titleSize = PublicFeedDimensions.TITLE_BASE + PublicFeedDimensions.TITLE_MULTIPLICANT * factor;
+    }
+    // setting the sizes to the elements of the card
+    card.style.width = cardSize + "px";
+    scoreElement = card.querySelector(".card-score");
+    scoreElement.style.width = scoreSize + "px";
+    scoreElement.style.height = scoreSize + "px";
+    scoreElement.style.fontSize = fontSize + "px";
+    card.querySelector(".content-title").style.fontSize = titleSize + "px";
+
+}
+
+// Method adds the correct icon for the vote buttons and adds clicklistener
 function initButtons(cardView, sketch){
     cardView.upvoteButton = cardView.element.querySelector(".likebutton");
     cardView.downvoteButton = cardView.element.querySelector(".dislikebutton");
@@ -78,9 +101,9 @@ class DislikeButtonEvent extends Event{
 }
 
 class PublicFeedCard extends View{
-    constructor(sketch, parentDiv, cardTemplate, counter){
+    constructor(sketch, parentDiv, cardTemplate, minMaxVotes){
         super();
-        this.element = createNewCard(sketch, parentDiv, cardTemplate, counter);
+        this.element = createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes);
         this.id = sketch.id;
         this.upvote = sketch.userUpvote;
         this.downvote = sketch.userDownvote;
@@ -105,6 +128,10 @@ class PublicFeedCard extends View{
     setDislikeInactive(){
         this.downvoteButton.src = Config.PATH_DISLIKE_ICON_INACTIVE;
         this.downvote = false;
+    }
+
+    setScore(votes){
+        setScore(this.element, votes);
     }
 
     resetButtons(){
