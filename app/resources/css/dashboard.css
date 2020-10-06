@@ -228,10 +228,18 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
     padding: .7vw;
     align-items: center;
+}
+
+.toolbox-drawing-tools {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 @media (max-width: 400px) {
@@ -247,8 +255,24 @@ body {
 .dashboard-toolbox-size {
     display: flex;
     padding: 0;
+    align-items: center;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.toolbox-action {
+    background-color: #242424;
+    width: 85%;
+    border-radius: 50%;
+    padding: 10px;
+    height: auto;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toolbox-action:hover {
+    border-radius: 10px;
 }
 
 .toolbox-expanded {
@@ -263,7 +287,9 @@ body {
 }
 
 .toolbox-size-item {
+    background-color: #fff;
     margin-bottom: 5px;
+    border-radius: 50%;
 }
 
 /*Save and load right bottom section*/
@@ -595,4 +621,69 @@ body {
 
 #admin-settings-dialog .member-item {
     display: block;
+}
+
+.modal-user-profile {
+    max-width: 400px;
+    transform: scale(0.7);
+}
+
+.modal-user-profile .flex-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.modal-user-profile .flex-header {
+    background-color: #12c2aa;
+    display: flex;
+    max-height: 30%;
+    min-width: 100%;
+}
+
+.flex-header .profile-image-container {
+    max-width: 30%;
+    margin: 0px;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.flex-header .profile-image {
+    max-height: 100%;
+    padding: 10px;
+}
+
+.flex-body {
+    padding: 15px;
+}
+
+.flex-body-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.profile-trophy {
+    display: flex;
+    align-items: center;
+}
+
+.panel-default {
+    border-color: #12c2aa;
+}
+
+.panel-default .panel-heading {
+    background-color: #434343;
+    border-color: #12c2aa;
+}
+
+.panel-title {
+    color: white;
+}
+
+.panel-body {
+    background-color: #343434;
 }

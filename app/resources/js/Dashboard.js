@@ -16,10 +16,12 @@ import ChooseTemplateDialogView from "./ui/dashboard/ChooseTemplateDialogView.js
 import UserModel from "./models/UserModel.js";
 import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
 import SketchModel from "./models/SketchModel.js";
+import UserProfileDialogView from "./ui/dashboard/UserProfileDialogView.js";
 
 let drawAreaView, drawAreaController, toolboxView, memberListView,
     channelListView, channelInfoDialogView, createChannelDialogView,
-    saveLoadView, createSketchDialogView, adminSettingsDialogView, topBarView, chooseTemplateDialogView;
+    saveLoadView, createSketchDialogView, adminSettingsDialogView, topBarView, 
+    chooseTemplateDialogView, userProfileDialogView;
 
 /**
  * builds needed data for the drawAreaController, to emit the new line
@@ -178,6 +180,7 @@ function configureDivSizes() {
     mainContent.style.maxWidth = "" + (window.innerWidth - leftBar.offsetWidth - memberBar.offsetWidth) + "px";
     canvasContainer.style.maxHeight = "" + (window.innerHeight - topAppBar.offsetHeight) + "px";
 
+    userProfileDialogView.hide();
     drawAreaView.resizeViews();
 }
 
@@ -205,9 +208,10 @@ class Dashboard {
             createChannelDialog = document.querySelector(".create-channel-container"),
             saveLoad = document.querySelector(".container-load-and-publish"),
             createSketchDialog = document.querySelector(".create-sketch-container"),
-            adminSettingsDialog = document.querySelector(".admin-settings"),
+            adminSettingsDialog = document.querySelector(".admin-settings-container"),
             topBar = document.querySelector(".container-top-bar-history-inner"),
-            templateDialog = document.querySelector(".choose-template-container");
+            templateDialog = document.querySelector(".choose-template-container"),
+            userProfileDialog = document.querySelector(".modal-user-profile");
 
         drawAreaView = new DrawAreaView(container);
         toolboxView = new ToolboxView(toolbox);
@@ -220,6 +224,7 @@ class Dashboard {
         adminSettingsDialogView = new AdminSettingsDialogView(adminSettingsDialog);
         topBarView = new TopBarView(topBar);
         chooseTemplateDialogView = new ChooseTemplateDialogView(templateDialog);
+        userProfileDialogView = new UserProfileDialogView(userProfileDialog);
 
         drawAreaController = new DrawAreaController(this.socket);
     }
@@ -232,6 +237,9 @@ class Dashboard {
         this.setToolboxListener(this);
         this.setChannelTopAndRightBarListener(this);
         this.setDialogListener(this);
+        window.addEventListener("click", () => {
+            userProfileDialogView.hide();
+        })
     }
 
     setDrawAreaListener(instance) {
@@ -256,6 +264,9 @@ class Dashboard {
                 drawAreaView.setDrawingActivated(true);
                 chooseTemplateDialogView.hide();
             }
+        });
+        drawAreaController.addEventListener(EventKeys.ACTIVE_USER_RECEIVED, (event) => {
+            memberListView.updateActiveState(event.data);
         });
     }
 
@@ -303,11 +314,6 @@ class Dashboard {
             .then((channel) => {
                 onCreateChannelDataLoaded(instance, channel);
             }));
-        createChannelDialogView.addEventListener(EventKeys.JOIN_CHANNEL_SUBMIT, (event) => ChannelController.joinNewChannel(event.data.id)
-            .then(() => {
-                createChannelDialogView.clearAfterSubmit();
-                window.location.reload();
-            }));
         createChannelDialogView.addEventListener(EventKeys.CLOSE_CREATE_CHANNEL_DIALOG, () => {
             createChannelDialogView.hide();
             drawAreaView.setDrawingActivated(true);
@@ -351,9 +357,19 @@ class Dashboard {
         });
 
         //RightBar Members
-        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => MemberController.fetchMemberData(event.data.url).then((memberData) => {
-            console.log(memberData);
-        }));
+        memberListView.addEventListener(EventKeys.MEMBER_ITEM_CLICK, (event) => {
+            let eventType = event.data.data.type;
+            if (eventType === "mouseover") {
+                MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
+                    let clickedMemberTarget = event.data.data.target;
+                    userProfileDialogView.adjustPositionProperties(clickedMemberTarget);
+                    userProfileDialogView.fillWithData(memberData, instance.user.userId)
+                    userProfileDialogView.show();
+               });
+            } else {
+                userProfileDialogView.hide();
+            }  
+        });
 
         //RightBar Save/Publish/Export Buttons
         saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () => SketchController.saveSketch(instance.socket, instance.channel.channelId).then(() => {
@@ -392,7 +408,7 @@ class Dashboard {
             this.channel = channel;
             topBarView.updateRoleVisibility(this.user.currentChannelRole);
             adminSettingsDialogView.setSettings(channel);
-            drawAreaController.join(channel.channelId);
+            drawAreaController.join(channel.channelId, this.user.userId);
             drawAreaView.creatorId = channel.creatorId;
             drawAreaView.clearCanvas({
                 isNewSketch: true,
@@ -414,7 +430,7 @@ class Dashboard {
     }
 
     onLeave() {
-        this.socket.emit(SocketKeys.UNSUBSCRIBE, {channelId: this.channel.channelId});
+        this.socket.emit(SocketKeys.UNSUBSCRIBE, {channelId: this.channel.channelId, userId: this.user.userId});
     }
 
 }

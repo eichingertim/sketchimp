@@ -39,6 +39,16 @@ const Config = {
         DELAY_SHOW_SUCCESS: 3000,
         PUBLIC_FEED_CARDS_PER_SECTION: 25,
         LAZY_LOADING_COOLDOWN: 500,
+        STATES: {
+            ACTIVE: "active",
+            INACTIVE: "inactive",
+            OFFLINE: "offline",
+        },
+        STATES_COLORS: {
+            ACTIVE: "#21AD50",
+            INACTIVE: "#D19917",
+            OFFLINE: "#DE6954",
+        },
     },
 
     EventKeys = {
@@ -90,7 +100,7 @@ const Config = {
         CHANNEL_INFO_CLICK: "ChannelInfoClick",
         ADMIN_SETTINGS_CLICK: "AdminSettingsClick",
         MEMBER_KICK_CLICK: "MemberKickClick",
-
+        ACTIVE_USER_RECEIVED: "ActiveUserReceived",
     },
 
     SocketKeys = {
@@ -104,6 +114,7 @@ const Config = {
         NEW_SKETCH: "new-sketch",
         TEMPLATE: "template",
         ADMIN_SETTINGS: "admin-settings",
+        ACTIVE_USER: "active-users",
     },
     
     PublicFeedDimensions = {
@@ -121,6 +132,7 @@ const Config = {
         TITLE_BASE: 20,
         TITLE_MULTIPLICANT: 20,
         MENUBAR_OFFSET: 30,
+
     };
 
 export {Config, EventKeys, SocketKeys, PublicFeedDimensions};
