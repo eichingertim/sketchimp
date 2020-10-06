@@ -10,6 +10,19 @@
     align-items: center;
 }
 
+.dialog-container-inner {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    border-radius: 1vw;
+    z-index: 5;
+    min-width: 35vw;
+    background-color: var(--dark-grey);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    padding: 1.5vw;
+}
+
 label {
     color: var(--teal-accent);
     font-size: 0.8vw;
@@ -88,17 +101,4 @@ input[type='radio']:checked:after {
     position: absolute;
     top: 20px;
     right: 20px;
-}
-
-.dialog-container-inner {
-    display: flex;
-    align-items: center;
-    position: relative;
-    justify-content: center;
-    border-radius: 1vw;
-    z-index: 5;
-    min-width: 35vw;
-    background-color: var(--darkest-grey);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    padding: 1.5vw;
 }

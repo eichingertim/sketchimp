@@ -2,6 +2,35 @@ body {
     box-sizing: content-box;
 }
 
+.btn {
+    font-family: "uni_sansheavy_caps", sans-serif;
+    font-weight: 700;
+    padding: 10px 24px;
+    -webkit-transition: background-color .3s ease, color .3s ease;
+    transition: background-color .3s ease, color .3s ease;
+}
+
+.btn-radius {
+    -webkit-transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+    transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+}
+
+.btn-radius {
+    -webkit-transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+    transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+}
+
+.btn-primary, .btn-primary:focus {
+    background-color: var(--teal-accent);
+    border: 0;
+    color: var(--white-font);
+}
+
+.btn-primary:hover, .btn-primary:active:focus {
+    background-color: var(--teal-accent-darker);
+    color: var(--white-font);
+}
+
 .dashboard {
     overflow: hidden;
     display: flex;
