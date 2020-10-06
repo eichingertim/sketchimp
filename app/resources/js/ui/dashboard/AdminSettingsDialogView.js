@@ -87,7 +87,7 @@ class AdminSettingsDialogView extends View {
 
     updateValues(channel, user) {
         let instance = this;
-        this.el.querySelector(".form-control").value = this.channelName;
+        this.el.querySelector("#channel-name").value = this.channelName;
         this.el.querySelector(".role-list").innerHTML = "";
         channel.members.forEach((member) => {
             let clone = instance.el.querySelector("#member-template-admin-dialog").content.cloneNode(true);
@@ -120,7 +120,7 @@ class AdminSettingsDialogView extends View {
             role = element.querySelector(".role-tag");
             return { userId: userId, role: role.textContent };
         });
-        newName = this.el.querySelector(".form-control").value;
+        newName = this.el.querySelector("#channel-name").value;
         return { channelId: this.channelId, channelName: newName, userList: userList };
     }
 }

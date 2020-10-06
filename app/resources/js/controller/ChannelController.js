@@ -14,7 +14,7 @@ class ChannelController {
         if (event) {
             event.preventDefault();
         }
-
+        console.log(url);
         return new Promise(function (resolve, reject) {
             let xhr = new XMLHttpRequest(),
                 xhrSketch = new XMLHttpRequest();

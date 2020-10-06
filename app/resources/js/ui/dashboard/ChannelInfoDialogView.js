@@ -55,6 +55,7 @@ function setListener(channelInfoDialogView) {
             channelInfoDialogView.el.querySelector("#channel-upload").click();
         });
         channelInfoDialogView.el.querySelector("#channel-upload").addEventListener("change", (event) => {
+            channelInfoDialogView.el.querySelector("#form-upload-channel-icon").classList.remove("hidden");
             channelInfoDialogView.el.querySelector("#selected-file").innerHTML = event.target.value;
             channelInfoDialogView.el.querySelector("#btn-upload-channel").style.visibility = "visible";
         });

@@ -239,7 +239,7 @@ class Dashboard {
         this.setDialogListener(this);
         window.addEventListener("click", () => {
             userProfileDialogView.hide();
-        })
+        });
     }
 
     setDrawAreaListener(instance) {
