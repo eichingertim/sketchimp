@@ -20,7 +20,9 @@ function onSubmitChannelClick(createChannelDialogView, data) {
         sketchName = createChannelDialogView.el.querySelector("#r_sketch_name").value,
         decision = createChannelDialogView.el.querySelector("input[name='layer']:checked").value;
 
-    createChannelDialogView.notifyAll(new CreateChannelEvent(channelName, sketchName, (decision === "multi-layer")));
+    if (!channelName.match("^\s*$") && !sketchName.match("^\s*$")) {
+        createChannelDialogView.notifyAll(new CreateChannelEvent(channelName.trim(), sketchName.trim(), (decision === "multi-layer")));
+    }
 }
 
 function onDialogCloseClick(createChannelDialogView, data) {
@@ -43,6 +45,7 @@ class CreateChannelDialogView extends View {
 
     clearAfterSubmit() {
         this.el.querySelector("#r_name").value = "";
+        this.el.querySelector("#r_sketch_name").value = "";
         this.hide();
     }
 
