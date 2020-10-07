@@ -156,18 +156,23 @@ Classes
   height: 100%;
 }
 
-.navigation-logo-text {
+.navigation-logo .logo-text {
   opacity: 1;
   color: var(--white-font) !important;
   transition: opacity 0.25s ease-in-out;
 }
 
-.navigation-logo-text:hover {
-  opacity: 0.3;
+.logo-text {
+  font-family: "uni_sansheavy_caps", sans-serif;
+  font-weight: 700;
 }
 
-.navigation-logo-text span {
+.logo-text span {
   color: var(--teal-accent) !important;
+}
+
+.navigation-logo .logo-text:hover {
+  opacity: 0.3;
 }
 
 .navigation-buttons {
