@@ -329,6 +329,14 @@ class Dashboard {
                 drawAreaView.setDrawingActivated(true);
             });
 
+        channelInfoDialogView.addEventListener(EventKeys.UPLOAD_CHANNEL_ICON, (event) => {
+            ChannelController.uploadChannelIcon(event.data.form).then(() => {
+                window.location.reload();
+            }).catch(error => {
+
+            })
+        });
+
         //CreateChannelAndSketchDialog
         createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => 
         ChannelController.createChannel(event.data)

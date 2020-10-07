@@ -101,6 +101,8 @@ const Config = {
         ADMIN_SETTINGS_CLICK: "AdminSettingsClick",
         MEMBER_KICK_CLICK: "MemberKickClick",
         ACTIVE_USER_RECEIVED: "ActiveUserReceived",
+
+        UPLOAD_CHANNEL_ICON: "UploadChannelIcon",
     },
 
     SocketKeys = {

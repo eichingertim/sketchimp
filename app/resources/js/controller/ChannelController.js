@@ -22,7 +22,7 @@ class ChannelController {
             xhr.onload = function () {
                 let data = JSON.parse(this.response).data, channel;
                 if (data) {
-                    channel = new ChannelModel(data.id, data.name, data.creator.id, data.creator.username, data.creation, data.members);
+                    channel = new ChannelModel(data.id, data.name, data.creator.id, data.creator.username, data.creation, data.members, data.icon);
                 }
                 xhrSketch.open(Config.HTTP_GET, Config.API_URL_CURRENT_SKETCH + data.id, true);
                 xhrSketch.onload = function () {
@@ -35,6 +35,20 @@ class ChannelController {
             xhr.send();
         });
 
+    }
+
+    static uploadChannelIcon(form) {
+        return new Promise(
+            function (resolve, reject) {
+                let xhr = new XMLHttpRequest(),
+                    formData = new FormData(form);
+                xhr.open(Config.HTTP_POST, form.action, true);
+                xhr.onload = function() {
+                    resolve();
+                };
+                xhr.send(formData);
+            }
+        );
     }
 
     static createChannel(data) {
@@ -53,7 +67,8 @@ class ChannelController {
                         channel;
 
                     if (channelData) {
-                        channel = new ChannelModel(channelData.id, channelData.name, channelData.creator.id, channelData.creator.username, channelData.creation, channelData.members);
+                        channel = new ChannelModel(channelData.id, channelData.name, channelData.creator.id, 
+                            channelData.creator.username, channelData.creation, channelData.members, channelData.icon);
                     }
 
                     xhrSketch.open(Config.HTTP_POST, Config.API_URL_NEW_SKETCH + channelData.id, true);
