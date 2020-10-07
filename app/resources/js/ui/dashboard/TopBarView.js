@@ -71,6 +71,22 @@ function setFullScreenListener(topBarView) {
     btnPublishSketch.addEventListener("click", onPublishClick.bind(this, topBarView));
 }
 
+function setLabelColor (element, role) {
+    if(role === "admins"){
+        element.textContent = "admins";
+        element.classList.remove("label-info","label-danger");
+        element.classList.add("label-success");
+    } else if(role === "collaborators"){
+        element.textContent = "collaborators";
+        element.classList.remove("label-success", "label-danger");
+        element.classList.add("label-info");
+    } else {
+        element.textContent = "viewers";
+        element.classList.remove("label-success", "label-info");
+        element.classList.add("label-danger");
+    }
+}
+
 class TopBarView extends View {
     constructor(el) {
         super();
@@ -88,6 +104,8 @@ class TopBarView extends View {
         } else {
             this.adminSettingsButton.classList.add("hidden");
         }
+        let roleTag = this.el.querySelector(".role-tag");
+        setLabelColor(roleTag, currentChannelRole);
     }
 
     clearSketchHistory() {

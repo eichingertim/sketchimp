@@ -89,20 +89,29 @@ class AdminSettingsDialogView extends View {
         let instance = this;
         this.el.querySelector("#channel-name").value = this.channelName;
         this.el.querySelector(".role-list").innerHTML = "";
-        channel.members.forEach((member) => {
-            let clone = instance.el.querySelector("#member-template-admin-dialog").content.cloneNode(true);
-            clone.querySelector(".member").innerHTML = member.username;
-            clone.querySelector(".member").id = member.id;
-            clone.querySelector(".role-tag").innerHTML = member.role;
-            if (channel.creatorId !== user.userId) {
-                clone.querySelector(".kick-member").classList.add("hidden");
-            }
-            instance.el.querySelector(".role-list").appendChild(clone);
-        });
-        setListener(this);
-        Array.from(this.el.querySelectorAll(".member-item")).forEach((member, index) => {
-            setLabelColor(member.querySelector(".role-tag"), instance.users[index].role);
-        });
+        if (channel.members.length === 0) {
+            this.el.querySelector(".role-list").classList.add("hidden");
+            this.el.querySelector("#empty-view").classList.remove("hidden");
+        } else {
+            this.el.querySelector(".role-list").classList.remove("hidden");
+            this.el.querySelector("#empty-view").classList.add("hidden");
+            channel.members.forEach((member) => {
+                let clone = instance.el.querySelector("#member-template-admin-dialog").content.cloneNode(true);
+                clone.querySelector(".member").innerHTML = member.username;
+                clone.querySelector(".member").id = member.id;
+                clone.querySelector(".role-tag").innerHTML = member.role;
+                if (channel.creatorId !== user.userId) {
+                    clone.querySelector(".kick-member").classList.add("hidden");
+                }
+                instance.el.querySelector(".role-list").appendChild(clone);
+            });
+            setListener(this);
+            Array.from(this.el.querySelectorAll(".member-item")).forEach((member, index) => {
+                setLabelColor(member.querySelector(".role-tag"), instance.users[index].role);
+            });
+        }
+
+        
     }
 
     setSettings(channel) {
