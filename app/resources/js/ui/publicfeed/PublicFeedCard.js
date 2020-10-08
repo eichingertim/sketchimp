@@ -24,8 +24,13 @@ function setScore(card, votes){
     card.querySelector(".card-score").innerHTML = votes;
     if (votes < 0) {
         card.querySelector(".card-score").classList.add("negative");
+        card.querySelector(".card-score").classList.remove("positive");
     } else if (votes > 0) {
         card.querySelector(".card-score").classList.add("positive");
+        card.querySelector(".card-score").classList.remove("negative");
+    } else {
+        card.querySelector(".card-score").classList.remove("positive");
+        card.querySelector(".card-score").classList.remove("negative");
     }
 }
 
