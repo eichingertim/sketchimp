@@ -57,10 +57,6 @@ body {
     margin-right: 1vh;
 }
 
-.hidden {
-    display: none !important;
-}
-
 /* The alert message box */
 .error-alert {
     max-width: 70%;

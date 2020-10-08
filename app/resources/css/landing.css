@@ -30,6 +30,10 @@ body {
 
 .grid-container .text-box {
     padding: 60px 0px 0px 80px;
+    width: 60%;
+    float: left;
+    position: relative;
+    min-height: 1px;
 }
 
 .row {
@@ -38,6 +42,8 @@ body {
 
 .grid-container .row {
     padding: 100px 50px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .grid-container hr {
@@ -45,10 +51,17 @@ body {
     border: 1px solid #999999;
 }
 
+.grid-container .img-box {
+    width: 40%;
+    float: right;
+}
+
 .grid-container .img-box .img {
     max-width: 100%;
     border-radius: 25px;
     padding: 10px;
+    vertical-align: middle;
+    border: 0;
 }
 
 .landing-top-bar {

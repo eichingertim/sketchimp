@@ -49,3 +49,25 @@
 #admin-settings-dialog .member-item {
     display: block;
 }
+
+.label {
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.label-success {
+    background-color: #5cb85c;
+}
+
+.label-danger {
+    background-color: #d9534f;
+}
+
+.label-info {
+    background-color: #5bc0de;
+}
+
