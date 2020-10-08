@@ -1,0 +1,132 @@
+.container-top-bar-history-outer {
+    width: 100%;
+    padding: 1vw;
+    background-color: var(--darkest-grey);
+}
+
+.container-top-bar-history-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: .5vw;
+    background-color: var(--dark-grey);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    border-radius: 15px;
+}
+
+.dashboard-top-app-bar {
+    display: flex;
+    height: 6vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    min-height: 45px;
+    border-bottom: 1px solid var(--bright);
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: var(--dark-grey);
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.info-settings-container {
+    display: flex;
+    align-items: center;
+    justify-content:center
+}
+
+.admin-settings-icon {
+    cursor: pointer;
+    height: 50%;
+    width: auto;
+    bottom: 0;
+    margin-bottom: 0;
+}
+
+.channel-info-icon {
+    cursor: pointer;
+    height: 50%;
+    width: auto;
+    bottom: 0;
+    margin-bottom: 0;
+}
+
+#channel-nav {
+    background-color: var(--highlight);
+    border-radius: 50%;
+    padding: 10px;
+    height: auto;
+    margin-right: 15px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#channel-nav:hover {
+    border-radius: 10px;
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.channel-title {
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.dashboard-sketch-history-container {
+    display: flex;
+    height: 5vh;
+    min-height: 45px;
+    width: 100%;
+    background-color: var(--dark-grey);
+}
+
+.sketch-history-list-img {
+    margin: 2px;
+}
+
+.sketch-history-list-item {
+    display: flex;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 100%;
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    -moz-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.sketch-history-list-item:hover {
+    transform:scale(1.2);
+    opacity: .5;
+}
+
+.sketch-history-list {
+    list-style-type: none;
+    margin: 0;
+    width: 100%;
+    padding: 8px;
+    overflow:auto;
+    white-space: nowrap;
+    display: flex;
+}
+
+.fullscreen-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    height: 100%;
+    background: var(--fullscreen-background);
+    display: flex;
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+}

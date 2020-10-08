@@ -1,29 +1,84 @@
 # Projekt
 
-[Beschreiben Sie hier in einer kurzen Zusammenfassung Hintergrund, Ziele und Funktionen Ihrer Anwendung. Fügen Sie einen sinnvollen Screenshot ein. Geben Sie eine Link zu einer lauffähigen, online-erreichbaren Version der fertigen Anwendung an.]
-
-Die geplanten Features der Anwendung werden [hier](./Features.md) beschrieben. Das verwendete Software Design ist [hier](./Design.md) zusammengefasst. Allgemeine Guidelines, die das Team im Rahmen des Projekts einhalten möchte werden [hier](./GFuidelines.md) zusammengetragen.
+Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benutzern bieten. Der Fokus liegt dabei auf dem Zusammenschluss in Gruppen (Channels), die eine Zeichenfläche zur Verfügung gestellt bekommen, mit der sie gemeinsam an einem Sketch arbeiten können. Die so erstellten Zeichnungen können abgeschlossen und wenn gewünscht veröffentlicht werden. Im "Public Feed" werden diese dann, zusammen mit Bildern anderer Kanäle, allen angemeldeten und anonymen Besuchern angezeigt und können von ersteren mit "Gefällt mir" oder "Gefällt mir nicht" ausgezeichnet werden.
 
 ## Team
 
-[Beschreiben Sie hier die einzelnen Teammitglieder mit Namen, E-Mail-Adresse, Github-Nutzer und Foto. Nennen Sie mindestens eine Komponenten der Anwendung, die in wesentlichen Teilen vom jeweiligen Teammitglied entwickelt wurde.]
+1. [Tim Eichinger](https://github.com/eichingertim) - tim1.eichinger@stud.uni-regensburg.de
+  * Komponenten: 
+    * Websocket 
+    * Zeichenkomponente+Toolbox
+    * Dashboard Frontend
+    * Sketch-History
+    * Sketch-Export und Vorlagen Import
+2. [Tobias Dollhofer](https://github.com/tobiasdollhofer) - tobias.dollhofer@stud.uni-regensburg.de
+  * Komponenten: 
+    * Sketchfunktionalität Backend (Datenbankmodel, Upload) 
+    * Publicfeed
+    * Web- und Datenbankhosting
+    * Logo-Design
+    * Impressum
+3. [Lukas Schauhuber](https://github.com/luggaesch) - lukas.schauhuber@stud.uni-regensburg.de
+  * Komponenten: 
+    * Backendrouting und Express-Konfiguration
+    * Datenbank, Modelle User und Channel
+    * Authentifizierung
+    * Channelsystem
+    * Frontend Landing- und PublicFeed
+    * View Engine
+    * Dateiupload
+    * Domainregistrierung
+4. [Timon Lorenz](https://github.com/TimmensOne)
+5. Jonas Ernst
 
-## Setup und Testing
+## Setup und Ausführen der Anwendung
 
-Im Starterpaket ist ein einfacher Webserver vorgegeben, mit dem Sie die Inhalte des Ordners `/app` statisch ausliefern können. Benutzen Sie diesen, um Ihre Anwendung zu entwickeln und zu testen. Sollten Sie zu Realisierung Ihrer Anwendung eine komplexere Serverkomponente benötigen, können Sie die vorhandenen Dateien (`index.js` und `lib/AppServer.js`) als Ausgangslage für eigene Erweiterungen nutzten. Speichern Sie alle weiteren, serverseitig verwendeten Dateien im Verzeichnis `/lib` ab.
+Die App wird vom Projektteam unter der Domain http://sketchimp.me angeboten.
+Zusätzlich besteht die Möglichkeit, das Projekt direkt auf einem eigenen Webserver auszuführen.
+Allerdings ist zu beachten, dass, ohne Anpassung der Datenbank-Verbindung, die Bild-Referenzen nicht geladen werden können, da die Quelldateien nur auf dem gehosteten Webserver vorliegen. Die reguläre Datenbank-URL liegt unter `/lib/config/Constants.js` als Konstante vor.
 
-So nutzen Sie den vorgegebenen Server:
+Um die Anwendung lokal zu installieren und zu starten sind keine besonderen Schritte notwendig. 
+Es reichen folgende Kommandos:
 
-1. Führen Sie **einmalig** den Befehl `npm install` aus, um die notwendigen Abhängigkeiten (`express`) zu installieren.
+```npm install```
 
-2. Führen Sie den Befehl `npm start` aus um die Anwendung zu starten. Der Inhalt des `/app`-Verzeichnis ist anschließend über die die Adresse `http://localhost:8000/app` erreichbar.
-
-### Automatisches Bauen der Anwendung
-
-Unter Umständen müssen oder wollen Sie vor dem Ausführen bzw. Bereitstellen Ihrer Anwendung bestimmte Optimierungsvorgänge durchführen (z.B. mehrere Javascript-Dateien zu einer zusammenfügen oder Grafikdateien für die Verwendung im Browser anpassen). Versuchen Sie diese Schritte mithilfe entsprechende *Node.js*-Module zu lösen und implementieren Sie die Automatisierung in der Datei `build.js`. Sie können diese Datei über den Befehl `npm run build` starten. Dabei wird vor dem Ausführen der Datei der Javascript-Code unter `app/resources/js/` auf Fehler und Warnungen (*eslint*) geprüft. Der automatisierte Bau der Software startet nur dann, wenn Ihr Code fehlerfrei ist.
-
-[Beschreiben Sie alle Schritte, die notwendig sind um Ihre Anwendung auf Basis dieses Repositorys zu starten.]
+```npm start```
 
 ## Beschreibung
 
-[Dokumentieren Sie ausführlich alle Funktionen der Anwendung. Verwenden Sie Screenshots und ggf. auch Gif-Dateien um zentrale Elemente und Abläufe zu beschreiben.]
+* Registrieren von Usern
+  * -- Screenshot Signup Maske --
+* Anmeldung im System
+  * -- Screenshot Login Maske --
+* Erstellen von Channels Beitreten von Channels
+  * -- Screenshot Channel Create Maske --
+* Zeichnen auf eigenem peristentem Canvas pro Channel
+  * -- Screenshot Canvas --
+* Festlegen von Benutzerrollen mit verschiedenen Rechten pro Channel
+  * -- Screenshot Channel Admin Panel --
+* Verwendung eines Ebenensystems
+  * -- Screenshot Layer Auswahl --
+* Wechseln von Stiftgrößen, Farben; Radieren, Rückgängig machen, Löschen
+  * -- Screenshot Toolbox --
+* Ändern von Usereinstellungen, Hochladen eines Avatars
+  * -- Screenshot User Profile --
+* Hochladen eines Channel Avatars
+  * -- Screenshot Channel Info --
+* Abschließen von Zeichnungen
+  * -- Screenshot Save Sketch Maske --
+* Veröffentlichen von Zeichnungen
+  * -- Screenshot Finalize and Publish Sketch --
+* Anzeigen einer Zeichenhistorie im Channel
+  * -- Screenshot Sketch History --
+* Exportieren von Zeichnungen
+  * -- Screenshot Export Sketch --
+* Auflistung aller veröffentlichten Zeichnungen im Public Feed
+  * -- Screenshot Public Feed --
+* Upvote und Downvote von Sketches
+  * -- Screenshot Card Hover --
+* Scoresystem bei Benutzern
+  * -- Screenshot User Hover --
+* Dynamisches Reloading des Frontends über AJAX
+  * -- Gif AJAX Reloading --
+* Eigen erstellte Server-API zur Abfrage von Channels/Usern/Sketches
+  * -- Screenshot Lookup API --

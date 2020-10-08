@@ -1,0 +1,90 @@
+html {
+    font-size: 10px;
+}
+body {
+    margin: 0 !important;
+    box-sizing: content-box;
+}
+
+.btn {
+    font-family: "uni_sansheavy_caps", sans-serif;
+    font-weight: 700;
+    padding: 10px 24px;
+    -webkit-transition: background-color .3s ease, color .3s ease;
+    transition: background-color .3s ease, color .3s ease;
+}
+
+.btn-radius {
+    -webkit-transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+    transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+}
+
+.btn-radius {
+    -webkit-transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+    transition: border-radius 0.4s cubic-bezier(1, 0.885, 0.32, 1.275);
+}
+
+.btn-primary, .btn-primary:focus {
+    background-color: var(--teal-accent);
+    border: 0;
+    color: var(--white-font);
+}
+
+.btn-primary:hover, .btn-primary:active:focus {
+    background-color: var(--teal-accent-darker);
+    color: var(--white-font);
+}
+
+.dashboard {
+    overflow: hidden;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.dashboard-main-content-container {
+    flex-grow: 1;
+    flex-shrink: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--bright);
+    margin-left: 1vh;
+    margin-right: 1vh;
+}
+
+/* The alert message box */
+.error-alert {
+    max-width: 70%;
+    border-radius: 10px;
+    position: absolute;
+    padding: 20px;
+    background-color: var(--alert); /* Red */
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+/* The close button */
+.error-alert-close {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+/* When moving the mouse over the close button */
+.error-alert-close:hover {
+    color: black;
+}

@@ -1,0 +1,11 @@
+@import "dashboard/colors.css";
+@import "dashboard/basic.css";
+@import "dashboard/scrollbar.css";
+@import "dashboard/content/left_sidebar.css";
+@import "dashboard/content/topbar_sketch_history.css";
+@import "dashboard/content/canvas.css";
+@import "dashboard/content/right_sidebar.css";
+@import "dashboard/dialogs/dialog_base.css";
+@import "dashboard/dialogs/channel_info_dialog.css";
+@import "dashboard/dialogs/user_profile_dialog.css";
+@import "dashboard/dialogs/admin_settings_dialog.css";

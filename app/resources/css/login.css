@@ -1,0 +1,124 @@
+@import "dashboard/colors.css";
+@import "dashboard/dialogs/dialog_base.css";
+
+.login-container {
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.dialog {
+    height: 45vw;
+    max-height: 90%;
+    width: 55vw;
+    display: flex; 
+    align-items: center;
+    padding: 10vw 3vw;
+    border-color: var(--teal-accent);
+    border-style: solid;
+    border-radius: 2%;
+    border-width: 2px;
+    transition: background-color 0.1s linear;
+    background-color: var(--darkest-grey);
+}
+
+.dialog:hover {
+    background-color: rgba(255,255,255,0.005);
+}
+
+.login-form {
+    padding: 0 0.5vw;
+    width: 50%;
+}
+
+.login-form p {
+    width: 100%; 
+    text-align: start; 
+    font-size: 2vw; 
+    text-transform: uppercase; 
+    margin-bottom: 1.5vw;
+}
+
+.login-form form {
+    width: 100%;
+}
+
+.login-form form div {
+    display: flex; 
+    flex-direction: column; 
+    padding: 0.5vw 0;
+    margin: 0.7vw 0;
+}
+
+.login-form form div label {
+    color: var(--teal-accent);
+    font-size: 1vw;
+}
+
+.login-form form div input {
+    padding: 0.5vw 0.8vw;
+    font-size: 1.3vw;
+    border: 0; 
+    border-radius: 3px; 
+    border-bottom: 1px solid #444444; 
+    background-color: transparent;
+}
+
+.login-form form div input:focus {
+    background-color: rgba(255,255,255,0.03);
+    outline: none;
+}
+
+.login-form form .help * {
+    font-size: 0.75vw; 
+    margin-bottom: 0.1vw;
+    text-transform: capitalize;
+}
+
+.btn-login {
+    width: 100%; 
+    color: white; 
+    background-color: var(--darkest-grey);
+    border-color: var(--teal-accent); 
+    border-radius: 10px; 
+    border-style: solid; 
+    padding: 0.8vw 2vw; 
+    margin-top: 1vw;
+    font-size: 1.2vw;
+}
+
+.btn-login:hover {
+    background-color: var(--teal-accent);
+    color: white;
+}
+
+.vl {
+    border: 1px solid white; 
+    height: 75%;
+    margin: 0vh 1.5vw;
+}
+
+.logo {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    width: 50%;
+}
+
+.logo img {
+    width: 50%;
+}
+
+.logo span {
+    text-align: center; 
+    font-size: 3vw;
+    font-family: "uni_sansheavy_caps", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.logo span span {
+    color: var(--teal-accent);
+}

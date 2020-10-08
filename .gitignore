@@ -1,2 +1,4 @@
 # Verhindert das Versionieren lokal installierter Abhängigkeiten
 node_modules
+.idea
+app/resources/img/uploads

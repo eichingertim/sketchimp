@@ -1,0 +1,9 @@
+:root {
+    --dark-grey: #151515;
+    --darkest-grey: #111111;
+    --fullscreen-background: rgba(60, 60, 60, 0.7);
+    --highlight: #343434;
+    --bright: #565656;
+    --accent: #12c2aa;
+    --alert: rgba(219, 74, 42, 0.7);
+}

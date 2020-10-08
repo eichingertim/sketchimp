@@ -1,0 +1,129 @@
+.profile-container {
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.profile-image {
+    vertical-align: middle;
+    border: 0;
+}
+
+.dialog {
+    height: 40vw;
+    max-height: 95%;
+    width: 50vw;
+    display: flex; 
+    align-items: center;
+    padding: 2vw 2vw;
+    border-color: var(--teal-accent);
+    border-style: solid;
+    border-radius: 2%;
+    border-width: 2px;
+    transition: background-color 0.1s linear;
+    background-color: var(--darkest-grey);
+}
+
+.dialog:hover {
+    background-color: rgba(255,255,255,0.005);
+}
+
+.profile-avatar {
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    width: 30%; 
+    align-items: center; 
+    margin-right: 1vw;
+}
+
+.profile-avatar div, .profile-avatar div img, .profile-avatar div div {
+    width: 100%;
+}
+
+.profile-avatar form {
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+}
+
+.profile-avatar form button {
+    width: 70%;
+}
+
+.profile-form {
+    padding: 0 0.4vw;
+    width: 70%;
+}
+
+.profile-title {
+    display: flex; 
+    margin-top: 0.9vw; 
+    justify-content: space-between; 
+    align-items: start;
+}
+
+.profile-title h3 {
+    width: 100%; 
+    text-align: start; 
+    font-size: 1.8vw; 
+    text-transform: uppercase; 
+}
+
+.score-container {
+    display: flex; 
+    align-items: center;
+}
+
+.score-container img {
+    margin-right: 0.9vw;
+    width: 1.8vw;
+}
+
+.score-container span {
+    font-size: 1.8vw;
+}
+
+.profile-form form {
+    width: 100%;
+}
+
+.profile-form form div {
+    display: flex; 
+    flex-direction: column; 
+    padding: 0.4vw 0;
+    margin: 0.6vw 0;
+}
+
+.profile-form form p, .profile-form form div input {
+    padding: 0.4vw 0.7vw;
+    font-size: 1.2vw;
+    margin: 0;
+}
+
+.profile-form form div label {
+    color: var(--teal-accent);
+    font-size: 0.9vw;
+}
+
+.profile-form form div input {
+    border: 0; 
+    border-radius: 3px; 
+    border-bottom: 1px solid #444444; 
+    background-color: transparent;
+}
+
+.profile-form form div input:focus {
+    background-color: rgba(255,255,255,0.03);
+    outline: none;
+}
+
+.profile-form form .help * {
+    font-size: 0.70vw; 
+    margin-bottom: 0.1vw;
+    text-transform: capitalize;
+}

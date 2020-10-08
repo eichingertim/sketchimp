@@ -1,6 +1,7 @@
 /* eslint-env node */
 
-const AppServer = require("./lib/AppServer.js");
+const AppServer = require("./lib/AppServer.js"),
+  Constants = require("./lib/config/Constants");
 
 var server;
 
@@ -9,8 +10,10 @@ var server;
  */
 function init() {
   // Access command line parameters from start command (see package.json)
-  let appDirectory = process.argv[2], // folder with client files
-    appPort = process.argv[3]; // port to use for serving static files
+  /*let appDirectory = process.argv[2], // folder with client files
+    appPort = process.argv[3]; */// port to use for serving static files
+  let appDirectory = Constants.APPDIR,
+    appPort = Constants.PORT;
   server = new AppServer(appDirectory);
   server.start(appPort);
 }
