@@ -117,6 +117,7 @@ const Config = {
         TEMPLATE: "template",
         ADMIN_SETTINGS: "admin-settings",
         ACTIVE_USER: "active-users",
+        ERROR: "error",
     },
     
     PublicFeedDimensions = {
