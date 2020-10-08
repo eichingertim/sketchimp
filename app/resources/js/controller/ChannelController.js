@@ -208,14 +208,14 @@ class ChannelController {
         );
     }
 
-    static deleteChannel(socket, channelId) {
+    static deleteChannel(socket, channelId, userId) {
         return new Promise(
             function (resolve, reject) {
                 let xhr = new XMLHttpRequest();
                 xhr.open(Config.HTTP.DELETE, Config.API_URLS.DELETE_CHANNEL + channelId, true);
                 xhr.withCredentials = true;
                 xhr.onload = function () {
-                    socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId});
+                    socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId, userId: userId});
                     Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
                 };
                 xhr.send();

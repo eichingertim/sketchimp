@@ -281,7 +281,10 @@ class Dashboard {
             memberListView.updateActiveState(event.data);
         });
         drawAreaController.addEventListener(EventKeys.DELETE_CHANNEL, (event) => {
-            fetchChannelData(instance, Config.API_URLS.CHANNEL + event.data.channelId);
+            let userId = event.data.userId;
+            if (instance.user.userId !== userId) {
+                window.location.reload();
+            }
         })
     }
 
@@ -319,12 +322,15 @@ class Dashboard {
                 topBarView.showAlert(error);
             }));
         channelInfoDialogView.addEventListener(EventKeys.DELETE_CHANNEL_CLICK, () =>
-            ChannelController.deleteChannel(instance.socket, instance.channel.channelId)
+            ChannelController.deleteChannel(instance.socket, instance.channel.channelId, instance.user.userId)
                 .then((data) => {
                     if (data && data.channelId) {
                         channelInfoDialogView.hide();
                         drawAreaView.setDrawingActivated(true);
+                        channelListView.removeChannel(data.channelId);
                         fetchChannelData(instance, Config.API_URLS.CHANNEL + data.channelId);
+                    } else {
+                        window.location.reload();
                     }
                 }).catch(error => {
                     topBarView.showAlert(error);

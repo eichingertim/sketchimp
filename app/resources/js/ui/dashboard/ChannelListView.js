@@ -48,6 +48,17 @@ class ChannelListView extends View {
         this.el.insertBefore(clone, this.el.children[this.el.children.length-1]);
         setListener(this);
     }
+
+    removeChannel(channelId) {
+        console.log(this.el);
+        let id = Config.API_URLS.CHANNEL + channelId,
+            channelElement = this.el.querySelector(`a[id="${id}"]`);
+        console.log(id)
+        console.log(channelElement);
+        if (channelElement) {
+            channelElement.remove();
+        }
+    }
 }
 
 export default ChannelListView;
