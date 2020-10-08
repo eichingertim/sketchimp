@@ -24,7 +24,7 @@ const Config = {
             POST: "POST",
             GET: "GET",
             DELETE: "DELETE",
-            PATCH: "PATH",
+            PATCH: "PATCH",
         },
         SUCCESS_ERROR: 0,
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
