@@ -68,7 +68,10 @@ Um den Upload von benutzereigenen Daten zu ermöglichen, wird die `StorageWorker
 
 ### Socket.IO
 
-Die `Socket.IO` Library wird als Websocket eingesetzt, um das kollaborative Zeichnen in Echtzeit zu ermöglichen. Um zwischen verschiedenen Channels zu unterscheiden, werden zwischen Clients Events mit dynamisch generierten Identifiern emited.
+Die `Socket.IO` Library wird als Websocket eingesetzt, um das kollaborative Zeichnen in Echtzeit zu ermöglichen. Um zwischen verschiedenen Channels zu unterscheiden, werden zwischen Clients Events mit dynamisch generierten Identifiern emited. Als Events wurde folgende Tags festgelegt:
+* UNSUBSCRIBE, SUBSCRIBE, LINE_DRAWN, LINE_UNDO, CLEAR_CANVAS, CHANNEL_LINE_HISTORY, DELETE_CHANNEL, NEW_SKETCH, TEMPLATE, ADMIN_SETTINGS, ACTIVE_USER, ERROR
+
+Da auch hier Fehler auftreten können, werden alle Operation im `socketWrapper.js` per try/catch abgesichert und falls ein Fehler auftritt, wird durch den *error*-Tag das dem Client mitgeteilt.
 
 ## Dependencies
 
