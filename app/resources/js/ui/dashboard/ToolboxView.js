@@ -119,6 +119,9 @@ class ToolboxView extends View {
         this.sizeItems[0].style.border = "2px solid white"
         this.notifyAll(new SizeChangeEvent(this.sizeItems[0].style.height));
         this.sizeItems.forEach(item => {
+            if (item.id !== "stroke-size-extra-small") {
+                item.style.border = "";
+            }
             item.style.backgroundColor = instance.colorPicker.color.hexString;
         });
     }

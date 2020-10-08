@@ -60,9 +60,6 @@ function onChannelDataForEnteringLoaded(dashboard, channel) {
     }
 
     channelInfoDialogView.updateInfo(channel, (channel.creatorId === dashboard.user.userId));
-    document.querySelector(".channel-title").textContent = channel.channelName;
-    memberListView.updateMembers(channel);
-
     if (dashboard.channel === null) {
         dashboard.onJoin(channel);
     } else {
@@ -438,6 +435,8 @@ class Dashboard {
     onJoin(channel) {
         if (channel.channelName !== undefined) {
             this.channel = channel;
+            memberListView.updateMembers(channel);
+            topBarView.updateChannelName(channel.channelName);
             topBarView.updateRoleVisibility(this.user.currentChannelRole);
             adminSettingsDialogView.setSettings(channel);
             drawAreaController.join(channel.channelId, this.user.userId);
@@ -448,6 +447,7 @@ class Dashboard {
                 userRole: this.user.currentChannelRole,
             });
             drawAreaView.setDrawingActivated(true);
+            toolboxView.reset();
             loadSketchHistory(channel.channelId);
 
         } else {

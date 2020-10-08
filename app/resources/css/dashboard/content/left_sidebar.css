@@ -25,6 +25,11 @@
     border-radius: 15px;
 }
 
+.dashboard-channels-container ::-webkit-scrollbar {
+    width: 0;
+    background: transparent; /* make scrollbar transparent */
+}
+
 .channels-container-outer {
     padding: 1vw;
     flex-shrink: 0;
@@ -38,9 +43,9 @@
 .dashboard-nav-shortcuts {
     display: flex;
     align-items: center;
-    height: 100%;
     justify-content: flex-end;
     flex-direction: column;
+    margin-top: 10px;
     padding-bottom: 10px;
 }
 

@@ -63,35 +63,35 @@ class SaveLoadView extends View {
     }
 
     setSketchSaved() {
-        let btnSave = this.el.querySelector("#save"),
-            tmp = btnSave.value;
+        let btnSave = this.el.querySelector("#span-save"),
+            tmp = btnSave.innerHTML;
 
-        btnSave.value = "Successfully saved";
+        btnSave.innerHTML = "Successfully saved";
 
         setTimeout(function(){
-            btnSave.value = tmp;
+            btnSave.innerHTML = tmp;
         }, Config.DELAY_SHOW_SUCCESS);
     }
 
     setSketchFinalized() {
-        let btnFinalizeAndCreate = this.el.querySelector("#save-publish"),
-            tmp = btnFinalizeAndCreate.value;
+        let btnFinalizeAndCreate = this.el.querySelector("#span-archive"),
+            tmp = btnFinalizeAndCreate.innerHTML;
 
-        btnFinalizeAndCreate.value = "Successfully Finalized";
+        btnFinalizeAndCreate.innerHTML = "Successfully Finalized";
 
         setTimeout(function(){
-            btnFinalizeAndCreate.value = tmp;
+            btnFinalizeAndCreate.innerHTML = tmp;
         }, Config.DELAY_SHOW_SUCCESS);
     }
 
     setSketchExported() {
-        let btnExportDownload = this.el.querySelector("#export-download"),
-            tmp = btnExportDownload.value;
+        let btnExportDownload = this.el.querySelector("#span-download"),
+            tmp = btnExportDownload.innerHTML;
 
-        btnExportDownload.value = "Successfully Exported";
+        btnExportDownload.innerHTML = "Successfully Exported";
 
         setTimeout(function(){
-            btnExportDownload.value = tmp;
+            btnExportDownload.innerHTML = tmp;
         }, Config.DELAY_SHOW_SUCCESS);
     }
 }

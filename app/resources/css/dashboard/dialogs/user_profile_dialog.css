@@ -1,6 +1,15 @@
 .modal-user-profile {
+    display: flex;
+    position: absolute;
+    z-index: 101;
+    border-radius: 10px;
     max-width: 400px;
     transform: scale(0.7);
+    width: 100%;
+    box-shadow: 0 0 24px rgba(17, 17, 26, 0.4);
+    background-color: var(--dark-grey);
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-user-profile .flex-container {
@@ -10,6 +19,7 @@
 }
 
 .modal-user-profile .flex-header {
+    border-radius: 10px 10px 0 0;
     background-color: var(--accent);
     display: flex;
     max-height: 30%;

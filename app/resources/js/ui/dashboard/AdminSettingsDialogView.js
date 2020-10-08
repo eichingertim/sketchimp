@@ -1,5 +1,6 @@
 import View from "../View.js";
 import { Event } from "../../utils/Observable.js";
+import Helper from "../../utils/Helper.js";
 import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
 class SaveSettingsClickEvent extends Event {
@@ -44,33 +45,17 @@ function setListener(adminSettingsDialogView) {
         });
         member.querySelector(".admin").addEventListener("click", () => {
             let element = member.querySelector(".role-tag");
-            setLabelColor(element, "admins");
+            Helper.setLabelColor(element, "admins");
         });
         member.querySelector(".collaborator").addEventListener("click", () => {
             let element = member.querySelector(".role-tag");
-            setLabelColor(element, "collaborators");
+            Helper.setLabelColor(element, "collaborators");
         });
         member.querySelector(".observer").addEventListener("click", () => {
             let element = member.querySelector(".role-tag");
-            setLabelColor(element, "Observer");
+            Helper.setLabelColor(element, "Observer");
         });
     });
-}
-
-function setLabelColor (element, role) {
-    if(role === "admins"){
-        element.textContent = "admins";
-        element.classList.remove("label-info","label-danger");
-        element.classList.add("label-success");
-    } else if(role === "collaborators"){
-        element.textContent = "collaborators";
-        element.classList.remove("label-success", "label-danger");
-        element.classList.add("label-info");
-    } else {
-        element.textContent = "viewers";
-        element.classList.remove("label-success", "label-info");
-        element.classList.add("label-danger");
-    }
 }
 
 class AdminSettingsDialogView extends View {
@@ -107,7 +92,7 @@ class AdminSettingsDialogView extends View {
             });
             setListener(this);
             Array.from(this.el.querySelectorAll(".member-item")).forEach((member, index) => {
-                setLabelColor(member.querySelector(".role-tag"), instance.users[index].role);
+                Helper.setLabelColor(member.querySelector(".role-tag"), instance.users[index].role);
             });
         }
 

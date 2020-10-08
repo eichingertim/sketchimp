@@ -16,7 +16,6 @@ function init() {
         channel.channelId = channelId;
         dashboard.onJoin(channel);
     }
-
 }
 
 init();
