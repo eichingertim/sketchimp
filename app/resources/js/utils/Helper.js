@@ -1,3 +1,5 @@
+import {Config, EventKeys, SocketKeys} from "./Config.js";
+
 class Helper {
     static setLabelColor (element, role) {
         if(role === "admins"){
@@ -12,6 +14,32 @@ class Helper {
             element.textContent = "viewers";
             element.classList.remove("label-success", "label-info");
             element.classList.add("label-danger");
+        }
+    }
+
+    static handleSimpleResponse(resolve, reject, jsonString) {
+        try {
+            let response = JSON.parse(jsonString);
+            if (response.success !== Config.SUCCESS_ERROR) {
+                resolve()
+            } else {
+                reject(response.message)
+            }
+        } catch (error) {
+            reject(error);
+        }
+    }
+
+    static handleResponseWithCallbackParam(resolve, reject, jsonString) {
+        try {
+            let response = JSON.parse(jsonString);
+            if (response.success !== Config.SUCCESS_ERROR) {
+                resolve(response.data)
+            } else {
+                reject(response.message)
+            }
+        } catch (error) {
+            reject(error);
         }
     }
 }
