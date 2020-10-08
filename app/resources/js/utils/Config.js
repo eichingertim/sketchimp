@@ -114,6 +114,8 @@ const Config = {
         ACTIVE_USER_RECEIVED: "ActiveUserReceived",
 
         UPLOAD_CHANNEL_ICON: "UploadChannelIcon",
+
+        DELETE_CHANNEL: "DeleteChannel"
     },
 
     SocketKeys = {

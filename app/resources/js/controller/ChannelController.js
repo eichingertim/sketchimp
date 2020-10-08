@@ -216,7 +216,7 @@ class ChannelController {
                 xhr.withCredentials = true;
                 xhr.onload = function () {
                     socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId});
-                    Helper.handleSimpleResponse(resolve, reject, this.response);
+                    Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
                 };
                 xhr.send();
             },

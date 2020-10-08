@@ -26,7 +26,7 @@ function setMouseListener(drawAreaView) {
         if (drawAreaView.isDrawingActivated) {
             drawAreaView.mouse.click = true;
         }
-    });
+    }, { passive: true} );
 
     drawAreaView.stage.on("mouseup touchend", function () {
         if (drawAreaView.isDrawingActivated) {
@@ -34,7 +34,7 @@ function setMouseListener(drawAreaView) {
             drawAreaView.mouse.posPrev = false;
             drawAreaView.mouse.move = false;
         }
-    });
+    }, { passive: true});
 
     drawAreaView.stage.on("mousemove touchmove", function () {
         if (drawAreaView.isDrawingActivated) {
@@ -45,7 +45,7 @@ function setMouseListener(drawAreaView) {
             drawAreaView.mouse.move = true;
             checkAndNotifyForDrawing(drawAreaView);
         }
-    });
+    }, { passive: true});
 }
 
 function clearAndSetupCollaboratorLayer(drawAreaView) {

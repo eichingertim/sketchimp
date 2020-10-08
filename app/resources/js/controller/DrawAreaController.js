@@ -37,6 +37,14 @@ class TemplateReceivedEvent extends Event {
     }
 }
 
+class DeleteChannelEvent extends Event {
+    constructor(data) {
+        super(EventKeys.DELETE_CHANNEL, data);
+    }
+}
+
+
+
 function getMarkedAsAdminLine(isMultiLayer, userRole) {
     if (isMultiLayer) {
         return userRole === Config.CHANNEL_ROLE_ADMIN;
@@ -64,7 +72,7 @@ class DrawAreaController extends Observable {
         let instance = this;
         this.socket.emit(SocketKeys.SUBSCRIBE, {channelId: channelId, userId: userId});
 
-        this.socket.on(SocketKeys.DELETE_CHANNEL, () => window.location.reload());
+        this.socket.on(SocketKeys.DELETE_CHANNEL, (data) => instance.notifyAll(new DeleteChannelEvent(data)));
         this.socket.on(SocketKeys.ADMIN_SETTINGS, () => window.location.reload());
         this.socket.on(SocketKeys.TEMPLATE, (data) => instance.notifyAll(new TemplateReceivedEvent(data)));
         this.socket.on(SocketKeys.NEW_SKETCH, (data) => instance.notifyAll(new NewSketchEvent(data)));

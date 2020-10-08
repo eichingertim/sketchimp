@@ -280,6 +280,9 @@ class Dashboard {
         drawAreaController.addEventListener(EventKeys.ACTIVE_USER_RECEIVED, (event) => {
             memberListView.updateActiveState(event.data);
         });
+        drawAreaController.addEventListener(EventKeys.DELETE_CHANNEL, (event) => {
+            fetchChannelData(instance, Config.API_URLS.CHANNEL + event.data.channelId);
+        })
     }
 
     setToolboxListener(instance) {
@@ -317,13 +320,16 @@ class Dashboard {
             }));
         channelInfoDialogView.addEventListener(EventKeys.DELETE_CHANNEL_CLICK, () =>
             ChannelController.deleteChannel(instance.socket, instance.channel.channelId)
-                .then(() => {
-                    channelInfoDialogView.hide();
-                    drawAreaView.setDrawingActivated(true);
-                    window.location.reload();
+                .then((data) => {
+                    if (data && data.channelId) {
+                        channelInfoDialogView.hide();
+                        drawAreaView.setDrawingActivated(true);
+                        fetchChannelData(instance, Config.API_URLS.CHANNEL + data.channelId);
+                    }
                 }).catch(error => {
-                topBarView.showAlert(error);
-            }));
+                    topBarView.showAlert(error);
+                }
+            ));
         channelInfoDialogView.addEventListener(EventKeys.CLOSE_INFO_DIALOG, () => {
             channelInfoDialogView.hide();
             drawAreaView.setDrawingActivated(true);
@@ -408,10 +414,10 @@ class Dashboard {
         //RightBar Save/Publish/Export Buttons
         saveLoadView.addEventListener(EventKeys.SKETCH_SAVE_CLICK, () =>
             SketchController.saveSketch(instance.socket, instance.channel.channelId).then(() => {
-            saveLoadView.setSketchSaved();
-        }).catch(error => {
-            topBarView.showAlert(error);
-        }));
+                saveLoadView.setSketchSaved();
+            }).catch(error => {
+                topBarView.showAlert(error);
+            }));
         saveLoadView.addEventListener(EventKeys.SKETCH_FINALIZE_CLICK, () => {
             if (instance.user.currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
                 drawAreaView.setDrawingActivated(false);

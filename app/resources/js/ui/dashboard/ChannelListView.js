@@ -43,7 +43,7 @@ class ChannelListView extends View {
             let channelTemplate = this.el.querySelector("#channel-template"),
             clone = channelTemplate.content.cloneNode(true),
             anchor = clone.querySelector("a");
-        anchor.id = Config.API_URL_CHANNEL + channel.channelId;
+        anchor.id = Config.API_URLS.CHANNEL + channel.channelId;
         anchor.textContent = channel.channelName.substring(0, 1);
         this.el.insertBefore(clone, this.el.children[this.el.children.length-1]);
         setListener(this);
