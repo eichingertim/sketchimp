@@ -44,7 +44,11 @@ label {
 }
 
 .layer-decision {
-    margin-bottom: 3vh;
+    margin-bottom: 2vh;
+}
+
+.layer-decision input {
+    margin-bottom: 2vh;
 }
 
 .text-input {
