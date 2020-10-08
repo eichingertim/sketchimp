@@ -14,9 +14,10 @@ Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benu
 2. [Tobias Dollhofer](https://github.com/tobiasdollhofer) - tobias.dollhofer@stud.uni-regensburg.de
   * Komponenten: 
     * Sketchfunktionalität Backend (Datenbankmodel, Upload) 
-    * Publicfeed Kartendesign 
+    * Publicfeed
     * Web- und Datenbankhosting
     * Logo-Design
+    * Impressum
 3. [Lukas Schauhuber](https://github.com/luggaesch) - lukas.schauhuber@stud.uni-regensburg.de
   * Komponenten: 
     * Backendrouting und Express-Konfiguration
