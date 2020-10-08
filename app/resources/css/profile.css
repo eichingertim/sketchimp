@@ -93,14 +93,18 @@
     margin: 0.7vw 0;
 }
 
+.profile-form form p, .profile-form form div input {
+    padding: 0.5vw 0.8vw;
+    font-size: 1.3vw;
+    margin: 0;
+}
+
 .profile-form form div label {
     color: var(--teal-accent);
     font-size: 1vw;
 }
 
 .profile-form form div input {
-    padding: 0.5vw 0.8vw;
-    font-size: 1.3vw;
     border: 0; 
     border-radius: 3px; 
     border-bottom: 1px solid #444444; 
