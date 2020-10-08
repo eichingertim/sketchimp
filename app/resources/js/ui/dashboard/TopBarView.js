@@ -155,6 +155,16 @@ class TopBarView extends View {
         this.fullScreenContainer.classList.add("hidden");
     }
 
+    showAlert(message) {
+        let alertBox = this.el.querySelector(".error-alert"),
+            alertMessage = this.el.querySelector("#error-message");
+        alertBox.classList.remove("hidden");
+        alertMessage.innerHTML = message;
+        setTimeout(function () {
+            alertBox.classList.add("hidden");
+        }, Config.DELAY_SHOW_ERROR)
+    }
+
 }
 
 export default TopBarView;

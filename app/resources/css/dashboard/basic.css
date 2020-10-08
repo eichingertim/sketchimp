@@ -60,3 +60,35 @@ body {
 .hidden {
     display: none !important;
 }
+
+/* The alert message box */
+.error-alert {
+    max-width: 70%;
+    border-radius: 10px;
+    position: absolute;
+    padding: 20px;
+    background-color: var(--alert); /* Red */
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+/* The close button */
+.error-alert-close {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+/* When moving the mouse over the close button */
+.error-alert-close:hover {
+    color: black;
+}

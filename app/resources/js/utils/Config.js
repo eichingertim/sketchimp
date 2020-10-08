@@ -26,6 +26,7 @@ const Config = {
             DELETE: "DELETE",
             PATCH: "PATH",
         },
+        SUCCESS_ERROR: 0,
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
         UUID_PATTERN: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
         CANVAS_WIDTH: 1080,
@@ -46,6 +47,7 @@ const Config = {
         CHANNEL_ROLE_COLLABORATOR: "collaborators",
         CHANNEL_ROLE_VIEWER: "viewers",
         DELAY_SHOW_SUCCESS: 3000,
+        DELAY_SHOW_ERROR: 6000,
         PUBLIC_FEED_CARDS_PER_SECTION: 25,
         LAZY_LOADING_COOLDOWN: 500,
         STATES: {
@@ -128,7 +130,7 @@ const Config = {
         ACTIVE_USER: "active-users",
         ERROR: "error",
     },
-    
+
     PublicFeedDimensions = {
         CARD_DEFAULT: 395,
         SCORE_DEFAULT: 55,
