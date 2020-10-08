@@ -1,5 +1,5 @@
 const Config = {
-        API_URL_NEW_CHANNEL: "/api/channel/new/",
+        API_URL_NEW_CHANNEL: "/api/channel/new",
         API_URL_NEW_SKETCH: "/api/sketch/new/",
         CONTENT_TYPE_URL_ENCODED: "application/x-www-form-urlencoded",
         CONTENT_TYPE_JSON: "application/json",
@@ -17,6 +17,8 @@ const Config = {
         API_URL_SKETCH_ALL_PUBLISHED: "/api/sketch/all-published",
         HTTP_POST: "POST",
         HTTP_GET: "GET",
+        HTTP_DELETE: "DELETE",
+        HTTP_PATCH: "PATCH",
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
         UUID_PATTERN: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
         CANVAS_WIDTH: 1080,

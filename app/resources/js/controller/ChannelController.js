@@ -58,10 +58,13 @@ class ChannelController {
                     xhrSketch = new XMLHttpRequest(),
                     channelName = data.name,
                     sketchName = data.sketchName,
+                    channelReqBody = { channelName: channelName },
                     isMultiLayer = data.isMultiLayer;
 
-                xhr.open(Config.HTTP_POST, Config.API_URL_NEW_CHANNEL + channelName, true);
+                xhr.open(Config.HTTP_POST, Config.API_URL_NEW_CHANNEL, true);
                 xhr.withCredentials = true;
+                xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
+
                 xhr.onload = function () {
                     let channelData = JSON.parse(this.response).data,
                         channel;
@@ -88,8 +91,8 @@ class ChannelController {
 
                     xhrSketch.send("name=" + sketchName.split(" ").join("+") + "&multilayer=" + isMultiLayer);
                 };
-                xhr.send();
-            },
+                xhr.send(JSON.stringify(channelReqBody));
+            }
         );
 
     }
@@ -130,11 +133,11 @@ class ChannelController {
                     bodyChannel = {channelName: settings.channelName},
                     xhrMember = new XMLHttpRequest(),
                     bodyMember = createBodyMember(settings.userList);
-                xhrChannel.open(Config.HTTP_POST, "/api/channel/update/" + settings.channelId, true);
+                xhrChannel.open(Config.HTTP_PATCH, "/api/channel/update/" + settings.channelId, true);
                 xhrChannel.withCredentials = true;
                 xhrChannel.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                 xhrChannel.onload = function () {
-                    xhrMember.open(Config.HTTP_POST, "/api/channel/roles/" + settings.channelId, true);
+                    xhrMember.open(Config.HTTP_PATCH, "/api/channel/roles/" + settings.channelId, true);
                     xhrMember.withCredentials = true;
                     xhrMember.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                     xhrMember.onload = function () {
@@ -168,7 +171,7 @@ class ChannelController {
         return new Promise(
             function (resolve, reject) {
                 let xhr = new XMLHttpRequest();
-                xhr.open(Config.HTTP_POST, Config.API_URL_DELETE_CHANNEL + channelId, true);
+                xhr.open(Config.HTTP_DELETE, Config.API_URL_DELETE_CHANNEL + channelId, true);
                 xhr.withCredentials = true;
                 xhr.onload = function () {
                     socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId});
