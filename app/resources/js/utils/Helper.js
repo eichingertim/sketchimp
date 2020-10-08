@@ -42,6 +42,14 @@ class Helper {
             reject(error);
         }
     }
+
+    static getCookiePosition(cookies) {
+        for (let i = 0; i < cookies.length; i++) {
+            if (cookies[i].includes("user-id")) {
+                return i;
+            }
+        }
+    }
 }
 
 export default Helper;
