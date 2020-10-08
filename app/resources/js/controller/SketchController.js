@@ -9,8 +9,8 @@ class SketchController {
                 socket.emit(SocketKeys.CHANNEL_LINE_HISTORY, {channelId: channelId, socketId: socketId});
                 socket.on(SocketKeys.CHANNEL_LINE_HISTORY, function (data) {
                     let xhr = new XMLHttpRequest(),
-                        url = Config.API_URL_SKETCH_SAVE + channelId;
-                    xhr.open(Config.HTTP_POST, url, true);
+                        url = Config.API_URLS.SKETCH_SAVE + channelId;
+                    xhr.open(Config.HTTP.POST, url, true);
                     xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                     xhr.onload = function () {
                         resolve();
@@ -30,8 +30,8 @@ class SketchController {
                         multilayer: isNewSketchMultiLayer,
                         image: imageBase64,
                     },
-                    url = Config.API_URL_FINALIZE_SKETCH + channelId;
-                xhr.open(Config.HTTP_POST, url, true);
+                    url = Config.API_URLS.FINALIZE_SKETCH + channelId;
+                xhr.open(Config.HTTP.POST, url, true);
                 xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                 xhr.onload = function () {
                     let newSketchData = JSON.parse(this.response).data;
@@ -48,7 +48,7 @@ class SketchController {
         return new Promise(
             function (resolve, reject) {
                 let xhr = new XMLHttpRequest();
-                xhr.open(Config.HTTP_POST, Config.API_URL_SKETCH_PUBLISH + sketchId, true);
+                xhr.open(Config.HTTP.POST, Config.API_URLS.SKETCH_PUBLISH + sketchId, true);
                 xhr.onload = function () {
                     resolve();
                 };
@@ -61,7 +61,7 @@ class SketchController {
         return new Promise(
           function (resolve, reject) {
               let xhr = new XMLHttpRequest();
-              xhr.open(Config.HTTP_GET, Config.API_URL_FINALIZED_SKETCHES + channelId, true);
+              xhr.open(Config.HTTP.GET, Config.API_URLS.FINALIZED_SKETCHES + channelId, true);
               xhr.onload = function () {
                   let sketches = JSON.parse(this.response).data;
                   resolve(sketches);

@@ -8,10 +8,9 @@ class MemberController {
             function (resolve, reject) {
                 let xhr = new XMLHttpRequest();
                 xhr.withCredentials = true;
-                xhr.open(Config.HTTP_GET, url, true);
+                xhr.open(Config.HTTP.GET, url, true);
                 xhr.onload = function() {
                     let data = JSON.parse(this.response).data;
-                    console.log(data);
                     resolve(data);
                 };
                 xhr.send();

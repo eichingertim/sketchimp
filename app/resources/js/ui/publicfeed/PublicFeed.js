@@ -70,20 +70,20 @@ function createCardsforNextSection(parentDiv){
 
 function onLikeClick(event){
     if(event.data){
-        sendClickActionToApi(Config.API_URL_SKETCH_LIKE + event.data);
+        sendClickActionToApi(Config.API_URLS.SKETCH_LIKE + event.data);
     }
 }
 
 function onDislikeClick(event){
     if(event.data){
-        sendClickActionToApi(Config.API_URL_SKETCH_DISLIKE + event.data);
+        sendClickActionToApi(Config.API_URLS.SKETCH_DISLIKE + event.data);
     }
 }
 
 // Method sends a post-request to api and handles the vote action when returned from api
 function sendClickActionToApi(url){
     let xhr = new XMLHttpRequest();
-    xhr.open(Config.HTTP_POST, url, true);
+    xhr.open(Config.HTTP.POST, url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
         try{
@@ -140,7 +140,7 @@ function getHighestAndLowestVotes(){
 // Method collects all published sketches from api and creates the first cards from it
 function getAllPublished(){
     let xhr = new XMLHttpRequest();
-    xhr.open(Config.HTTP_GET, Config.API_URL_SKETCH_ALL_PUBLISHED, true);
+    xhr.open(Config.HTTP.GET, Config.API_URLS.SKETCH_ALL_PUBLISHED, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
         try{
