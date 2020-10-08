@@ -74,7 +74,11 @@ class DrawAreaController extends Observable {
         this.socket.on(SocketKeys.ACTIVE_USER, (data) => {
             instance.notifyAll(new ActiveUserEvent(data));
         });
+        this.socket.on(SocketKeys.ERROR, (error) => console.log(error));
+    }
 
+    emitLeaveChannel(channelId, userId) {
+        this.socket.emit(SocketKeys.UNSUBSCRIBE, {channelId: channelId, userId: userId});
     }
 
     emitAdminSettingsChanged(channelId) {
@@ -92,7 +96,7 @@ class DrawAreaController extends Observable {
     emitNewSketch(channelId, sketchId, sketchName, sketchMultiLayer) {
         this.socket.emit(SocketKeys.NEW_SKETCH, {
             channelId: channelId,
-            sketchId: sketchName,
+            sketchId: sketchId,
             sketchName: sketchName,
             sketchMultiLayer: sketchMultiLayer,
         });

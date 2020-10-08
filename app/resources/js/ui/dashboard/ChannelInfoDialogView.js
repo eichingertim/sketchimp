@@ -20,6 +20,12 @@ class CloseInfoDialogEvent extends Event {
     }
 }
 
+class UploadChannelIconEvent extends Event {
+    constructor(data) {
+        super(EventKeys.UPLOAD_CHANNEL_ICON, data);
+    }
+}
+
 function onLeaveChannelClick(channelInfoDialogView, data) {
     channelInfoDialogView.notifyAll(new LeaveChannelClickEvent());
 }
@@ -43,6 +49,19 @@ function copy2Clipboard(str) {
     document.body.removeChild(ta);
 }
 
+function readURL(channelInfoDialogView, input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      
+      reader.onload = function(e) {
+        channelInfoDialogView.el.querySelector("#channel-icon").classList.add("preview")
+        channelInfoDialogView.el.querySelector("#channel-icon").src = e.target.result;
+      }
+      
+      reader.readAsDataURL(input.files[0]); // convert to base64 string
+    }
+  }
+
 function setListener(channelInfoDialogView) {
     try {
         channelInfoDialogView.el.querySelector(".leave-channel")
@@ -56,8 +75,17 @@ function setListener(channelInfoDialogView) {
         });
         channelInfoDialogView.el.querySelector("#channel-upload").addEventListener("change", (event) => {
             channelInfoDialogView.el.querySelector("#form-upload-channel-icon").classList.remove("hidden");
-            channelInfoDialogView.el.querySelector("#selected-file").innerHTML = event.target.value;
+            channelInfoDialogView.el.querySelector("#channel-icon").classList.remove("hidden");
+            channelInfoDialogView.el.querySelector(".placeholder-channel-icon").classList.add("hidden");
+            console.log(event);
+            readURL(channelInfoDialogView, event.target);
             channelInfoDialogView.el.querySelector("#btn-upload-channel").style.visibility = "visible";
+        });
+        channelInfoDialogView.el.querySelector("#form-upload-channel-icon").addEventListener("submit", (event) => {
+            event.preventDefault();
+            channelInfoDialogView.notifyAll(new UploadChannelIconEvent({form: event.target}));
+
+            //window.location.reload();
         });
 
         let btnCopyChannelId = channelInfoDialogView.el.querySelector(".copy-channel-id");
@@ -83,8 +111,22 @@ class ChannelInfoDialogView extends View {
     }
 
     updateInfo(channel, isCreator) {
+        let image = this.el.querySelector("#channel-icon"),
+                placeholder = this.el.querySelector(".placeholder-channel-icon"),
+                date = new Date(channel.creationDate);
+
+        if (channel.channelIcon) {
+            image.classList.remove("hidden");
+            image.src = channel.channelIcon;
+            placeholder.classList.add("hidden");
+        } else {
+            image.classList.add("hidden");
+            placeholder.classList.remove("hidden");
+            placeholder.innerHTML = channel.channelName.substring(0,1).toUpperCase();
+        }
+
         this.el.querySelector(".info-channel-name").textContent = channel.channelName;
-        this.el.querySelector(".info-channel-creation").textContent = channel.creationDate;
+        this.el.querySelector(".info-channel-creation").textContent = date.toDateString() + ", " + date.toLocaleTimeString();
         this.el.querySelector(".info-channel-creator").textContent = channel.creatorName;
         this.el.querySelector("#form-upload-channel-icon").action = "/api/channel/upload/" + channel.channelId;
         if (isCreator) {

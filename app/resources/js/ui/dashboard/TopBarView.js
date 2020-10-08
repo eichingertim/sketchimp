@@ -1,10 +1,9 @@
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
+import Helper from "../../utils/Helper.js";
 import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
 
-let fullScreenContainer = document.querySelector(".fullscreen-image"),
-    closeFullscreen = fullScreenContainer.querySelector("#close-full-screen"),
-    btnPublishSketch = fullScreenContainer.querySelector("#publish-to-public-feed");
+
 
 class ChannelInfoClick extends Event {
     constructor() {
@@ -67,8 +66,8 @@ function setListener(topBarView) {
 }
 
 function setFullScreenListener(topBarView) {
-    closeFullscreen.addEventListener("click", onCloseClick.bind(this, topBarView));
-    btnPublishSketch.addEventListener("click", onPublishClick.bind(this, topBarView));
+    topBarView.closeFullscreen.addEventListener("click", onCloseClick.bind(this, topBarView));
+    topBarView.btnPublishSketch.addEventListener("click", onPublishClick.bind(this, topBarView));
 }
 
 class TopBarView extends View {
@@ -78,6 +77,9 @@ class TopBarView extends View {
         this.adminSettingsButton = this.el.querySelector(".admin-settings-icon");
         this.channelInfoButton = this.el.querySelector(".channel-info-icon");
         this.sketchHistoryList = this.el.querySelector(".sketch-history-list");
+        this.fullScreenContainer = document.querySelector(".fullscreen-image");
+        this.closeFullscreen = this.fullScreenContainer.querySelector("#close-full-screen");
+        this.btnPublishSketch = this.fullScreenContainer.querySelector("#publish-to-public-feed");
         setListener(this);
         setFullScreenListener(this);
     }
@@ -88,6 +90,12 @@ class TopBarView extends View {
         } else {
             this.adminSettingsButton.classList.add("hidden");
         }
+        let roleTag = this.el.querySelector(".role-tag");
+        Helper.setLabelColor(roleTag, currentChannelRole);
+    }
+
+    updateChannelName(channelName) {
+        this.el.querySelector(".channel-title").innerHTML = channelName;
     }
 
     clearSketchHistory() {
@@ -116,28 +124,35 @@ class TopBarView extends View {
     }
 
     finishedPublishing() {
-        btnPublishSketch.innerHTML = "Published Successfully";
-        let instance = this;
-        btnPublishSketch.removeEventListener("click", onPublishClick.bind(this, instance));
+        let tmp = this.btnPublishSketch.innerHTML,
+            instance = this;
+
+        this.btnPublishSketch.innerHTML = "Published Successfully";
+
+        setTimeout(function(){
+            instance.btnPublishSketch.innerHTML = tmp;
+            instance.btnPublishSketch.classList.add("hidden");
+        }, Config.DELAY_SHOW_SUCCESS);
+        this.btnPublishSketch.removeEventListener("click", onPublishClick.bind(this, instance));
     }
 
     showImageFullscreen(data) {
-        let imageTag = fullScreenContainer.children[0];
+        let imageTag = this.fullScreenContainer.children[0];
 
         if (data.isPublished) {
-            btnPublishSketch.classList.add("hidden");
+            this.btnPublishSketch.classList.add("hidden");
         } else {
-            btnPublishSketch.classList.remove("hidden");
+            this.btnPublishSketch.classList.remove("hidden");
         }
 
         imageTag.src = data.image;
         imageTag.id = data.sketchId;
 
-        fullScreenContainer.classList.remove("hidden");
+        this.fullScreenContainer.classList.remove("hidden");
     }
 
     closeFullScreen() {
-        fullScreenContainer.classList.add("hidden");
+        this.fullScreenContainer.classList.add("hidden");
     }
 
 }

@@ -1,6 +1,6 @@
 class ChannelModel {
 
-    constructor(channelId, channelName, creatorId, creatorName, creationDate, members) {
+    constructor(channelId, channelName, creatorId, creatorName, creationDate, members, channelIcon) {
         this.channelId = channelId;
         this.channelName = channelName;
         this.creationDate = creationDate;
@@ -8,6 +8,7 @@ class ChannelModel {
         this.creatorName = creatorName;
         this.members = members;
         this.currentSketch = null;
+        this.channelIcon = channelIcon;
     }
 
 }

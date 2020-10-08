@@ -10,3 +10,24 @@
     flex-direction: column;
     align-items: center;
 }
+
+.placeholder-channel-icon {
+    height: 160px; 
+    width: 160px; 
+    max-width: 100%; 
+    border-radius: 50%; 
+    background-color: var(--accent);
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.preview {
+    max-width: 160px;
+    width: 160px;
+    max-height: 160px;
+    height: 160px;
+}

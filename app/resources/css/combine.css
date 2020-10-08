@@ -457,9 +457,9 @@ label, .label {
 .profile-image-container {
   margin-top: 15px;
   position: relative;
-  width: 80%;
+  width: 100%;
   height: fit-content;
-  max-width: 80%;
+  max-width: 100%;
 }
 
 #profile-upload {

@@ -11,6 +11,7 @@ class MemberController {
                 xhr.open(Config.HTTP_GET, url, true);
                 xhr.onload = function() {
                     let data = JSON.parse(this.response).data;
+                    console.log(data);
                     resolve(data);
                 };
                 xhr.send();
