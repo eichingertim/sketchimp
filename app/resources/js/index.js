@@ -1,13 +1,16 @@
 /* eslint-env browser */
 import ChannelModel from "./models/ChannelModel.js";
 import Dashboard from "./Dashboard.js";
+import Helper from "./utils/Helper.js";
 
 let socket = io(),
     dashboard;
 
 function init() {
-    let id = document.cookie.split("="),
-        filteredUserId = (decodeURIComponent(id[1]).match("\".*\"")[0]).toString().match("[^\"]+")[0],
+    let cookieArray = document.cookie.split("; "),
+        cookie = cookieArray[Helper.getCookiePosition(cookieArray)].split("=")[1],
+        decoded = decodeURIComponent(cookie).match("\".*\""),
+        filteredUserId = (decoded[0]).toString().match("[^\"]+")[0],
         channelId = document.querySelector(".info-channel-id").textContent;
 
     dashboard = new Dashboard(socket, filteredUserId);
