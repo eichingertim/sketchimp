@@ -74,7 +74,10 @@ class DrawAreaController extends Observable {
         this.socket.on(SocketKeys.ACTIVE_USER, (data) => {
             instance.notifyAll(new ActiveUserEvent(data));
         });
-        this.socket.on(SocketKeys.ERROR, (error) => console.log(error));
+        this.socket.on(SocketKeys.ERROR, (error) => {
+            console.log(error)
+            window.location.reload();
+        });
     }
 
     emitLeaveChannel(channelId, userId) {
