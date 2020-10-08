@@ -29,7 +29,7 @@ function createNext(){
         // eslint-disable-next-line no-undef
         masonry = new Masonry(parentDiv, {
             itemSelector: ".card",
-            columnWidth: 150,
+            columnWidth: 100,
             fitWidth: true,
             originLeft: false,
         });
