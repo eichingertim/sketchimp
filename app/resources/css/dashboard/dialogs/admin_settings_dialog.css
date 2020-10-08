@@ -20,6 +20,10 @@
 }
 
 .dropdown-menu {
+    display: none;
+    list-style: none;
+    z-index: 10;
+    position: absolute;
     margin: 0;
     background-color: #343434;
 }
@@ -37,7 +41,7 @@
 }
 
 .role-item {
-    max-width: 100%;
+    padding: 15px 10px;
 }
 
 .role-item a {
@@ -47,7 +51,10 @@
 
 
 #admin-settings-dialog .member-item {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
 }
 
 .label {
