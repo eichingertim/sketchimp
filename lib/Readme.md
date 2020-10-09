@@ -103,5 +103,5 @@ Zur Umsetzung der Anwendung werden eine Reihe von Fremdlibraries verwendet:
     * passport - Authentifizierungslösung
     * passport-local - Kombination mit Passport
     * path - Umgang mit Verzeichnissen und Pfaden in Nodejs
-    * socketio - Websocket für Echtzeitkommunikation
+    * socket.io - Websocket für Echtzeitkommunikation
     * streamifier - Umgang mit FileUpload
