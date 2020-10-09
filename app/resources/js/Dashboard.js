@@ -345,7 +345,7 @@ class Dashboard {
                     if (data && data.channelId) {
                         channelInfoDialogView.hide();
                         drawAreaView.setDrawingActivated(true);
-                        channelListView.removeChannel(data.channelId);
+                        channelListView.removeChannel(instance.channel.channelId);
                         fetchChannelData(instance, Config.API_URLS.CHANNEL + data.channelId);
                     } else {
                         window.location.reload();
