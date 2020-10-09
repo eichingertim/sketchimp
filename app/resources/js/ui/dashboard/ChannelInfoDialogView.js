@@ -120,6 +120,7 @@ class ChannelInfoDialogView extends View {
             placeholder.innerHTML = channel.channelName.substring(0, 1).toUpperCase();
         }
 
+        this.el.querySelector(".info-channel-id").textContent = channel.channelId;
         this.el.querySelector(".info-channel-name").textContent = channel.channelName;
         this.el.querySelector(".info-channel-creation").textContent = date.toDateString() + ", " + date.toLocaleTimeString();
         this.el.querySelector(".info-channel-creator").textContent = channel.creatorName;

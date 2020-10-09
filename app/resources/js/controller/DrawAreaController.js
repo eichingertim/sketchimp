@@ -73,7 +73,7 @@ class DrawAreaController extends Observable {
             instance.notifyAll(new ActiveUserEvent(data));
         });
         this.socket.on(SocketKeys.ERROR, () => {
-            window.location.reload();
+            console.log("Socket Error");
         });
     }
 
