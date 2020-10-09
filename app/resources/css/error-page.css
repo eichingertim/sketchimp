@@ -42,10 +42,20 @@ h1 {
 
 h2 {
     font-weight: bold;
+    font-size: 3em;
 }
 
 p {
     font-size: 1.8em;
+}
+
+.row div {
+    float: right; 
+    width: 50%;
+}
+
+a {
+    text-decoration: none;
 }
 
 .btn {
@@ -58,8 +68,8 @@ p {
     cursor: pointer;
     font-size: 2em;
     letter-spacing: 2px;
-    -webkit-transition: 0.2s ease;
-    transition: 0.2s ease;
+    -webkit-transition: 0.1s ease;
+    transition: 0.1s ease;
     font-weight: bold;
     margin: 5px 0px;
 }
@@ -78,19 +88,22 @@ p {
     height: 100%;
     background: var(--green);
     z-index: -1;
-    -webkit-transition: 0.2s ease;
-    transition: 0.2s ease;
+    -webkit-transition: 0.1s ease;
+    transition: 0.1s ease;
+    border-radius: 30px;
 }
 
 .btn.green:hover {
     color: var(--white);
     background: var(--green);
-    -webkit-transition: 0.2s ease;
-    transition: 0.2s ease;
+    -webkit-transition: 0.1s ease;
+    transition: 0.1s ease;
+    border-radius: 30px;
 }
 
 .btn.green:hover:before {
     width: 100%;
+    border-radius: 30px;
 }
 
 @media screen and (max-width: 768px) {

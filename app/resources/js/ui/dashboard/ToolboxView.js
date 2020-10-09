@@ -1,6 +1,6 @@
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class DeleteForeverEvent extends Event {
     constructor() {
@@ -30,14 +30,6 @@ class UndoEvent extends Event {
     constructor() {
         super(EventKeys.UNDO_CLICK, null);
     }
-}
-
-function onUndoClick(toolboxView, data) {
-    toolboxView.notifyAll(new UndoEvent());
-}
-
-function onDeleteForeverClick(toolboxView, data) {
-    toolboxView.notifyAll(new DeleteForeverEvent());
 }
 
 function onSizeItemClick(toolboxView, data) {
@@ -70,21 +62,31 @@ function addClickListeners(toolboxView) {
     toolboxView.sizeItems.forEach((sizeItem) => {
         sizeItem.addEventListener("click", onSizeItemClick.bind(this, toolboxView));
     });
-    toolboxView.undo.addEventListener("click", onUndoClick.bind(this, toolboxView));
-    toolboxView.deleteForever.addEventListener("click", onDeleteForeverClick.bind(this, toolboxView));
+    toolboxView.undo.addEventListener("click", () => {
+        toolboxView.notifyAll(new UndoEvent());
+    });
+    toolboxView.deleteForever.addEventListener("click", () => {
+        toolboxView.notifyAll(new DeleteForeverEvent());
+    });
 
     toolboxView.colorPicker.on("color:change", onColorChanged.bind(this, toolboxView));
 }
 
+/**
+ * Iro is imported in the dashboard.ejs file -> not defined in this script
+ */
 function initColorSlider() {
+    // eslint-disable-next-line no-undef
     return new iro.ColorPicker("#color-slider-container", {
         layout: [{
+            // eslint-disable-next-line no-undef
                 component: iro.ui.Wheel,
                 options: {
                     sliderType: "hue",
                 },
             },
             {
+                // eslint-disable-next-line no-undef
                 component: iro.ui.Slider,
                 options: {
                     sliderType: "value",
@@ -92,7 +94,7 @@ function initColorSlider() {
             },
         ],
         color: Config.DEFAULT_PEN_COLOR,
-        width: 80,
+        width: Config.WIDTH_COLOR_PICKER,
         layoutDirection: "horizontal",
     });
 }
@@ -116,7 +118,7 @@ class ToolboxView extends View {
     reset() {
         this.colorPicker.reset();
         let instance = this;
-        this.sizeItems[0].style.border = "2px solid white"
+        this.sizeItems[0].style.border = Config.SIZE_ITEM_SELECTED_BORDER;
         this.notifyAll(new SizeChangeEvent(this.sizeItems[0].style.height));
         this.sizeItems.forEach(item => {
             if (item.id !== "stroke-size-extra-small") {

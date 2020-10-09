@@ -1,6 +1,6 @@
 import View from "../View.js";
 import { Event } from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class ChannelItemClickEvent extends Event {
     constructor(href) {
@@ -14,7 +14,7 @@ class JoinServerClickEvent extends Event {
     }
 }
 
-function onJoinServerClick(channelListView, data) {
+function onJoinServerClick(channelListView) {
     event.preventDefault();
     channelListView.notifyAll(new JoinServerClickEvent());
 }
@@ -29,7 +29,8 @@ function setListener(channelListView) {
         channel.addEventListener("click", onChannelItemClick.bind(this, channelListView));
     });
 
-    channelListView.el.querySelector(".join-server").addEventListener("click", onJoinServerClick.bind(this, channelListView));
+    channelListView.el.querySelector(".join-server").addEventListener("click", () =>
+        onJoinServerClick(channelListView));
 }
 
 class ChannelListView extends View {
@@ -50,11 +51,8 @@ class ChannelListView extends View {
     }
 
     removeChannel(channelId) {
-        console.log(this.el);
         let id = Config.API_URLS.CHANNEL + channelId,
             channelElement = this.el.querySelector(`a[id="${id}"]`);
-        console.log(id)
-        console.log(channelElement);
         if (channelElement) {
             channelElement.remove();
         }

@@ -1,9 +1,7 @@
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 import Helper from "../../utils/Helper.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
-
-
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class ChannelInfoClick extends Event {
     constructor() {
@@ -35,11 +33,11 @@ class FullScreenCloseClick extends Event {
     }
 }
 
-function onCloseClick(topBarView, data) {
+function onCloseClick(topBarView) {
     topBarView.notifyAll(new FullScreenCloseClick());
 }
 
-function onPublishClick(topBarView, event) {
+function onPublishClick(topBarView) {
     let sketchId = document.querySelector(".fullscreen-image").children[0].id;
     topBarView.notifyAll(new PublishSketchClick(sketchId));
 }
@@ -66,8 +64,8 @@ function setListener(topBarView) {
 }
 
 function setFullScreenListener(topBarView) {
-    topBarView.closeFullscreen.addEventListener("click", onCloseClick.bind(this, topBarView));
-    topBarView.btnPublishSketch.addEventListener("click", onPublishClick.bind(this, topBarView));
+    topBarView.closeFullscreen.addEventListener("click", () => onCloseClick(topBarView));
+    topBarView.btnPublishSketch.addEventListener("click", () => onPublishClick(topBarView));
 }
 
 class TopBarView extends View {
@@ -162,7 +160,7 @@ class TopBarView extends View {
         alertMessage.innerHTML = message;
         setTimeout(function () {
             alertBox.classList.add("hidden");
-        }, Config.DELAY_SHOW_ERROR)
+        }, Config.DELAY_SHOW_ERROR);
     }
 
 }

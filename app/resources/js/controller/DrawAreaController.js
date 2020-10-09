@@ -1,5 +1,6 @@
 import {Event, Observable} from "../utils/Observable.js";
 import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import Helper from "../utils/Helper.js";
 
 class LineDrawnEvent extends Event {
     constructor(data) {
@@ -43,22 +44,11 @@ class DeleteChannelEvent extends Event {
     }
 }
 
-
-
 function getMarkedAsAdminLine(isMultiLayer, userRole) {
     if (isMultiLayer) {
         return userRole === Config.CHANNEL_ROLE_ADMIN;
     }
     return true;
-}
-
-function createUUID() {
-    let dt = new Date().getTime();
-    return Config.UUID_PATTERN.replace(/[xy]/g, function (c) {
-        let r = (dt + Math.random() * 16) % 16 | 0;
-        dt = Math.floor(dt / 16);
-        return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
-    });
 }
 
 class DrawAreaController extends Observable {
@@ -82,8 +72,7 @@ class DrawAreaController extends Observable {
         this.socket.on(SocketKeys.ACTIVE_USER, (data) => {
             instance.notifyAll(new ActiveUserEvent(data));
         });
-        this.socket.on(SocketKeys.ERROR, (error) => {
-            console.log(error)
+        this.socket.on(SocketKeys.ERROR, () => {
             window.location.reload();
         });
     }
@@ -118,7 +107,7 @@ class DrawAreaController extends Observable {
             this.socket.emit(SocketKeys.LINE_DRAWN, {
                 channelId: data.channelId,
                 userId: data.userId,
-                lineId: createUUID(),
+                lineId: Helper.createUUID(),
                 line: [data.lineData.mouse.pos, data.lineData.mouse.posPrev],
                 color: data.lineData.color,
                 penRubber: data.lineData.penRubber,

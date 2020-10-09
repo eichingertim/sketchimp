@@ -1,5 +1,5 @@
 import PublicFeedCard from "./PublicFeedCard.js";
-import Config, { PublicFeedDimensions } from "../../utils/Config.js";
+import Config, { NavbarDimensions } from "../../utils/Config.js";
 
 var cardsItem = document.getElementById("cards"),
 sketchData,
@@ -158,8 +158,8 @@ function getAllPublished(){
 function initScrollBehaviour(){
     window.onscroll = function() {
         // change navbar appereance when scrolled down
-        if (document.body.scrollTop >= topContainer.offsetHeight - PublicFeedDimensions.MENUBAR_OFFSET || 
-            document.documentElement.scrollTop >= topContainer.offsetHeight - PublicFeedDimensions.MENUBAR_OFFSET) {
+        if (document.body.scrollTop >= topContainer.offsetHeight - NavbarDimensions.OFFSET || 
+            document.documentElement.scrollTop >= topContainer.offsetHeight - NavbarDimensions.OFFSET ) {
           navBar.classList.add("scroll");
         } else {
           navBar.classList.remove("scroll");

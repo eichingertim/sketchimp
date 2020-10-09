@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+
 const Config = {
         API_URLS: {
             CHANNEL: "/api/channel/",
@@ -17,6 +19,8 @@ const Config = {
             DELETE_CHANNEL: "/api/channel/delete/",
             KICK_MEMBER: "/api/channel/kick/",
             SKETCH_ALL_PUBLISHED: "/api/sketch/all-published",
+            CHANNEL_ICON_UPLOAD: "/api/channel/upload/",
+            MEMBER: "/api/user/",
         },
         CONTENT_TYPE_URL_ENCODED: "application/x-www-form-urlencoded",
         CONTENT_TYPE_JSON: "application/json",
@@ -26,6 +30,10 @@ const Config = {
             DELETE: "DELETE",
             PATCH: "PATCH",
         },
+        OFFSET_Y_PROFILE_DIALOG: 70,
+        OFFSET_X_PROFILE_DIALOG: 400,
+        SIZE_ITEM_SELECTED_BORDER: "2px solid white",
+        WIDTH_COLOR_PICKER: 80,
         SUCCESS_ERROR: 0,
         DEFAULT_SKETCH_NAME: "Monkey Sketch",
         UUID_PATTERN: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",
@@ -60,6 +68,10 @@ const Config = {
             INACTIVE: "#D19917",
             OFFLINE: "#DE6954",
         },
+        REGEX_NO_WHITE_SPACE: /^\s*$/g,
+        LENGTH_UUID: 16,
+        UUID_BYTE_3: 0x3,
+        UUID_BYTE_8: 0x8,
     },
 
     EventKeys = {
@@ -115,7 +127,7 @@ const Config = {
 
         UPLOAD_CHANNEL_ICON: "UploadChannelIcon",
 
-        DELETE_CHANNEL: "DeleteChannel"
+        DELETE_CHANNEL: "DeleteChannel",
     },
 
     SocketKeys = {
@@ -147,9 +159,25 @@ const Config = {
         SCOREFONT_MULTIPLICANT: 12,
         TITLE_BASE: 20,
         TITLE_MULTIPLICANT: 20,
-        MENUBAR_OFFSET: 30,
+    },
 
+    LandingPageConfigs = {
+        COLOR_DEPTH: Math.pow(2, 24),
+        DIMENSIONS_DIVIDER: 2,
+        COLOR_STRING_LENGTH: 16,
+        SIZE_MULTIPLIER: 15,
+        DISTANCE_MULTIPLIER: 10,
+        ANGLE_VALUE: 0.5,
+        STROKE_WIDTH_MULTIPLIER: 5,
+        LINE_WIDTH_MULTIPLIER: 50,
+        LINE_WIDTH_DIVIDER: 10,
+        LINE_HEIGHT_MULTIPLIER: 60,
+        LINE_HEIGHT_DIVIDER: 20,
+    },
+
+    NavbarDimensions = {
+        OFFSET: 50,
     };
 
-export {Config, EventKeys, SocketKeys, PublicFeedDimensions};
+export {Config, EventKeys, SocketKeys, PublicFeedDimensions, LandingPageConfigs, NavbarDimensions};
 export default Config;

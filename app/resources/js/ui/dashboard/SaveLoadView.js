@@ -1,6 +1,6 @@
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class SaveEvent extends Event {
     constructor() {
@@ -26,32 +26,24 @@ class ImportTemplateEvent extends Event {
     }
 }
 
-function onSaveClick(saveLoadView, data) {
-    saveLoadView.notifyAll(new SaveEvent());
-}
-
-function onFinalizeAndCreateNew(saveLoadView, data) {
-    saveLoadView.notifyAll(new FinalizeEvent());
-}
-
-function onExportSketchAndDownload(saveLoadView, data) {
-    saveLoadView.notifyAll(new ExportEvent());
-}
-
-function onImportTemplateClick(saveLoadView, data) {
-    saveLoadView.notifyAll(new ImportTemplateEvent());
-}
-
 function setListeners(saveLoadView) {
     let btnSave = saveLoadView.el.querySelector("#save"),
         btnFinalizeAndCreate = saveLoadView.el.querySelector("#save-publish"),
         btnExportDownload = saveLoadView.el.querySelector("#export-download"),
         btnLoadTemplate = saveLoadView.el.querySelector("#import-template");
 
-    btnSave.addEventListener("click", onSaveClick.bind(this, saveLoadView));
-    btnFinalizeAndCreate.addEventListener("click", onFinalizeAndCreateNew.bind(this, saveLoadView));
-    btnExportDownload.addEventListener("click", onExportSketchAndDownload.bind(this, saveLoadView));
-    btnLoadTemplate.addEventListener("click", onImportTemplateClick.bind(this, saveLoadView));
+    btnSave.addEventListener("click", () => {
+        saveLoadView.notifyAll(new SaveEvent());
+    });
+    btnFinalizeAndCreate.addEventListener("click", () => {
+        saveLoadView.notifyAll(new FinalizeEvent());
+    });
+    btnExportDownload.addEventListener("click", () => {
+        saveLoadView.notifyAll(new ExportEvent());
+    });
+    btnLoadTemplate.addEventListener("click",() => {
+        saveLoadView.notifyAll(new ImportTemplateEvent());
+    });
 }
 
 class SaveLoadView extends View {
@@ -66,7 +58,7 @@ class SaveLoadView extends View {
         let btnSave = this.el.querySelector("#span-save"),
             tmp = btnSave.innerHTML;
 
-        btnSave.innerHTML = "Successfully saved";
+        btnSave.innerHTML = "Successfully Saved";
 
         setTimeout(function(){
             btnSave.innerHTML = tmp;

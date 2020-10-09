@@ -1,4 +1,4 @@
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import {Config, SocketKeys} from "../utils/Config.js";
 import Helper from "../utils/Helper.js";
 import ChannelModel from "../models/ChannelModel.js";
 import SketchModel from "../models/SketchModel.js";
@@ -37,16 +37,16 @@ class ChannelController {
             xhr.open(Config.HTTP.GET, url, true);
             xhr.onload = function () {
                 try {
-                    let channelResponse = JSON.parse(this.response);
+                    let channelResponse = JSON.parse(xhr.response);
                     if (channelResponse.success !== Config.SUCCESS_ERROR) {
-                        let data = JSON.parse(this.response).data, channel;
+                        let data = JSON.parse(xhr.response).data, channel;
                         if (data) {
                             channel = new ChannelModel(data.id, data.name, data.creator.id, data.creator.username,
                                 data.creation, data.members, data.icon);
                         }
                         xhrSketch.open(Config.HTTP.GET, Config.API_URLS.CURRENT_SKETCH + data.id, true);
                         xhrSketch.onload = function () {
-                            handleResponseSketchData(resolve, reject, channel, this.response);
+                            handleResponseSketchData(resolve, reject, channel, xhrSketch.response);
                         };
                         xhrSketch.send();
                     } else {
@@ -68,7 +68,7 @@ class ChannelController {
                     formData = new FormData(form);
                 xhr.open(Config.HTTP.POST, form.action, true);
                 xhr.onload = function () {
-                    Helper.handleSimpleResponse(resolve, reject, this.response);
+                    Helper.handleSimpleResponse(resolve, reject, xhr.response);
                 };
                 xhr.send(formData);
             }
@@ -92,7 +92,7 @@ class ChannelController {
                 xhr.onload = function () {
 
                     try {
-                        let channelResponse = JSON.parse(this.response);
+                        let channelResponse = JSON.parse(xhr.response);
                         if (channelResponse.success !== Config.SUCCESS_ERROR) {
                             let channelData = channelResponse.data,
                                 channel;
@@ -107,7 +107,7 @@ class ChannelController {
                             xhrSketch.withCredentials = true;
                             xhrSketch.setRequestHeader("Content-Type", Config.CONTENT_TYPE_URL_ENCODED);
                             xhrSketch.onload = function () {
-                                handleResponseSketchData(resolve, reject, channel, this.response);
+                                handleResponseSketchData(resolve, reject, channel, xhrSketch.response);
                             };
 
                             if (sketchName === "" || sketchName === " ") {
@@ -137,10 +137,10 @@ class ChannelController {
                 xhr.open(Config.HTTP.POST, Config.API_URLS.JOIN_CHANNEL + channelId, true);
                 xhr.withCredentials = true;
                 xhr.onload = function () {
-                    Helper.handleSimpleResponse(resolve, reject, this.response);
+                    Helper.handleSimpleResponse(resolve, reject, xhr.response);
                 };
                 xhr.send();
-            },
+            }
         );
 
     }
@@ -152,10 +152,10 @@ class ChannelController {
                 xhr.open(Config.HTTP.POST, Config.API_URLS.LEAVE_CHANNEL + channelId, true);
                 xhr.withCredentials = true;
                 xhr.onload = function () {
-                    Helper.handleSimpleResponse(resolve, reject, this.response);
+                    Helper.handleSimpleResponse(resolve, reject, xhr.response);
                 };
                 xhr.send();
-            },
+            }
         );
     }
 
@@ -171,24 +171,24 @@ class ChannelController {
                 xhrChannel.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                 xhrChannel.onload = function () {
                     try {
-                        let responseChannel = JSON.parse(this.response);
+                        let responseChannel = JSON.parse(xhrChannel.response);
                         if (responseChannel.success !== Config.SUCCESS_ERROR) {
                             xhrMember.open(Config.HTTP.PATCH, Config.API_URLS.UPDATE_ROLES + settings.channelId, true);
                             xhrMember.withCredentials = true;
                             xhrMember.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                             xhrMember.onload = function () {
-                                Helper.handleSimpleResponse(resolve, reject, this.response);
+                                Helper.handleSimpleResponse(resolve, reject, xhrMember.response);
                             };
                             xhrMember.send(JSON.stringify(bodyMember));
                         } else {
-                            reject(responseChannel.message)
+                            reject(responseChannel.message);
                         }
                     } catch (error) {
                         reject(error);
                     }
                 };
                 xhrChannel.send(JSON.stringify(bodyChannel));
-            },
+            }
         );
     }
 
@@ -219,7 +219,7 @@ class ChannelController {
                     Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
                 };
                 xhr.send();
-            },
+            }
         );
     }
 }

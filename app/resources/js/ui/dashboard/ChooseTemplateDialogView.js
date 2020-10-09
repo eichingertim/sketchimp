@@ -1,6 +1,6 @@
 import View from "../View.js";
 import { Event } from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {EventKeys} from "../../utils/Config.js";
 
 class TemplateSelectedEvent extends Event {
     constructor(url) {
@@ -19,7 +19,7 @@ function setListener(chooseTemplateDialogView) {
        template.addEventListener("click", onTemplateClick.bind(this, chooseTemplateDialogView));
     });
 
-    closeItem.addEventListener("click", (event) => {
+    closeItem.addEventListener("click", () => {
         chooseTemplateDialogView.toggleVisibility();
     });
 
