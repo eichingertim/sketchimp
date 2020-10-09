@@ -1,6 +1,9 @@
 import View from "../View.js";
 import {Config} from "../../utils/Config.js";
 
+/**
+ * Represents the UserProfileDialog which is shown when someone hovers over a member
+ */
 class UserProfileDialogView extends View {
     constructor(el){
         super();
@@ -14,12 +17,21 @@ class UserProfileDialogView extends View {
         this.avatar = this.el.querySelector(".profile-image");
     }
 
+    /**
+     * Adjusts the position of the dialog
+     * @param target hovered member-item
+     */
     adjustPositionProperties(target) {
         let rect = target.getBoundingClientRect();
         this.el.style.left = (rect.left - Config.OFFSET_X_PROFILE_DIALOG) + "px";
         this.el.style.top = (rect.top - Config.OFFSET_Y_PROFILE_DIALOG) + "px";
     }
 
+    /**
+     * Fills the profile dialog with memberData
+     * @param memberData data that should be filled in
+     * @param userId current userId
+     */
     fillWithData(memberData, userId) {
         let instance = this;
         this.username.innerHTML = memberData.name;

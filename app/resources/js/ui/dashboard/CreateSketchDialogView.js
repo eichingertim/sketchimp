@@ -14,6 +14,10 @@ class DialogCloseEvent extends Event {
     }
 }
 
+/**
+ * checks if entered data is valid and notifies the listener about it
+ * @param createSketchDialogView current instance of the view
+ */
 function onSketchSubmitClick(createSketchDialogView) {
     event.preventDefault();
     let name = createSketchDialogView.el.querySelector("#sketch_name").value,
@@ -26,10 +30,18 @@ function onSketchSubmitClick(createSketchDialogView) {
     }
 }
 
+/**
+ * Notifies the listener about the dialog-close-button was clicked
+ * @param createSketchDialogView current instance of the view
+ */
 function onDialogCloseClick(createSketchDialogView) {
     createSketchDialogView.notifyAll(new DialogCloseEvent());
 }
 
+/**
+ * set the listener for submit and close button
+ * @param createSketchDialogView current instance of the view
+ */
 function setListeners(createSketchDialogView) {
     let btnSubmit = createSketchDialogView.el.querySelector(".submit-sketch-create");
     btnSubmit.addEventListener("click", () => onSketchSubmitClick(createSketchDialogView));
@@ -38,6 +50,9 @@ function setListeners(createSketchDialogView) {
         .addEventListener("click", () => onDialogCloseClick(createSketchDialogView));
 }
 
+/**
+ * Represents the CreateSketch Dialog
+ */
 class CreateSketchDialogView extends View {
     constructor(el) {
         super();
@@ -45,6 +60,9 @@ class CreateSketchDialogView extends View {
         setListeners(this);
     }
 
+    /**
+     * Clears the input-fields and hides the dialog
+     */
     clearAfterSubmit() {
         this.el.querySelector("#sketch_name").value = "";
         this.toggleVisibility();

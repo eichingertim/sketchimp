@@ -8,11 +8,20 @@ class MemberItemClickEvent extends Event {
     }
 }
 
+/**
+ * Notifies listener about a hover event over a member-item
+ * @param memberListView current instance of a view
+ * @param event hover event
+ */
 function onMemberClick(memberListView, event) {
     event.preventDefault();
     memberListView.notifyAll(new MemberItemClickEvent(event));
 }
 
+/**
+ * sets mouseover and mouseout listener for member-item
+ * @param memberListView current instance of view
+ */
 function setListener(memberListView) {
     let channelMembers = memberListView.el.querySelectorAll(".member");
     channelMembers.forEach(member => {
@@ -21,6 +30,12 @@ function setListener(memberListView) {
     }); 
 }
 
+/**
+ * appends the create to the member list, as it is saved apart from members
+ * @param channel current channel's data
+ * @param memberTemplate template of a member item
+ * @param memberListView current instance of view
+ */
 function appendCreatorToList(channel, memberTemplate, memberListView) {
     let clone = memberTemplate.content.cloneNode(true),
         anchor = clone.querySelector("span");
@@ -30,6 +45,9 @@ function appendCreatorToList(channel, memberTemplate, memberListView) {
     memberListView.el.appendChild(clone);
 }
 
+/**
+ * Represents the member list of a channel
+ */
 class MemberListView extends View {
     constructor(el) {
         super();
@@ -37,6 +55,10 @@ class MemberListView extends View {
         setListener(this);
     }
 
+    /**
+     * Updates active state-colors of the member-items (RED=Offline, ORANGE=Not Active, GREEN: Active),
+     * @param data necessary data to update the states
+     */
     updateActiveState(data) {
         let memberItems = this.el.querySelectorAll(".member-item");
         memberItems.forEach((memberItem) => {
@@ -66,6 +88,10 @@ class MemberListView extends View {
         });
     }
 
+    /**
+     * updates the member-list. clears and adds all members to the the listview
+     * @param channel current channel's data
+     */
     updateMembers(channel) {
         let memberTemplate = document.querySelector("#member-template");
         this.el.innerHTML = "";

@@ -26,6 +26,10 @@ class ImportTemplateEvent extends Event {
     }
 }
 
+/**
+ * Sets listener to all buttons in this view
+ * @param saveLoadView current instance of view
+ */
 function setListeners(saveLoadView) {
     let btnSave = saveLoadView.el.querySelector("#save"),
         btnFinalizeAndCreate = saveLoadView.el.querySelector("#save-publish"),
@@ -46,6 +50,9 @@ function setListeners(saveLoadView) {
     });
 }
 
+/**
+ * Represents the four buttons to Save, Finalize, Export a sketch and to select a template.
+ */
 class SaveLoadView extends View {
 
     constructor(el) {
@@ -54,6 +61,9 @@ class SaveLoadView extends View {
         setListeners(this);
     }
 
+    /**
+     * Updates Save-Button text to indicate that the sketch was successfully saved
+     */
     setSketchSaved() {
         let btnSave = this.el.querySelector("#span-save"),
             tmp = btnSave.innerHTML;
@@ -65,6 +75,9 @@ class SaveLoadView extends View {
         }, Config.DELAY_SHOW_SUCCESS);
     }
 
+    /**
+     * Updates Finalize-Button text to indicate that the sketch was successfully finalized
+     */
     setSketchFinalized() {
         let btnFinalizeAndCreate = this.el.querySelector("#span-archive"),
             tmp = btnFinalizeAndCreate.innerHTML;
@@ -76,6 +89,9 @@ class SaveLoadView extends View {
         }, Config.DELAY_SHOW_SUCCESS);
     }
 
+    /**
+     * Updates Export-Button text to indicate that the sketch was successfully exported
+     */
     setSketchExported() {
         let btnExportDownload = this.el.querySelector("#span-download"),
             tmp = btnExportDownload.innerHTML;

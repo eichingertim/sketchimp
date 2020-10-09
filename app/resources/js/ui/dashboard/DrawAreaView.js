@@ -4,6 +4,16 @@ import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 import {Config, EventKeys} from "../../utils/Config.js";
 
+class EmitLineEvent extends Event {
+    constructor(data) {
+        super(EventKeys.LINE_READY_FOR_EMIT, data);
+    }
+}
+
+/**
+ * Checks if the current mouse-data is valid for a line to be emitted
+ * @param drawAreaView current instance of view
+ */
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
         .posPrev) {
@@ -23,6 +33,10 @@ function checkAndNotifyForDrawing(drawAreaView) {
     };
 }
 
+/**
+ * Sets the listener for mouse or touch interaction with the canvas stage
+ * @param drawAreaView current instance of view
+ */
 function setMouseListener(drawAreaView) {
     drawAreaView.image.on("mousedown touchstart", function () {
         if (drawAreaView.isDrawingActivated) {
@@ -50,6 +64,10 @@ function setMouseListener(drawAreaView) {
     }, { passive: true});
 }
 
+/**
+ * clears and resets the collaborator stage
+ * @param drawAreaView current instance of view
+ */
 function clearAndSetupCollaboratorLayer(drawAreaView) {
     drawAreaView.layer.collaboratorLayer.destroyChildren();
     drawAreaView.image = new Konva.Image({
@@ -61,6 +79,12 @@ function clearAndSetupCollaboratorLayer(drawAreaView) {
     drawAreaView.stage.draw();
 }
 
+/**
+ * Sets up the complete Konva.js elements (stage, layers, and images)
+ * Handles additionally if the current sketch has one or separate layer for admin and collaborators
+ * @param drawAreaView current instance of view
+ * @param isMultiLayer bool if current sketch has multilayer activated
+ */
 function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
 
@@ -106,12 +130,9 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.context.lineWidth = Config.DEFAULT_PEN_SIZE;
 }
 
-class EmitLineEvent extends Event {
-    constructor(data) {
-        super(EventKeys.LINE_READY_FOR_EMIT, data);
-    }
-}
-
+/**
+ * Represents the canvas where the channel-members can draw
+ */
 class DrawAreaView extends View {
     constructor(el) {
         super();
@@ -137,6 +158,10 @@ class DrawAreaView extends View {
         setMouseListener(this);
     }
 
+    /**
+     * fills the background with a passed template
+     * @param url template url that should be iserted
+     */
     setTemplate(url) {
         let instance = this;
         Konva.Image.fromURL(url, function (node) {
@@ -150,10 +175,18 @@ class DrawAreaView extends View {
         });
     }
 
+    /**
+     * Activates or deactivates drawing
+     * @param active bool if drawing should be active
+     */
     setDrawingActivated(active) {
         this.isDrawingActivated = active;
     }
 
+    /**
+     * Exports the current canvas-stage as a base64 string
+     * @returns {string|null} returns the encoded string
+     */
     getStageAsBase64() {
         if (this.stage !== undefined && this.stage !== null) {
             return this.stage.toDataURL({
@@ -163,6 +196,10 @@ class DrawAreaView extends View {
         return null;
     }
 
+    /**
+     * Exports the current canvas stage as a PNG image
+     * @returns {Promise<>|null} wait for the export to finish
+     */
     getStageAsPNG() {
         let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
@@ -179,14 +216,26 @@ class DrawAreaView extends View {
         return null;
     }
 
+    /**
+     * Updates the brush color
+     * @param color
+     */
     updateColor(color) {
         this.context.strokeStyle = color;
     }
 
+    /**
+     * Updates the brush size
+     * @param size
+     */
     updateSize(size) {
         this.context.lineWidth = size;
     }
 
+    /**
+     * Switches between the rubber and pen
+     * @param item includes the item to be activated
+     */
     switchPenRubber(item) {
         if (item === "toolbox-pen") {
             this.context.globalCompositeOperation = Config.PEN_OPERATION;
@@ -195,6 +244,9 @@ class DrawAreaView extends View {
         }
     }
 
+    /**
+     * resizes the canvas and its container to be accurate
+     */
     resizeViews() {
         let bigContainer = document.querySelector(".dashboard-canvas");
 
@@ -211,6 +263,10 @@ class DrawAreaView extends View {
         }
     }
 
+    /**
+     * adds a received line to the canvas
+     * @param data includes the data of line
+     */
     addLine(data) {
         let isAdminLine = data.adminLine,
             newLine = new Konva.Line({
@@ -238,6 +294,11 @@ class DrawAreaView extends View {
         }
     }
 
+    /**
+     * destroys the passed line
+     * @param data data of the line should be undo
+     * @param isMultiLayer bool if current sketch is multilayer
+     */
     undoLine(data, isMultiLayer) {
         for (let id of data) {
             let line = this.stage.findOne("#" + id);
@@ -253,6 +314,10 @@ class DrawAreaView extends View {
         }
     }
 
+    /**
+     * clears the canvas handles between multilayer/not and admin/collaborator
+     * @param data includes necessary data to clear and reset the canvas
+     */
     clearCanvas(data) {
         if (data.isNewSketch || data.userRole === Config.CHANNEL_ROLE_ADMIN) {
             this.stage.destroyChildren();

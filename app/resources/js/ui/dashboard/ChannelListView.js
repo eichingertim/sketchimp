@@ -14,15 +14,28 @@ class JoinServerClickEvent extends Event {
     }
 }
 
+/**
+ * Notifies listeners about the join server button was clicked
+ * @param channelListView current instance of the view
+ */
 function onJoinServerClick(channelListView) {
     event.preventDefault();
     channelListView.notifyAll(new JoinServerClickEvent());
 }
 
+/**
+ * Notifies listeners about the channel item was clicked
+ * @param channelListView current instance of the view
+ * @param data includes clicked element
+ */
 function onChannelItemClick(channelListView, data) {
     channelListView.notifyAll(new ChannelItemClickEvent(data.target.id));
 }
 
+/**
+ * Sets the listener for each channel-item and the join-server item
+ * @param channelListView current instance of the view
+ */
 function setListener(channelListView) {
     let items = channelListView.el.querySelectorAll(".channel");
     items.forEach(channel => {
@@ -33,6 +46,9 @@ function setListener(channelListView) {
         onJoinServerClick(channelListView));
 }
 
+/**
+ * Represents the ChannelListView
+ */
 class ChannelListView extends View {
     constructor(el) {
         super();
@@ -40,6 +56,10 @@ class ChannelListView extends View {
         setListener(this);
     }
 
+    /**
+     * Adds a channel dynamically to the list
+     * @param channel data of the channel that should be added
+     */
     addNewChannel(channel) {
             let channelTemplate = this.el.querySelector("#channel-template"),
             clone = channelTemplate.content.cloneNode(true),
@@ -50,6 +70,10 @@ class ChannelListView extends View {
         setListener(this);
     }
 
+    /**
+     * removes a channel from the list
+     * @param channelId id of the channel that should be removed
+     */
     removeChannel(channelId) {
         let id = Config.API_URLS.CHANNEL + channelId,
             channelElement = this.el.querySelector(`a[id="${id}"]`);

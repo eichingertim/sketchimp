@@ -145,6 +145,11 @@ function onFullScreenCloseClick() {
     drawAreaView.setDrawingActivated(true);
 }
 
+/**
+ * Fetches data of channel that is passed as url
+ * @param dashboard current instance of dashboard
+ * @param url channels GET url
+ */
 function fetchChannelData(dashboard, url) {
     ChannelController.fetchChannelData(url)
         .then((channel) => {
@@ -154,6 +159,10 @@ function fetchChannelData(dashboard, url) {
     });
 }
 
+/**
+ * loads the sketch-history and tells the topBarView to update
+ * @param channelId current channelId
+ */
 function loadSketchHistory(channelId) {
     SketchController.loadHistory(channelId).then((sketches) => {
         topBarView.clearSketchHistory();
@@ -178,6 +187,10 @@ function onPublishSketchBtnClick(dashboard, event) {
     });
 }
 
+/**
+ * Starts process to save new channel settings set by the admin
+ * @param dashboard current dashboard instance
+ */
 function onSaveAdminSettingsClicked(dashboard) {
     const settings = adminSettingsDialogView.getSettings();
     ChannelController.saveAdminSettings(settings).then(() => {
@@ -205,6 +218,9 @@ function configureDivSizes() {
     drawAreaView.resizeViews();
 }
 
+/**
+ * Main Point of the application -> Here controllers communicate with views and views communicate with controllers
+ */
 class Dashboard {
     constructor(socket, userId) {
 
@@ -220,6 +236,9 @@ class Dashboard {
         window.onresize = configureDivSizes;
     }
 
+    /**
+     * Initializes all views of the dashboard
+     */
     initUIAndController() {
         const container = document.querySelector("#container"),
             toolbox = document.querySelector(".dashboard-toolbox-container"),
@@ -263,6 +282,10 @@ class Dashboard {
         });
     }
 
+    /**
+     * Registers listeners on drawAreaView and drawAreaController
+     * @param instance current dashboard instance
+     */
     setDrawAreaListener(instance) {
         drawAreaView.addEventListener(EventKeys.LINE_READY_FOR_EMIT, onLineEmit.bind(this, instance));
         drawAreaController.addEventListener(EventKeys.LINE_DRAWN_RECEIVED, (event) =>
@@ -306,6 +329,10 @@ class Dashboard {
         });
     }
 
+    /**
+     * registers listeners for the toolboxview
+     * @param instance current dashboard instance
+     */
     setToolboxListener(instance) {
         toolboxView.addEventListener(EventKeys.COLOR_CHANGE_CLICK, (event) =>
             drawAreaView.updateColor(event.data.color));
@@ -328,6 +355,10 @@ class Dashboard {
             drawAreaController.emitUndoLine(instance.channel.channelId, instance.user.userId));
     }
 
+    /**
+     * sets listeners for all dialogs of the application
+     * @param instance current dashboard instance
+     */
     setDialogListener(instance) {
         //ChannelInfoDialog
         channelInfoDialogView.addEventListener(EventKeys.LEAVE_CHANNEL_CLICK, () =>
@@ -414,6 +445,10 @@ class Dashboard {
         });
     }
 
+    /**
+     * Sets listener for top and right bar of the dashboard
+     * @param instance current dashboard instance
+     */
     setChannelTopAndRightBarListener(instance) {
 
         //LeftBar Channels
@@ -475,6 +510,10 @@ class Dashboard {
         });
     }
 
+    /**
+     * gets called when the user joins a new channel
+     * @param channel data of the new channel
+     */
     onJoin(channel) {
         if (channel.channelName !== undefined) {
             this.channel = channel;
@@ -498,6 +537,9 @@ class Dashboard {
         }
     }
 
+    /**
+     * gets called when the user switches a channel
+     */
     onLeave() {
         drawAreaController.emitLeaveChannel(this.channel.channelId, this.user.userId);
     }

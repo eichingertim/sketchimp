@@ -14,6 +14,10 @@ class CloseDialogClick extends Event {
     }
 }
 
+/**
+ * checks if entered data is valid and notifies the listener about it
+ * @param createChannelDialogView current instance of the view
+ */
 function onSubmitChannelClick(createChannelDialogView) {
     event.preventDefault();
     let channelName = createChannelDialogView.el.querySelector("#r_name").value,
@@ -27,10 +31,18 @@ function onSubmitChannelClick(createChannelDialogView) {
     }
 }
 
+/**
+ * Notifies the listener about the close-button was clicked
+ * @param createChannelDialogView current instance of the view
+ */
 function onDialogCloseClick(createChannelDialogView) {
     createChannelDialogView.notifyAll(new CloseDialogClick());
 }
 
+/**
+ * Sets the listener for submit and close-button
+ * @param createChannelDialogView current instance of the view
+ */
 function setListener(createChannelDialogView) {
     createChannelDialogView.el.querySelector(".submit-channel-creation")
         .addEventListener("click", () => onSubmitChannelClick(createChannelDialogView));
@@ -38,6 +50,9 @@ function setListener(createChannelDialogView) {
         .addEventListener("click", () => onDialogCloseClick(createChannelDialogView));
 }
 
+/**
+ * Represents the CreateChannel Dialog
+ */
 class CreateChannelDialogView extends View {
     constructor(el) {
         super();
@@ -45,6 +60,9 @@ class CreateChannelDialogView extends View {
         setListener(this);
     }
 
+    /**
+     * Clears the input-fields and hides the dialog
+     */
     clearAfterSubmit() {
         this.el.querySelector("#r_name").value = "";
         this.el.querySelector("#r_sketch_name").value = "";

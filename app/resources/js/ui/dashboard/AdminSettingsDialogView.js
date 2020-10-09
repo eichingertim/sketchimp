@@ -21,14 +21,26 @@ class MemberKickClickEvent extends Event {
     }
 }
 
+/**
+ * Notifies listener about the settings should be saved
+ * @param adminSettingsDialogView current instance of the view
+ */
 function onSaveSettingsClick(adminSettingsDialogView) {
     adminSettingsDialogView.notifyAll(new SaveSettingsClickEvent());
 }
 
+/**
+ * Notifies listener about the dialog should be closed
+ * @param adminSettingsDialogView current instance of the view
+ */
 function onDialogCloseClick(adminSettingsDialogView) {
     adminSettingsDialogView.notifyAll(new CloseSettingsClickEvent());
 }
 
+/**
+ * adds click listener for all elements except the members
+ * @param adminSettingsDialogView current instance of the view
+ */
 function setListenerOnce(adminSettingsDialogView) {
     adminSettingsDialogView.saveButton = adminSettingsDialogView.el.querySelector(".save-settings");
     adminSettingsDialogView.saveButton
@@ -37,6 +49,10 @@ function setListenerOnce(adminSettingsDialogView) {
         .addEventListener("click", () => onDialogCloseClick(adminSettingsDialogView));
 }
 
+/**
+ * Adds listener for all members and there role setting list
+ * @param adminSettingsDialogView current instance of the view
+ */
 function setListener(adminSettingsDialogView) {
     Array.from(adminSettingsDialogView.el.querySelectorAll(".member-item")).forEach(member => {
         member.querySelector(".kick-member").addEventListener("click", () => {
@@ -58,6 +74,9 @@ function setListener(adminSettingsDialogView) {
     });
 }
 
+/**
+ * Represents the ChannelSettings Dialog that is just visible for admins
+ */
 class AdminSettingsDialogView extends View {
     constructor(el) {
         super();
@@ -70,6 +89,11 @@ class AdminSettingsDialogView extends View {
         this.user = null;
     }
 
+    /**
+     * Updates all elements with new channel data
+     * @param channel current channel's data
+     * @param user current user's data
+     */
     updateValues(channel, user) {
         let instance = this;
         this.el.querySelector("#channel-name").value = this.channelName;
@@ -97,6 +121,10 @@ class AdminSettingsDialogView extends View {
         }
     }
 
+    /**
+     * updates data with current channel
+     * @param channel current channel data
+     */
     setSettings(channel) {
         this.channelId = channel.channelId;
         this.channelName = channel.channelName;
@@ -105,6 +133,10 @@ class AdminSettingsDialogView extends View {
         });
     }
 
+    /**
+     * builds a object of settings that can be returned
+     * @returns {{userList: {role: *, userId: *}[], channelName: *, channelId: null}} object with necessary data
+     */
     getSettings() {
         let userList, role, userId, newName;
         userList = Array.from(this.el.querySelectorAll(".member-item")).map((element, index) => {
