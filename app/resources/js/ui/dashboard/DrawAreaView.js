@@ -1,3 +1,5 @@
+/* global Konva */
+
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 import {Config, EventKeys} from "../../utils/Config.js";
@@ -50,7 +52,6 @@ function setMouseListener(drawAreaView) {
 
 function clearAndSetupCollaboratorLayer(drawAreaView) {
     drawAreaView.layer.collaboratorLayer.destroyChildren();
-    // eslint-disable-next-line no-undef
     drawAreaView.image = new Konva.Image({
         image: drawAreaView.canvas,
         x: 0,
@@ -63,18 +64,14 @@ function clearAndSetupCollaboratorLayer(drawAreaView) {
 function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
 
-    // eslint-disable-next-line no-undef
     drawAreaView.layer.adminLayer = new Konva.Layer();
-    // eslint-disable-next-line no-undef
     drawAreaView.layer.backgroundLayer = new Konva.Layer();
     if (isMultiLayer) {
-        // eslint-disable-next-line no-undef
         drawAreaView.layer.collaboratorLayer = new Konva.Layer();
     } else {
         drawAreaView.layer.collaboratorLayer = null;
     }
 
-    // eslint-disable-next-line no-undef
     drawAreaView.stage = new Konva.Stage({
         container: "container",
         width: Config.CANVAS_WIDTH,
@@ -90,7 +87,6 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
         drawAreaView.stage.add(drawAreaView.layer.collaboratorLayer);
     }
 
-    // eslint-disable-next-line no-undef
     drawAreaView.image = new Konva.Image({
         image: drawAreaView.canvas,
         x: 0,
@@ -143,7 +139,6 @@ class DrawAreaView extends View {
 
     setTemplate(url) {
         let instance = this;
-        // eslint-disable-next-line no-undef
         Konva.Image.fromURL(url, function (node) {
             node.setAttrs({
                 x: 0,
@@ -218,7 +213,6 @@ class DrawAreaView extends View {
 
     addLine(data) {
         let isAdminLine = data.adminLine,
-            // eslint-disable-next-line no-undef
             newLine = new Konva.Line({
             points: [
                 data.line[0].x * this.stage.width(),
