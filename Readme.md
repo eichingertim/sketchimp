@@ -46,39 +46,18 @@ Es reichen folgende Kommandos:
 
 ## Beschreibung
 
-* Registrieren von Usern
-  * -- Screenshot Signup Maske --
-* Anmeldung im System
-  * -- Screenshot Login Maske --
-* Erstellen von Channels Beitreten von Channels
-  * -- Screenshot Channel Create Maske --
-* Zeichnen auf eigenem peristentem Canvas pro Channel
-  * -- Screenshot Canvas --
-* Festlegen von Benutzerrollen mit verschiedenen Rechten pro Channel
-  * -- Screenshot Channel Admin Panel --
-* Verwendung eines Ebenensystems
-  * -- Screenshot Layer Auswahl --
-* Wechseln von Stiftgrößen, Farben; Radieren, Rückgängig machen, Löschen
-  * -- Screenshot Toolbox --
-* Ändern von Usereinstellungen, Hochladen eines Avatars
-  * -- Screenshot User Profile --
-* Hochladen eines Channel Avatars
-  * -- Screenshot Channel Info --
-* Abschließen von Zeichnungen
-  * -- Screenshot Save Sketch Maske --
-* Veröffentlichen von Zeichnungen
-  * -- Screenshot Finalize and Publish Sketch --
-* Anzeigen einer Zeichenhistorie im Channel
-  * -- Screenshot Sketch History --
-* Exportieren von Zeichnungen
-  * -- Screenshot Export Sketch --
-* Auflistung aller veröffentlichten Zeichnungen im Public Feed
-  * -- Screenshot Public Feed --
-* Upvote und Downvote von Sketches
-  * -- Screenshot Card Hover --
-* Scoresystem bei Benutzern
-  * -- Screenshot User Hover --
-* Dynamisches Reloading des Frontends über AJAX
-  * -- Gif AJAX Reloading --
-* Eigen erstellte Server-API zur Abfrage von Channels/Usern/Sketches
-  * -- Screenshot Lookup API --
+|   |   |   |
+|---|---|---|
+| Registrieren von Nutzern  | Anmeldung im System  | Erstellen von Channels  |
+| ![register](docs/screenshots/signin.png)  | ![register](docs/screenshots/login.png)  | ![register](docs/screenshots/createchannel.png)  |
+| Betreten von Channels  | Zeichnen auf eigenem peristentem Canvas pro Channel  | Festlegen von Benutzerrollen mit verschiedenen Rechten pro Channel  |
+| ![register](docs/screenshots/joinchannel.png)  | ![register](docs/screenshots/draw.png)  | ![register](docs/screenshots/adminsettings.png)  |
+| Verwendung eines Ebenensystems  | Wechseln von Stiftgrößen, Farben; Radieren, Rückgängig machen, Löschen  | Ändern von Usereinstellungen, Hochladen eines Avatars  |
+| ![register](docs/screenshots/layersystem.png)  | ![register](docs/screenshots/toolbox.png)  | ![register](docs/screenshots/profile.png)  |
+| Hochladen eines Channel Avatars  | Abschließen von Zeichnungen  | Veröffentlichen von Zeichnungen  |
+| ![register](docs/screenshots/channelinfo.png)  | ![register](docs/screenshots/finalize.png)  | ![register](docs/screenshots/publish.png)  |
+| Anzeigen einer Zeichenhistorie im Channel  | Exportieren von Zeichnungen  | Auflistung aller veröffentlichten Zeichnungen im Public Feed  |
+| ![register](docs/screenshots/sketchhistorys.png)  | ![register](docs/screenshots/export.png)  | ![register](docs/screenshots/publicfeed.png)  |
+| Upvote und Downvote von Sketches  | Dynamisches Reloading des Frontends über AJAX  | Eigen erstellte Server-API zur Abfrage von Channels/Usern/Sketches  |
+| ![register](docs/screenshots/votes.png)  | ![register](docs/screenshots/ajax.gif)  | ![register](docs/screenshots/apiresult.png)  |
+
