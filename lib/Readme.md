@@ -23,8 +23,11 @@ Dabei werden Parameter an die View Engine übergeben, um den Content darzustelle
 * /@me (GET) - Anzeige des eigenen Benutzerprofils
     * /update (POST) - Anpassung der Benutzerdaten
     * /upload (POST) - Hochladen eines Avatars
+* /join (GET) - Join Channel View
 * /public-feed (GET) - Sammlung aller veröffentlichten Zeichnungen mit Up-/Downvote Funktion
+* /imprint (GET) - Impressum
 * /* (GET) - Wildcard-Route; dem Benutzer wird eine 404-Seite angezeigt
+
 
 ##### API
 
@@ -33,12 +36,16 @@ Diese Routen bieten eine Schnittstelle zur Abfrage von Serverdaten. Die jeweilig
 * /user/:id (GET) - Abfrage eines Benutzerprofils
 * /channel 
     * /:id (GET) - Abfragen eines Channelprofils
-    * /new/:name (POST) - Erstellen eines neuen Channels
+    * /new (POST) - Erstellen eines neuen Channels
     * /join/:id (POST) - Beitreten eines bestehenden Channels
     * /leave/:id (POST) - Verlassen eines Channels
+    * /kick/:id (POST) - Entfernt User aus einem Channel
+    * /delete/:id (POST) - Löscht den Channel
+    * /update/:id (PATCH) - Überschreibt die Channel-Attribute
     * /:id/upload (POST) - Hochladen eines Channel Icons
+    * /roles/:id (PATH) - Überschreibt die Rollen-Einstellungen
 * /sketch
-    * /:sketchId (GET) - Abfragen eines Sketchprofils
+    * /:sketchId (GET) - Abfragen eines Sketches
     * /all/:channelId (GET) - Abfragen aller Sketches eines Channels
     * /all-finalized/:channelId (GET) - Abfragen aller abgeschlossenen Sketches eines Channels
     * /all-published (GET) - Abfragen aller veröffentlichten Sketches
@@ -48,6 +55,7 @@ Diese Routen bieten eine Schnittstelle zur Abfrage von Serverdaten. Die jeweilig
     * /upvote/:sketchId (POST) - Upvote eins Sketches
     * /downvote/:sketchId (POST) - Downvote eines Sketches
     * /finalize-create/:channelId (POST) - Abschließen eines Sketches und Erstellung eines neuen Sketches in einem Channel
+    * /publish/:sketchId (POST) - Veröffentlichen eines Sketches im Public Feed
 
 ### Authentifizierung
 

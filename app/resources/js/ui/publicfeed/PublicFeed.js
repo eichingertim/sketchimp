@@ -111,9 +111,11 @@ function getSketchCardForId(id){
 function handleVoteResponse(sketchCard, responseData){
     sketchCard.setScore(responseData.votes);
     sketchCard.resetButtons();
+    //colorize upvotebutton
     if(responseData.userUpvote){
         sketchCard.setLikeActive();
     }
+    //colorize downvotebutton
     if(responseData.userDownvote){
         sketchCard.setDislikeActive();
     }

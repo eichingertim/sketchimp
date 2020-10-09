@@ -22,6 +22,7 @@ function createNewCard(sketch, parentDiv, cardTemplate, minMaxVotes){
 // Method sets score to the front end view of the card
 function setScore(card, votes){
     card.querySelector(".card-score").innerHTML = votes;
+    // set color for score background
     if (votes < 0) {
         card.querySelector(".card-score").classList.add("negative");
         card.querySelector(".card-score").classList.remove("positive");
@@ -67,6 +68,7 @@ function setCardSize(card, sketchVotes, minMaxVotes){
 function initButtons(cardView, sketch){
     cardView.upvoteButton = cardView.element.querySelector(".likebutton");
     cardView.downvoteButton = cardView.element.querySelector(".dislikebutton");
+    // setting the right colored icon depending on the votes of the user
     if(cardView.upvoteButton && cardView.downvoteButton){
        if(sketch.userUpvote){
         cardView.upvoteButton.src = "/app/assets/thumb_up-white-18dp-active.svg";

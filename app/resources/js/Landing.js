@@ -1,5 +1,8 @@
 import { LandingPageConfigs, NavbarDimensions } from "./utils/Config.js";
 
+// Source: https://codepen.io/tholman/pen/ifDak
+// Used for Oil painting hero on the landing page
+
 var app,
     navBar = document.querySelector(".navigation-top"),
     scrollIndicator = document.querySelector(".scroll-indicator"),

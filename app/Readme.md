@@ -47,10 +47,13 @@ Für die Javascript-Implementierung haben wir uns für einen **Objektorientierte
     * `Observable.js`: Enthält die Logik für Erstellung/Handhabung von Events und Observable.
     * `Helper.js`: Enthält oft verwendete Methoden, die in mehr als einem Modul gebraucht werden.
  ### Public Feed
- >TODO: Fill Text
+ Der Public Feed zeigt alle veröffentlichten Sketches in Form kleiner Karten an. 
+ Initial wird dabei die Datei `PublicFeed.js` ausgeführt. Hier werden Scroll-Listener für das Navbar-Verhalten und das Lazyloading erstellt. Weiterhin werden von der API alle veröffentlichten Sketches in Form einer JSON-Datei abgerufen. Anschließend werden die ersten Karten aus einem Template mit der Datei `PublicFeedCard.js` gerendert. Wird das Ende der Seite erreicht, werden die nächsten Karten nachgeladen.
+ Die Anordnung der Karten wird mit der Library Masonry ([Quelle](https://masonry.desandro.com)) zufällig vorgenommen. Auf Basis der Likes eines jeden Sketches werden die Größen der Karten relativ zueinander angepasst. 
  
  ### Landing Page
- >TODO: Fill Text
+ Die Landingpage startet mit einem Full-Size-Hero, in dem ein Oil-Painting gestartet wird. Hierbei handelt es sich um ein Script, welches von Codepen übernommen wurde ([Quelle](https://codepen.io/tholman/pen/ifDak)).
+ Das Script wird in der Datei `Landing.js` ausgeführt. Im weiteren Seitenverlauf wird eine Funktionsübersicht der Anwendung abgebildet.
  
  ## Assets
  Im `/apps/assets`-Ordner sind alle verwendeten Icons, Templates und Bilder, gespeichert, die verwendet werden.
