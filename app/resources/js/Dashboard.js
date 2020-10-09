@@ -270,6 +270,7 @@ class Dashboard {
         drawAreaController.addEventListener(EventKeys.LINE_DRAWN_RECEIVED, (event) =>
             drawAreaView.addLine(event.data));
         drawAreaController.addEventListener(EventKeys.CLEAR_RECEIVED, (event) => {
+            toolboxView.reset();
             drawAreaView.clearCanvas(event.data);
         });
         drawAreaController.addEventListener(EventKeys.LINE_UNDO_RECEIVED, (event) =>
