@@ -86,12 +86,12 @@ function sendClickActionToApi(url){
     xhr.open(Config.HTTP.POST, url, true);
     xhr.setRequestHeader("Content-Type", "text/html");
     xhr.onload = function() {
-        try{
+        try {
             let data = JSON.parse(this.response).data,
             sketchCard = getSketchCardForId(data.id);
             handleVoteResponse(sketchCard, data);
-        }catch (e) {
-            console.log(e);
+        }catch(e) {
+            // error sendingClickAction
         }
     };
     xhr.send();
@@ -149,7 +149,7 @@ function getAllPublished(){
             minMaxVotes = getHighestAndLowestVotes();
             createNext();
         } catch(e){
-            console.log(e);
+            // error fetching all published sketches
         }
     };
     xhr.send();

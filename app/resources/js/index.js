@@ -1,8 +1,9 @@
+/* global io */
+
 import ChannelModel from "./models/ChannelModel.js";
 import Dashboard from "./Dashboard.js";
 import Helper from "./utils/Helper.js";
 
-// eslint-disable-next-line no-undef
 let socket = io(),
     dashboard;
 
