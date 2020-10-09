@@ -29,11 +29,20 @@ body {
 }
 
 .grid-container .text-box {
-    padding: 60px 0px 0px 80px;
-    width: 60%;
+    padding: 3vw;
+    width: 50%;
     float: left;
     position: relative;
     min-height: 1px;
+}
+
+.text-box h3 {
+    font-size: 2.5vw;
+    font-weight: 600;
+}
+
+.text-box span {
+    font-size: 1.2vw;
 }
 
 .row {
@@ -43,7 +52,8 @@ body {
 .grid-container .row {
     padding: 100px 50px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
 .grid-container hr {
