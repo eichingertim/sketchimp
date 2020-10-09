@@ -24,7 +24,7 @@ function checkAndNotifyForDrawing(drawAreaView) {
 }
 
 function setMouseListener(drawAreaView) {
-    drawAreaView.image.on("mousedown touchstart", function () {
+    drawAreaView.stage.on("mousedown touchstart", function () {
         if (drawAreaView.isDrawingActivated) {
             drawAreaView.mouse.click = true;
         }
@@ -64,13 +64,13 @@ function clearAndSetupCollaboratorLayer(drawAreaView) {
 function setupKonvaJS(drawAreaView, isMultiLayer) {
     drawAreaView.resizeViews();
 
-    drawAreaView.layer.adminLayer = new Konva.Layer();
     drawAreaView.layer.backgroundLayer = new Konva.Layer();
     if (isMultiLayer) {
         drawAreaView.layer.collaboratorLayer = new Konva.Layer();
     } else {
         drawAreaView.layer.collaboratorLayer = null;
     }
+    drawAreaView.layer.adminLayer = new Konva.Layer();
 
     drawAreaView.stage = new Konva.Stage({
         container: "container",
