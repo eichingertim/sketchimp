@@ -1,4 +1,5 @@
 import View from "../View.js";
+import {Config} from "../../utils/Config.js";
 
 class UserProfileDialogView extends View {
     constructor(el){
@@ -15,8 +16,8 @@ class UserProfileDialogView extends View {
 
     adjustPositionProperties(target) {
         let rect = target.getBoundingClientRect();
-        this.el.style.left = (rect.left - 400) + 'px';
-        this.el.style.top = (rect.top - 70) + 'px';
+        this.el.style.left = (rect.left - Config.OFFSET_X_PROFILE_DIALOG) + "px";
+        this.el.style.top = (rect.top - Config.OFFSET_Y_PROFILE_DIALOG) + "px";
     }
 
     fillWithData(memberData, userId) {

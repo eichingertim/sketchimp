@@ -1,4 +1,4 @@
-import {Config, EventKeys, SocketKeys} from "./Config.js";
+import {Config} from "./Config.js";
 
 class Helper {
     static setLabelColor (element, role) {
@@ -21,9 +21,9 @@ class Helper {
         try {
             let response = JSON.parse(jsonString);
             if (response.success !== Config.SUCCESS_ERROR) {
-                resolve()
+                resolve();
             } else {
-                reject(response.message)
+                reject(response.message);
             }
         } catch (error) {
             reject(error);
@@ -34,9 +34,9 @@ class Helper {
         try {
             let response = JSON.parse(jsonString);
             if (response.success !== Config.SUCCESS_ERROR) {
-                resolve(response.data)
+                resolve(response.data);
             } else {
-                reject(response.message)
+                reject(response.message);
             }
         } catch (error) {
             reject(error);
@@ -54,9 +54,9 @@ class Helper {
     static createUUID() {
         let dt = new Date().getTime();
         return Config.UUID_PATTERN.replace(/[xy]/g, function (c) {
-            let r = (dt + Math.random() * 16) % 16 | 0;
-            dt = Math.floor(dt / 16);
-            return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+            let r = (dt + Math.random() * Config.LENGTH_UUID) % Config.LENGTH_UUID | 0;
+            dt = Math.floor(dt / Config.LENGTH_UUID);
+            return (c === "x" ? r : (r & Config.UUID_BYTE_3 | Config.UUID_BYTE_8)).toString(Config.LENGTH_UUID);
         });
     }
 }

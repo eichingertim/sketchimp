@@ -1,6 +1,6 @@
 import View from "../View.js";
 import { Event } from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class MemberItemClickEvent extends Event {
     constructor(data) {
@@ -24,7 +24,7 @@ function setListener(memberListView) {
 function appendCreatorToList(channel, memberTemplate, memberListView) {
     let clone = memberTemplate.content.cloneNode(true),
         anchor = clone.querySelector("span");
-    anchor.id = "/api/user/" + channel.creatorId;
+    anchor.id = Config.API_URLS.MEMBER + channel.creatorId;
     anchor.textContent = channel.creatorName;
     anchor.style.color = Config.STATES_COLORS.OFFLINE;
     memberListView.el.appendChild(clone);
@@ -73,7 +73,7 @@ class MemberListView extends View {
         channel.members.forEach(user => {
             let clone = memberTemplate.content.cloneNode(true),
                 anchor = clone.querySelector("span");
-            anchor.id = "/api/user/" + user.id;
+            anchor.id = Config.API_URLS.MEMBER + user.id;
             anchor.textContent = user.username;
             anchor.style.color = Config.STATES_COLORS.OFFLINE;
             this.el.appendChild(clone);

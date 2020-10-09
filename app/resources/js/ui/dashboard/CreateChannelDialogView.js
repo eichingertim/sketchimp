@@ -1,6 +1,6 @@
 import View from "../View.js";
 import { Event } from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class CreateChannelEvent extends Event {
     constructor(name, sketchName, isMultiLayer) {
@@ -14,26 +14,28 @@ class CloseDialogClick extends Event {
     }
 }
 
-function onSubmitChannelClick(createChannelDialogView, data) {
+function onSubmitChannelClick(createChannelDialogView) {
     event.preventDefault();
     let channelName = createChannelDialogView.el.querySelector("#r_name").value,
         sketchName = createChannelDialogView.el.querySelector("#r_sketch_name").value,
         decision = createChannelDialogView.el.querySelector("input[name='layer']:checked").value;
 
-    if (!channelName.match("^\s*$") && !sketchName.match("^\s*$")) {
+    if (!channelName.match(Config.REGEX_NO_WHITE_SPACE) && !sketchName.match(Config.REGEX_NO_WHITE_SPACE)) {
         createChannelDialogView.notifyAll(new CreateChannelEvent(channelName.trim(), sketchName.trim(), (decision === "multi-layer")));
+    } else {
+        createChannelDialogView.notifyAll(new CreateChannelEvent(null, null, null));
     }
 }
 
-function onDialogCloseClick(createChannelDialogView, data) {
+function onDialogCloseClick(createChannelDialogView) {
     createChannelDialogView.notifyAll(new CloseDialogClick());
 }
 
 function setListener(createChannelDialogView) {
     createChannelDialogView.el.querySelector(".submit-channel-creation")
-        .addEventListener("click", onSubmitChannelClick.bind(this, createChannelDialogView));
+        .addEventListener("click", () => onSubmitChannelClick(createChannelDialogView));
     createChannelDialogView.el.querySelector("#create-channel-close")
-        .addEventListener("click", onDialogCloseClick.bind(this, createChannelDialogView));
+        .addEventListener("click", () => onDialogCloseClick(createChannelDialogView));
 }
 
 class CreateChannelDialogView extends View {

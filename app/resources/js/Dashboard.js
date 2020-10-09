@@ -92,31 +92,40 @@ function onSketchExportClick() {
  * @param event sketch create event
  */
 function onSketchCreateClick(dashboard, event) {
-    if (dashboard.user.currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
-        drawAreaView.getStageAsPNG().then(function (imageTarget) {
-            let newSketchName = event.data.name,
-                isMultiLayer = event.data.isMultiLayer;
-            SketchController.finalizeSketch(dashboard.channel.channelId, imageTarget.src, newSketchName, isMultiLayer)
-                .then((newSketchData) => {
-                    let clearCanvasData = {
-                        channelId: dashboard.channel.channelId,
-                        isNewSketch: true,
-                        userRole: dashboard.user.currentChannelRole,
-                        multilayer: newSketchData.multilayer,
-                        creatorId: dashboard.channel.creatorId,
 
-                    };
-                    saveLoadView.setSketchFinalized();
-                    createSketchDialogView.clearAfterSubmit();
-                    drawAreaController.emitClearCanvas(clearCanvasData);
-                    drawAreaController.emitNewSketch(dashboard.channel.channelId, newSketchData.id, newSketchData.name,
-                        newSketchData.multilayer);
-                    drawAreaView.setDrawingActivated(true);
-                    loadSketchHistory(dashboard.channel.channelId);
-                }).catch(error => {
-                topBarView.showAlert(error);
+
+
+    if (dashboard.user.currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
+        if (event.data.name !== null) {
+            drawAreaView.getStageAsPNG().then(function (imageTarget) {
+                let newSketchName = event.data.name,
+                    isMultiLayer = event.data.isMultiLayer;
+                SketchController.finalizeSketch(dashboard.channel.channelId, imageTarget.src, newSketchName, isMultiLayer)
+                    .then((newSketchData) => {
+                        let clearCanvasData = {
+                            channelId: dashboard.channel.channelId,
+                            isNewSketch: true,
+                            userRole: dashboard.user.currentChannelRole,
+                            multilayer: newSketchData.multilayer,
+                            creatorId: dashboard.channel.creatorId,
+
+                        };
+                        saveLoadView.setSketchFinalized();
+                        createSketchDialogView.clearAfterSubmit();
+                        drawAreaController.emitClearCanvas(clearCanvasData);
+                        drawAreaController.emitNewSketch(dashboard.channel.channelId, newSketchData.id, newSketchData.name,
+                            newSketchData.multilayer);
+                        drawAreaView.setDrawingActivated(true);
+                        loadSketchHistory(dashboard.channel.channelId);
+                    }).catch(error => {
+                    topBarView.showAlert(error);
+                });
             });
-        });
+        } else {
+            topBarView.showAlert("Fields should not be empty");
+        }
+    } else {
+        topBarView.showAlert("You are not an admin");
     }
 }
 
@@ -334,7 +343,7 @@ class Dashboard {
                     }
                 }).catch(error => {
                     topBarView.showAlert(error);
-                }
+                },
             ));
         channelInfoDialogView.addEventListener(EventKeys.CLOSE_INFO_DIALOG, () => {
             channelInfoDialogView.hide();
@@ -350,13 +359,19 @@ class Dashboard {
         });
 
         //CreateChannelAndSketchDialog
-        createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) =>
-            ChannelController.createChannel(event.data)
-                .then((channel) => {
-                    onCreateChannelDataLoaded(instance, channel);
-                }).catch(error => {
-                topBarView.showAlert(error);
-            }));
+        createChannelDialogView.addEventListener(EventKeys.CREATE_CHANNEL_SUBMIT, (event) => {
+            if (event.data.name !== null) {
+                ChannelController.createChannel(event.data)
+                    .then((channel) => {
+                        onCreateChannelDataLoaded(instance, channel);
+                    }).catch(error => {
+                    topBarView.showAlert(error);
+                });
+            } else {
+                topBarView.showAlert("Fields should not be empty");
+            }
+
+        });
         createChannelDialogView.addEventListener(EventKeys.CLOSE_CREATE_CHANNEL_DIALOG, () => {
             createChannelDialogView.hide();
             drawAreaView.setDrawingActivated(true);

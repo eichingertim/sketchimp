@@ -1,6 +1,6 @@
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 function checkAndNotifyForDrawing(drawAreaView) {
     if (drawAreaView.mouse.click && drawAreaView.mouse.move && drawAreaView.mouse
@@ -50,6 +50,7 @@ function setMouseListener(drawAreaView) {
 
 function clearAndSetupCollaboratorLayer(drawAreaView) {
     drawAreaView.layer.collaboratorLayer.destroyChildren();
+    // eslint-disable-next-line no-undef
     drawAreaView.image = new Konva.Image({
         image: drawAreaView.canvas,
         x: 0,
@@ -64,8 +65,10 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
 
     // eslint-disable-next-line no-undef
     drawAreaView.layer.adminLayer = new Konva.Layer();
+    // eslint-disable-next-line no-undef
     drawAreaView.layer.backgroundLayer = new Konva.Layer();
     if (isMultiLayer) {
+        // eslint-disable-next-line no-undef
         drawAreaView.layer.collaboratorLayer = new Konva.Layer();
     } else {
         drawAreaView.layer.collaboratorLayer = null;
@@ -94,14 +97,12 @@ function setupKonvaJS(drawAreaView, isMultiLayer) {
         y: 0,
     });
 
-    //drawAreaView.layer.backgroundLayer.add(background);
     drawAreaView.layer.adminLayer.add(drawAreaView.image);
 
     if (isMultiLayer) {
         drawAreaView.layer.collaboratorLayer.add(drawAreaView.image);
     }
     drawAreaView.stage.draw();
-
 
     drawAreaView.context = drawAreaView.canvas.getContext("2d");
     drawAreaView.context.strokeStyle = Config.DEFAULT_PEN_COLOR;
@@ -142,6 +143,7 @@ class DrawAreaView extends View {
 
     setTemplate(url) {
         let instance = this;
+        // eslint-disable-next-line no-undef
         Konva.Image.fromURL(url, function (node) {
             node.setAttrs({
                 x: 0,
@@ -170,9 +172,9 @@ class DrawAreaView extends View {
         let instance = this;
         if (this.stage !== undefined && this.stage !== null) {
             return new Promise(
-                function (resolve, reject) {
+                function (resolve) {
                     instance.stage.toImage({
-                        callback: function (img) {
+                        callback(img) {
                             resolve(img);
                         },
                     });
@@ -216,6 +218,7 @@ class DrawAreaView extends View {
 
     addLine(data) {
         let isAdminLine = data.adminLine,
+            // eslint-disable-next-line no-undef
             newLine = new Konva.Line({
             points: [
                 data.line[0].x * this.stage.width(),

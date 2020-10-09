@@ -1,6 +1,6 @@
 import View from "../View.js";
 import { Event } from "../../utils/Observable.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {Config, EventKeys} from "../../utils/Config.js";
 
 class SketchCreateEvent extends Event {
     constructor(name, isMultiLayer) {
@@ -14,23 +14,28 @@ class DialogCloseEvent extends Event {
     }
 }
 
-function onSketchSubmitClick(createSketchDialogView, data) {
+function onSketchSubmitClick(createSketchDialogView) {
     event.preventDefault();
     let name = createSketchDialogView.el.querySelector("#sketch_name").value,
         decision = createSketchDialogView.el.querySelector("input[name='layer']:checked").value;
-    createSketchDialogView.notifyAll(new SketchCreateEvent(name, (decision === "multi-layer")));
+
+    if (!name.match(Config.REGEX_NO_WHITE_SPACE)) {
+        createSketchDialogView.notifyAll(new SketchCreateEvent(name, (decision === "multi-layer")));
+    } else {
+        createSketchDialogView.notifyAll(new SketchCreateEvent(null, null));
+    }
 }
 
-function onDialogCloseClick(createSketchDialogView, data) {
+function onDialogCloseClick(createSketchDialogView) {
     createSketchDialogView.notifyAll(new DialogCloseEvent());
 }
 
 function setListeners(createSketchDialogView) {
     let btnSubmit = createSketchDialogView.el.querySelector(".submit-sketch-create");
-    btnSubmit.addEventListener("click", onSketchSubmitClick.bind(this, createSketchDialogView));
+    btnSubmit.addEventListener("click", () => onSketchSubmitClick(createSketchDialogView));
 
     createSketchDialogView.el.querySelector("#create-sketch-close")
-        .addEventListener("click", onDialogCloseClick.bind(this, createSketchDialogView));
+        .addEventListener("click", () => onDialogCloseClick(createSketchDialogView));
 }
 
 class CreateSketchDialogView extends View {
