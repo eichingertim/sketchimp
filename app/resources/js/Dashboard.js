@@ -286,7 +286,17 @@ class Dashboard {
             }
         });
         drawAreaController.addEventListener(EventKeys.ACTIVE_USER_RECEIVED, (event) => {
-            memberListView.updateActiveState(event.data);
+            ChannelController.fetchChannelData(Config.API_URLS.CHANNEL + event.data.channelId)
+                .then((channel) => {
+                if (instance.channel.members.length !== channel.members.length) {
+                    instance.channel.members = channel.members;
+                    memberListView.updateMembers(instance.channel);
+                    memberListView.updateActiveState(event.data);
+                } else {
+                    memberListView.updateActiveState(event.data);
+                }
+            });
+
         });
         drawAreaController.addEventListener(EventKeys.DELETE_CHANNEL, (event) => {
             let userId = event.data.userId;
