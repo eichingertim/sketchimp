@@ -1,4 +1,4 @@
-import { LandingPageConfigs, NavbarDimensions } from "./utils/Config";
+import { LandingPageConfigs, NavbarDimensions } from "./utils/Config.js";
 
 var app,
     navBar = document.querySelector(".navigation-top"),
