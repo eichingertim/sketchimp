@@ -344,8 +344,8 @@ class Dashboard {
                     }
                 }).catch(error => {
                     topBarView.showAlert(error);
-                },
-            ));
+                })
+            );
         channelInfoDialogView.addEventListener(EventKeys.CLOSE_INFO_DIALOG, () => {
             channelInfoDialogView.hide();
             drawAreaView.setDrawingActivated(true);
