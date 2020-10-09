@@ -67,7 +67,8 @@ Es reichen folgende Kommandos:
 
 ## Bekannte Probleme und Verbesserungsmöglichkeiten
 
+Die App wurde primär mit Chrome/Chromium basierten Browser getestet und sollte nur mit diesen verwendet werden. Auch eine mobile Version wird nicht unterstützt.
 Die Performance der Anwendung ist durch Verwendung verschiedener Libraries nicht optimal und könnte noch verbessert werden.
 Weiterhin besteht bezüglich des gehosteten Webservers eine finanzielle Problematik, da uns keine Geldmittel zur Verfügung stehen um das Projekt umzusetzen.
 Es gelten Beschränkungen durch den Provider "Heroku" bezüglich verfügbarer Bandbreite, Arbeitsspeicher und Festplattenspeicher des Systems.
-Um Fehler seitens des Webservers auszuschließen, sollte die Anwendung daher im Zweifel auf einer lokalen Maschine mit eigenen MongoDB Instanz betrieben werden.
+Um Fehler seitens des Webservers auszuschließen, sollte die Anwendung daher im Zweifel auf einer lokalen Maschine mit eigener MongoDB Instanz betrieben werden.
