@@ -1,4 +1,4 @@
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import {Config} from "../utils/Config.js";
 import Helper from "../utils/Helper.js";
 
 class MemberController {
@@ -10,7 +10,7 @@ class MemberController {
                 xhr.withCredentials = true;
                 xhr.open(Config.HTTP.GET, url, true);
                 xhr.onload = function() {
-                    Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
+                    Helper.handleResponseWithCallbackParam(resolve, reject, xhr.response);
                 };
                 xhr.send();
             }

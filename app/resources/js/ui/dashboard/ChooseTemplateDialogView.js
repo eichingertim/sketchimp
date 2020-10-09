@@ -19,7 +19,7 @@ function setListener(chooseTemplateDialogView) {
        template.addEventListener("click", onTemplateClick.bind(this, chooseTemplateDialogView));
     });
 
-    closeItem.addEventListener("click", (event) => {
+    closeItem.addEventListener("click", () => {
         chooseTemplateDialogView.toggleVisibility();
     });
 

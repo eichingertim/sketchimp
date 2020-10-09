@@ -14,7 +14,7 @@ import AdminSettingsDialogView from "./ui/dashboard/AdminSettingsDialogView.js";
 import TopBarView from "./ui/dashboard/TopBarView.js";
 import ChooseTemplateDialogView from "./ui/dashboard/ChooseTemplateDialogView.js";
 import UserModel from "./models/UserModel.js";
-import {Config, EventKeys, SocketKeys} from "./utils/Config.js";
+import {Config, EventKeys} from "./utils/Config.js";
 import SketchModel from "./models/SketchModel.js";
 import UserProfileDialogView from "./ui/dashboard/UserProfileDialogView.js";
 
@@ -159,7 +159,7 @@ function loadSketchHistory(channelId) {
 /**
  * publishes current sketch-history sketch in fullscreen
  * @param dashboard current dashboard instance
- * @param event {@link EventKeys.PUBLISH_SKETCH_CLICK}
+ * @param event current event
  */
 function onPublishSketchBtnClick(dashboard, event) {
     let sketchId = event.data.sketchId;
@@ -171,7 +171,7 @@ function onPublishSketchBtnClick(dashboard, event) {
     });
 }
 
-function onSaveAdminSettingsClicked(dashboard, event) {
+function onSaveAdminSettingsClicked(dashboard) {
     const settings = adminSettingsDialogView.getSettings();
     ChannelController.saveAdminSettings(settings).then(() => {
         drawAreaController.emitAdminSettingsChanged(dashboard.channel.channelId);
@@ -285,7 +285,7 @@ class Dashboard {
             if (instance.user.userId !== userId) {
                 window.location.reload();
             }
-        })
+        });
     }
 
     setToolboxListener(instance) {
@@ -346,7 +346,7 @@ class Dashboard {
                 window.location.reload();
             }).catch(error => {
                 topBarView.showAlert(error);
-            })
+            });
         });
 
         //CreateChannelAndSketchDialog
@@ -371,8 +371,8 @@ class Dashboard {
         });
 
         //AdminSettingsDialog
-        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK,
-            onSaveAdminSettingsClicked.bind(this, instance));
+        adminSettingsDialogView.addEventListener(EventKeys.SAVE_SETTINGS_CLICK, () =>
+            onSaveAdminSettingsClicked(instance));
         adminSettingsDialogView.addEventListener(EventKeys.CLOSE_ADMIN_DIALOG, () => {
             adminSettingsDialogView.hide();
             drawAreaView.setDrawingActivated(true);
@@ -407,7 +407,7 @@ class Dashboard {
                 MemberController.fetchMemberData(event.data.data.target.id).then((memberData) => {
                     let clickedMemberTarget = event.data.data.target;
                     userProfileDialogView.adjustPositionProperties(clickedMemberTarget);
-                    userProfileDialogView.fillWithData(memberData, instance.user.userId)
+                    userProfileDialogView.fillWithData(memberData, instance.user.userId);
                     userProfileDialogView.show();
                 }).catch(error => {
                     topBarView.showAlert(error);
@@ -470,7 +470,7 @@ class Dashboard {
             loadSketchHistory(channel.channelId);
 
         } else {
-            fetchChannelData(this, Config.API_URLS.CHANNEL + channel.channelId)
+            fetchChannelData(this, Config.API_URLS.CHANNEL + channel.channelId);
         }
     }
 

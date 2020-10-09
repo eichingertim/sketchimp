@@ -1,7 +1,7 @@
 import View from "../View.js";
-import { Event } from "../../utils/Observable.js";
+import {Event} from "../../utils/Observable.js";
 import Helper from "../../utils/Helper.js";
-import {Config, EventKeys, SocketKeys} from "../../utils/Config.js";
+import {EventKeys} from "../../utils/Config.js";
 
 class SaveSettingsClickEvent extends Event {
     constructor() {
@@ -21,20 +21,20 @@ class MemberKickClickEvent extends Event {
     }
 }
 
-function onSaveSettingsClick(adminSettingsDialogView, data) {
+function onSaveSettingsClick(adminSettingsDialogView) {
     adminSettingsDialogView.notifyAll(new SaveSettingsClickEvent());
 }
 
-function onDialogCloseClick(adminSettingsDialogView, data) {
+function onDialogCloseClick(adminSettingsDialogView) {
     adminSettingsDialogView.notifyAll(new CloseSettingsClickEvent());
 }
 
 function setListenerOnce(adminSettingsDialogView) {
     adminSettingsDialogView.saveButton = adminSettingsDialogView.el.querySelector(".save-settings");
     adminSettingsDialogView.saveButton
-        .addEventListener("click", onSaveSettingsClick.bind(this, adminSettingsDialogView));
+        .addEventListener("click", () => onSaveSettingsClick(adminSettingsDialogView));
     adminSettingsDialogView.el.querySelector("#admin-settings-close")
-        .addEventListener("click", onDialogCloseClick.bind(this, adminSettingsDialogView));
+        .addEventListener("click", () => onDialogCloseClick(adminSettingsDialogView));
 }
 
 function setListener(adminSettingsDialogView) {
@@ -95,15 +95,13 @@ class AdminSettingsDialogView extends View {
                 Helper.setLabelColor(member.querySelector(".role-tag"), instance.users[index].role);
             });
         }
-
-        
     }
 
     setSettings(channel) {
         this.channelId = channel.channelId;
         this.channelName = channel.channelName;
         this.users = channel.members.map(member => {
-            return { id: member.id, name: member.username, role: member.role };
+            return {id: member.id, name: member.username, role: member.role};
         });
     }
 
@@ -112,10 +110,10 @@ class AdminSettingsDialogView extends View {
         userList = Array.from(this.el.querySelectorAll(".member-item")).map((element, index) => {
             userId = this.users[index].id;
             role = element.querySelector(".role-tag");
-            return { userId: userId, role: role.textContent };
+            return {userId: userId, role: role.textContent};
         });
         newName = this.el.querySelector("#channel-name").value;
-        return { channelId: this.channelId, channelName: newName, userList: userList };
+        return {channelId: this.channelId, channelName: newName, userList: userList};
     }
 }
 

@@ -1,4 +1,4 @@
-import {Config, EventKeys, SocketKeys} from "../utils/Config.js";
+import {Config, SocketKeys} from "../utils/Config.js";
 import Helper from "../utils/Helper.js";
 
 class SketchController {
@@ -14,7 +14,7 @@ class SketchController {
                     xhr.open(Config.HTTP.POST, url, true);
                     xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                     xhr.onload = function () {
-                        Helper.handleSimpleResponse(resolve, reject, this.response);
+                        Helper.handleSimpleResponse(resolve, reject, xhr.response);
                     };
                     xhr.send(JSON.stringify(data.channel));
                 });
@@ -35,7 +35,7 @@ class SketchController {
                 xhr.open(Config.HTTP.POST, url, true);
                 xhr.setRequestHeader("Content-Type", Config.CONTENT_TYPE_JSON);
                 xhr.onload = function () {
-                    Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
+                    Helper.handleResponseWithCallbackParam(resolve, reject, xhr.response);
                 };
                 xhr.send(JSON.stringify(sketchBody));
             }
@@ -49,7 +49,7 @@ class SketchController {
                 let xhr = new XMLHttpRequest();
                 xhr.open(Config.HTTP.POST, Config.API_URLS.SKETCH_PUBLISH + sketchId, true);
                 xhr.onload = function () {
-                    Helper.handleSimpleResponse(resolve, reject, this.response);
+                    Helper.handleSimpleResponse(resolve, reject, xhr.response);
                 };
                 xhr.send();
             }
@@ -62,7 +62,7 @@ class SketchController {
               let xhr = new XMLHttpRequest();
               xhr.open(Config.HTTP.GET, Config.API_URLS.FINALIZED_SKETCHES + channelId, true);
               xhr.onload = function () {
-                  Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
+                  Helper.handleResponseWithCallbackParam(resolve, reject, xhr.response);
               };
               xhr.send();
           }
