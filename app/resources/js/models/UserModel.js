@@ -1,3 +1,6 @@
+/**
+ * A model of user that can be used in the frontend
+ */
 class UserModel {
     constructor(id, name, currentChannelRole) {
         this.userId = id;

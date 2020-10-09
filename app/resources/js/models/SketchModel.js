@@ -1,3 +1,6 @@
+/**
+ * A model of sketch that can be used in the frontend
+ */
 class SketchModel {
 
     constructor(id, name, multilayer) {

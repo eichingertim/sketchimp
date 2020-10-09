@@ -1,3 +1,6 @@
+/**
+ * A model of channel that can be used in the frontend
+ */
 class ChannelModel {
 
     constructor(channelId, channelName, creatorId, creatorName, creationDate, members, channelIcon) {
