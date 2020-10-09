@@ -3,12 +3,24 @@ import Helper from "../utils/Helper.js";
 import ChannelModel from "../models/ChannelModel.js";
 import SketchModel from "../models/SketchModel.js";
 
+/**
+ * Creates a Object with key=userId and value=userRole
+ * @param userList list of channel members
+ * @returns {{roleList: {}}} Object of users/members
+ */
 function createBodyMember(userList) {
     const userObj = {};
     userList.forEach(user => userObj[user.userId] = user.role);
     return {roleList: userObj};
 }
 
+/**
+ * Handles the response of a XMLHttpRequest for sketches
+ * @param resolve gets called, when process success
+ * @param reject gets called, when process failes
+ * @param channel includes ChanelModel of before received channel
+ * @param jsonString response as jsonString
+ */
 function handleResponseSketchData(resolve, reject, channel, jsonString) {
     try {
         let response = JSON.parse(jsonString);
@@ -25,8 +37,17 @@ function handleResponseSketchData(resolve, reject, channel, jsonString) {
     }
 }
 
+/**
+ * Class with static Methods to handle AJAX and therefore all XMLHttpRequests belonging to channels
+ */
 class ChannelController {
 
+    /**
+     * fetches the channel-data and its current sketch from {@param url}
+     * and converts it to ChannelModel and SketchModel
+     * @param url GET Channel-Url with channelId
+     * @returns {Promise<>} wait for request to finish
+     */
     static fetchChannelData(url) {
         if (event) {
             event.preventDefault();
@@ -61,6 +82,11 @@ class ChannelController {
 
     }
 
+    /**
+     * Executes the POST requests to upload a new channel-icon from a html-form
+     * @param form html-form
+     * @returns {Promise<>} wait for request to finish
+     */
     static uploadChannelIcon(form) {
         return new Promise(
             function (resolve, reject) {
@@ -75,6 +101,12 @@ class ChannelController {
         );
     }
 
+    /**
+     * Executes the POST request for a new channel and a new sketch and when it successes it
+     * returns a new ChannelModel with its current sketch
+     * @param data includes data for new channel and sketch (channelName, sketchName, multilayer)
+     * @returns {Promise<>} wait for request to finish
+     */
     static createChannel(data) {
         return new Promise(
             function (resolve, reject) {
@@ -130,21 +162,11 @@ class ChannelController {
 
     }
 
-    static joinNewChannel(channelId) {
-        return new Promise(
-            function (resolve, reject) {
-                let xhr = new XMLHttpRequest();
-                xhr.open(Config.HTTP.POST, Config.API_URLS.JOIN_CHANNEL + channelId, true);
-                xhr.withCredentials = true;
-                xhr.onload = function () {
-                    Helper.handleSimpleResponse(resolve, reject, xhr.response);
-                };
-                xhr.send();
-            }
-        );
-
-    }
-
+    /**
+     * Executes POST request to leave a channel
+     * @param channelId id of the channel to be left
+     * @returns {Promise<>} wait for request to finish
+     */
     static leaveChannel(channelId) {
         return new Promise(
             function (resolve, reject) {
@@ -159,6 +181,11 @@ class ChannelController {
         );
     }
 
+    /**
+     * Executes PATH request to update channel settings, especially the channelName and roles of members.
+     * @param settings admin set settings
+     * @returns {Promise<>} wait for request to finish
+     */
     static saveAdminSettings(settings) {
         return new Promise(
             function (resolve, reject) {
@@ -192,6 +219,12 @@ class ChannelController {
         );
     }
 
+    /**
+     * Executes POST-Request to kick a member from a channel
+     * @param memberId id of the member to be kicked
+     * @param channelId id of the channel where the member should be kicked from
+     * @returns {Promise<>} wait for request to finish
+     */
     static kickMember(memberId, channelId) {
         return new Promise(
             function (resolve, reject) {
@@ -208,6 +241,13 @@ class ChannelController {
         );
     }
 
+    /**
+     * Executes DELETE Request to remove a channel
+     * @param socket current socket client to emit this delete action instantly
+     * @param channelId id of channel to be removed
+     * @param userId current user's id
+     * @returns {Promise<>} wait for request to finish
+     */
     static deleteChannel(socket, channelId, userId) {
         return new Promise(
             function (resolve, reject) {
@@ -216,7 +256,7 @@ class ChannelController {
                 xhr.withCredentials = true;
                 xhr.onload = function () {
                     socket.emit(SocketKeys.DELETE_CHANNEL, {channelId: channelId, userId: userId});
-                    Helper.handleResponseWithCallbackParam(resolve, reject, this.response);
+                    Helper.handleResponseWithCallbackParam(resolve, reject, xhr.response);
                 };
                 xhr.send();
             }

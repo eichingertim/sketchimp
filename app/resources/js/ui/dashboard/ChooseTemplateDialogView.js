@@ -8,10 +8,19 @@ class TemplateSelectedEvent extends Event {
     }
 }
 
+/**
+ * Notifies listener about a template was selected
+ * @param templateDialogView current instance of the view
+ * @param event clicked template's event
+ */
 function onTemplateClick(templateDialogView, event) {
     templateDialogView.notifyAll(new TemplateSelectedEvent(event.target.src));
 }
 
+/**
+ * sets the listener for all templates and the close-dialog button
+ * @param chooseTemplateDialogView current instance of the view
+ */
 function setListener(chooseTemplateDialogView) {
     let items = chooseTemplateDialogView.el.querySelectorAll(".template-item"),
         closeItem = chooseTemplateDialogView.el.querySelector("#close-template-screen");
@@ -25,6 +34,9 @@ function setListener(chooseTemplateDialogView) {
 
 }
 
+/**
+ * Represents the ChooseTemplate Dialog
+ */
 class ChooseTemplateDialogView extends View {
     constructor(el) {
         super();

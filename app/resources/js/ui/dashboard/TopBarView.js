@@ -33,15 +33,28 @@ class FullScreenCloseClick extends Event {
     }
 }
 
+/**
+ * Notifies listener about fullscreen image close-button was clicked
+ * @param topBarView current instance of view
+ */
 function onCloseClick(topBarView) {
     topBarView.notifyAll(new FullScreenCloseClick());
 }
 
+/**
+ * Notifies listener about the publish button was clicked
+ * @param topBarView current instance of view
+ */
 function onPublishClick(topBarView) {
     let sketchId = document.querySelector(".fullscreen-image").children[0].id;
     topBarView.notifyAll(new PublishSketchClick(sketchId));
 }
 
+/**
+ * Notifies listener about a sketch-history item was clicked
+ * @param topBarView current instance of view
+ * @param data click-event
+ */
 function onSketchHistoryItemClick(topBarView, data) {
     let image = data.target,
         sketchId = image.id.split("|")[0],
@@ -49,6 +62,10 @@ function onSketchHistoryItemClick(topBarView, data) {
     topBarView.notifyAll(new HistoryItemClickEvent(image.src, sketchId, isPublished));
 }
 
+/**
+ * sets the listener for all items in the topbar
+ * @param topBarView current instance of view
+ */
 function setListener(topBarView) {
     let historyItems = topBarView.el.querySelectorAll(".sketch-history-list-item");
     historyItems.forEach(item => {
@@ -63,11 +80,18 @@ function setListener(topBarView) {
     });
 }
 
+/**
+ * sets the listener for close and publish button of the sketch fullscreen image
+ * @param topBarView
+ */
 function setFullScreenListener(topBarView) {
     topBarView.closeFullscreen.addEventListener("click", () => onCloseClick(topBarView));
     topBarView.btnPublishSketch.addEventListener("click", () => onPublishClick(topBarView));
 }
 
+/**
+ * Represents the TopBar where Title, Settings-Button, Info-Button and SketchHistory is located
+ */
 class TopBarView extends View {
     constructor(el) {
         super();
@@ -82,6 +106,10 @@ class TopBarView extends View {
         setFullScreenListener(this);
     }
 
+    /**
+     * Updates visibility of the settings button (visible just for admins)
+     * @param currentChannelRole users current channel role
+     */
     updateRoleVisibility(currentChannelRole) {
         if (currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
             this.adminSettingsButton.classList.remove("hidden");
@@ -92,14 +120,25 @@ class TopBarView extends View {
         Helper.setLabelColor(roleTag, currentChannelRole);
     }
 
+    /**
+     * updates the channel-name view
+     * @param channelName current channel name
+     */
     updateChannelName(channelName) {
         this.el.querySelector(".channel-title").innerHTML = channelName;
     }
 
+    /**
+     * clears the sketch-history list-view
+     */
     clearSketchHistory() {
         this.sketchHistoryList.innerHTML = "";
     }
 
+    /**
+     * adds the complete sketch-history
+     * @param sketches finalized sketches for the current channel
+     */
     addSketchHistory(sketches) {
         let instance = this;
         sketches.forEach(sketch => {
@@ -108,6 +147,12 @@ class TopBarView extends View {
         setListener(this);
     }
 
+    /**
+     * adds one item to the sketch history
+     * @param image path of the sketch-image
+     * @param sketchId id of the sketch
+     * @param isPublished bool if it was published to the public feed
+     */
     addSketchHistoryItem(image, sketchId, isPublished) {
         let sketchHistoryList = this.el.querySelector(".sketch-history-list"),
             li = document.createElement("li"),
@@ -121,6 +166,9 @@ class TopBarView extends View {
         sketchHistoryList.appendChild(li);
     }
 
+    /**
+     * indicates that the sketch was published
+     */
     finishedPublishing() {
         let tmp = this.btnPublishSketch.innerHTML,
             instance = this;
@@ -134,6 +182,10 @@ class TopBarView extends View {
         this.btnPublishSketch.removeEventListener("click", onPublishClick.bind(this, instance));
     }
 
+    /**
+     * shows clicked sketch-history as fullscreen
+     * @param data clicked sketch data
+     */
     showImageFullscreen(data) {
         let imageTag = this.fullScreenContainer.children[0];
 
@@ -149,10 +201,17 @@ class TopBarView extends View {
         this.fullScreenContainer.classList.remove("hidden");
     }
 
+    /**
+     * closes fullscreen
+     */
     closeFullScreen() {
         this.fullScreenContainer.classList.add("hidden");
     }
 
+    /**
+     * shows a red alert message on top
+     * @param message text that should be alerted
+     */
     showAlert(message) {
         let alertBox = this.el.querySelector(".error-alert"),
             alertMessage = this.el.querySelector("#error-message");

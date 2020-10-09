@@ -1,3 +1,5 @@
+/*global iro*/
+
 import View from "../View.js";
 import {Event} from "../../utils/Observable.js";
 import {Config, EventKeys} from "../../utils/Config.js";
@@ -32,6 +34,11 @@ class UndoEvent extends Event {
     }
 }
 
+/**
+ * Notifies the listener that a size item was clicked, and passes the necessary data
+ * @param toolboxView current instance of view
+ * @param data click event
+ */
 function onSizeItemClick(toolboxView, data) {
     toolboxView.notifyAll(new SizeChangeEvent(data.target.style.height.replace("px", "")));
     toolboxView.sizeItems.forEach(item => {
@@ -43,6 +50,11 @@ function onSizeItemClick(toolboxView, data) {
     });
 }
 
+/**
+ * notifies listener about a color change from the color picker
+ * @param toolboxView current instance of view
+ * @param data change event
+ */
 function onColorChanged(toolboxView, data) {
     toolboxView.notifyAll(new ColorChangeEvent(data.hexString));
     toolboxView.sizeItems.forEach(item => {
@@ -50,12 +62,21 @@ function onColorChanged(toolboxView, data) {
     });
 }
 
+/**
+ * notifies listener about a switch between rubber and pen
+ * @param toolboxView current instance of view
+ * @param data click event
+ */
 function onPenRubberSwitch(toolboxView, data) {
     toolboxView.switchRubberPencil(data.target.id);
     toolboxView.notifyAll(new PenRubberSwitchEvent(data.target.id));
 
 }
 
+/**
+ * Adds listener to all items in the toolbox
+ * @param toolboxView current instance of view
+ */
 function addClickListeners(toolboxView) {
     toolboxView.pen.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
     toolboxView.rubber.addEventListener("click", onPenRubberSwitch.bind(this, toolboxView));
@@ -73,20 +94,17 @@ function addClickListeners(toolboxView) {
 }
 
 /**
- * Iro is imported in the dashboard.ejs file -> not defined in this script
+ * Initializes the iro-ColorPicker and sets default values
  */
 function initColorSlider() {
-    // eslint-disable-next-line no-undef
     return new iro.ColorPicker("#color-slider-container", {
         layout: [{
-            // eslint-disable-next-line no-undef
                 component: iro.ui.Wheel,
                 options: {
                     sliderType: "hue",
                 },
             },
             {
-                // eslint-disable-next-line no-undef
                 component: iro.ui.Slider,
                 options: {
                     sliderType: "value",
@@ -99,6 +117,9 @@ function initColorSlider() {
     });
 }
 
+/**
+ * Represents the Toolbox where the user can select tools to variate it's drawing
+ */
 class ToolboxView extends View {
 
     constructor(el) {
@@ -115,6 +136,9 @@ class ToolboxView extends View {
         addClickListeners(this);
     }
 
+    /**
+     * resets all items to its initial state
+     */
     reset() {
         this.colorPicker.reset();
         let instance = this;
@@ -128,6 +152,10 @@ class ToolboxView extends View {
         });
     }
 
+    /**
+     * switches pen and rubber -> switches sizes of its corresponding html-elements
+     * @param id
+     */
     switchRubberPencil(id) {
         const pen = this.el.querySelector("#toolbox-pen"),
             rubber = this.el.querySelector("#toolbox-rubber");

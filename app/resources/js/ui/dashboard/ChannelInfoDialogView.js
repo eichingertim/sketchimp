@@ -26,27 +26,48 @@ class UploadChannelIconEvent extends Event {
     }
 }
 
+/**
+ * Notifies listener about the leave-channel-button was clicked
+ * @param channelInfoDialogView current instance of the view
+ */
 function onLeaveChannelClick(channelInfoDialogView) {
     channelInfoDialogView.notifyAll(new LeaveChannelClickEvent());
 }
 
+/**
+ * Notifies listener about the delete-channel-button was clicked
+ * @param channelInfoDialogView current instance of the view
+ */
 function onDeleteChannelClick(channelInfoDialogView) {
     channelInfoDialogView.notifyAll(new DeleteChannelClickEvent());
 }
 
+/**
+ * Notifies listener about the close-dialog-button was clicked
+ * @param channelInfoDialogView current instance of the view
+ */
 function onDialogCloseClick(channelInfoDialogView) {
     channelInfoDialogView.notifyAll(new CloseInfoDialogEvent());
 }
 
-function copy2Clipboard(str) {
+/**
+ * copies the generated invite-link to clipboard
+ * @param channelId current channel's id
+ */
+function copy2Clipboard(channelId) {
     let ta = document.createElement("textarea");
-    ta.value = window.location.origin + "/join/" + str;
+    ta.value = window.location.origin + "/join/" + channelId;
     document.body.appendChild(ta);
     ta.select();
     document.execCommand("copy");
     document.body.removeChild(ta);
 }
 
+/**
+ * reads the selected file URL and shows a preview
+ * @param channelInfoDialogView current instance of the view
+ * @param input element input where the user has selected a file
+ */
 function readURL(channelInfoDialogView, input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -60,6 +81,10 @@ function readURL(channelInfoDialogView, input) {
     }
 }
 
+/**
+ * sets the necessary listener for the dialog's elements
+ * @param channelInfoDialogView current instance of the view
+ */
 function setListener(channelInfoDialogView) {
     try {
         channelInfoDialogView.el.querySelector(".leave-channel")
@@ -98,6 +123,9 @@ function setListener(channelInfoDialogView) {
 
 }
 
+/**
+ * Represents the ChannelInfo Dialog
+ */
 class ChannelInfoDialogView extends View {
     constructor(el) {
         super();
@@ -105,6 +133,11 @@ class ChannelInfoDialogView extends View {
         setListener(this);
     }
 
+    /**
+     * Updates the elements text or src with the passed channel-model
+     * @param channel current channel's data
+     * @param isCreator indicates if the current user is creator of the channel
+     */
     updateInfo(channel, isCreator) {
         let image = this.el.querySelector("#channel-icon"),
             placeholder = this.el.querySelector(".placeholder-channel-icon"),
