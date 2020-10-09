@@ -93,8 +93,6 @@ function onSketchExportClick() {
  */
 function onSketchCreateClick(dashboard, event) {
 
-
-
     if (dashboard.user.currentChannelRole === Config.CHANNEL_ROLE_ADMIN) {
         if (event.data.name !== null) {
             drawAreaView.getStageAsPNG().then(function (imageTarget) {
