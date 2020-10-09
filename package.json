@@ -19,6 +19,10 @@
     "Timon Lorenz <timon.lorenz@stud.uni-regensburg.de>",
     "Tobias Dollhofer <tobias.dollhofer@stud.uni-regensburg.de>"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/UniRegensburg/mme-ss2020-projekte-sketching-with-friends-2"
+  },
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
