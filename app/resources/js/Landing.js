@@ -1,3 +1,5 @@
+import { LandingPageConfigs, NavbarDimensions } from "./utils/Config";
+
 var app,
     navBar = document.querySelector(".navigation-top"),
     scrollIndicator = document.querySelector(".scroll-indicator"),
@@ -9,20 +11,21 @@ function OilPainting(){
     context,
     width,
     height,
-    startPos = {x: window.innerWidth/2, y: window.innerHeight/2},
-    prevPos = {x: window.innerWidth/2, y: 0},
+    divider = LandingPageConfigs.DIMENSIONS_DIVIDER,
+    startPos = {x: window.innerWidth/divider, y: window.innerHeight/divider},
+    prevPos = {x: window.innerWidth/divider, y: 0},
     dist = {x: 0, y: 0},
-    colour = "#"+Math.floor(Math.random()*16777215).toString(16),
+    colour = "#"+Math.floor(Math.random()*LandingPageConfigs.COLOR_DEPTH).toString(LandingPageConfigs.COLOR_STRING_LENGTH),
     MouseMove = function(e) {
-        var distance = Math.sqrt(Math.pow(prevPos.x - startPos.x, 2) +
-        Math.pow(prevPos.y - startPos.y, 2)),
-        a = distance * 10 * (Math.pow(Math.random(), 2) - 0.5),
-        r = Math.random() - 0.5,
-        size = (Math.random() * 15) / distance,
+        var distance = Math.sqrt(Math.pow(prevPos.x - startPos.x, divider) +
+        Math.pow(prevPos.y - startPos.y, divider)),
+        a = distance * LandingPageConfigs.DISTANCE_MULTIPLIER * (Math.pow(Math.random(), divider) - LandingPageConfigs.ANGLE_VALUE),
+        r = Math.random() - LandingPageConfigs.ANGLE_VALUE,
+        size = (Math.random() * LandingPageConfigs.SIZE_MULTIPLIER) / distance,
         lWidth;
         
-        dist.x = (prevPos.x - startPos.x) * Math.sin(0.5) + startPos.x;
-        dist.y = (prevPos.y - startPos.y) * Math.cos(0.5) + startPos.y;
+        dist.x = (prevPos.x - startPos.x) * Math.sin(LandingPageConfigs.ANGLE_VALUE) + startPos.x;
+        dist.y = (prevPos.y - startPos.y) * Math.cos(LandingPageConfigs.ANGLE_VALUE) + startPos.y;
         
         startPos.x = prevPos.x;
         startPos.y = prevPos.y;
@@ -30,9 +33,10 @@ function OilPainting(){
         prevPos.x = (e.layerX);
         prevPos.y = (e.layerY);
         
-        lWidth = (Math.random()+50/10-0.5)*size+(1-Math.random()+60/20-0.5)*size;
+        lWidth = (Math.random()+LandingPageConfigs.LINE_WIDTH_MULTIPLIER/LandingPageConfigs.LINE_WIDTH_DIVIDER-LandingPageConfigs.ANGLE_VALUE)*size+
+            (1-Math.random()+LandingPageConfigs.LINE_HEIGHT_MULTIPLIER/LandingPageConfigs.LINE_HEIGHT_DIVIDER-LandingPageConfigs.ANGLE_VALUE)*size;
         context.lineWidth = lWidth;
-        context.strokeWidth = lWidth * 5;
+        context.strokeWidth = lWidth * LandingPageConfigs.STROKE_WIDTH_MULTIPLIER;
         
         context.lineCap = "round";
         context.lineJoin = "round";
@@ -54,7 +58,7 @@ function OilPainting(){
     },
     MouseDown = function(e) {
         e.preventDefault();
-        colour = "#"+Math.floor(Math.random()*16777215).toString(16);
+        colour = "#"+Math.floor(Math.random()*LandingPageConfigs.COLOR_DEPTH).toString(LandingPageConfigs.COLOR_STRING_LENGTH);
         context.fillStyle = colour;
         context.strokeStyle = colour;
     },
@@ -89,10 +93,10 @@ function OilPainting(){
     };
 }
 window.onscroll = function() {
-    if (this.document.body.scrollTop >= 50 || this.document.documentElement.scrollTop >= 50) {
+    if (this.document.body.scrollTop >= NavbarDimensions.OFFSET || this.document.documentElement.scrollTop >= NavbarDimensions.OFFSET) {
         scrollIndicator.classList.add("hidden");
     }
-    if (document.body.scrollTop >= hero.offsetHeight -50 || document.documentElement.scrollTop >= hero.offsetHeight -50) {
+    if (document.body.scrollTop >= hero.offsetHeight - NavbarDimensions.OFFSET || document.documentElement.scrollTop >= hero.offsetHeight - NavbarDimensions.OFFSET) {
       navBar.classList.add("scroll");
     } else {
       navBar.classList.remove("scroll");

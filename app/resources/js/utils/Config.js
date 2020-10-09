@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+
 const Config = {
         API_URLS: {
             CHANNEL: "/api/channel/",
@@ -147,9 +149,25 @@ const Config = {
         SCOREFONT_MULTIPLICANT: 12,
         TITLE_BASE: 20,
         TITLE_MULTIPLICANT: 20,
-        MENUBAR_OFFSET: 30,
-
+    },
+    
+    LandingPageConfigs = {
+        COLOR_DEPTH: Math.pow(2, 24),
+        DIMENSIONS_DIVIDER: 2,
+        COLOR_STRING_LENGTH: 16,
+        SIZE_MULTIPLIER: 15,
+        DISTANCE_MULTIPLIER: 10,
+        ANGLE_VALUE: 0.5,
+        STROKE_WIDTH_MULTIPLIER: 5,
+        LINE_WIDTH_MULTIPLIER: 50,
+        LINE_WIDTH_DIVIDER: 10,
+        LINE_HEIGHT_MULTIPLIER: 60,
+        LINE_HEIGHT_DIVIDER: 20,
+    },
+    
+    NavbarDimensions = {
+        OFFSET: 50,
     };
 
-export {Config, EventKeys, SocketKeys, PublicFeedDimensions};
+export {Config, EventKeys, SocketKeys, PublicFeedDimensions, LandingPageConfigs, NavbarDimensions };
 export default Config;

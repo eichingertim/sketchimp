@@ -4,10 +4,17 @@
     },
     "rules":
     {
+        /*
+        * These linting errors are disabled due to incompatibilities with these system components:
+        * 1. MongoDBs Identifier notation "Document._id" conflicts with the no-underscore-dangle rule
+        * 2. Asynchronous Computing and usage of Promises conflicts with the consistent-return rule
+        *
+        "no-underscore-dangle": "error",
+        "consistent-return": "error",
+        */
         "block-scoped-var": "error",
         "camelcase": "warn",
         "comma-dangle": ["error", "always-multiline"],
-        "consistent-return": "error",
         "curly": "error",
         "default-case": "error",
         "eqeqeq": "error",
@@ -30,7 +37,6 @@
         "no-unused-expressions": "error",
         "no-useless-concat": "error",
         "no-undef-init": "error",
-        "no-underscore-dangle": "error",
         "no-param-reassign": "error",
         "no-self-compare": "error",
         "no-void": "error",
