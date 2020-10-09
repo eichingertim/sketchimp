@@ -1,7 +1,7 @@
 {
-  "name": "projekt-starter-mme-ss20",
+  "name": "sketchimp-mme-ss20",
   "version": "1.0.0",
-  "description": "Startercode für die Abschlussprojekte des MME-Kurses im Sommersemester 2020",
+  "description": "Quellcode für Abschlussprojekt Sketchimp des MME-Kurses im Sommersemester 2020",
   "main": "index.js",
   "directories": {
     "doc": "docs"
@@ -12,7 +12,13 @@
     "build": "node build.js",
     "prebuild": "eslint app/resources/js/"
   },
-  "author": "Alexander Bazo <alexander.bazo@ur.de>",
+  "author": "Sketchimp Team",
+  "contributors": [
+    "Lukas Schauhuber <lukas.schauhuber@stud.uni-regensburg.de>",
+    "Tim Eichinger <tim1.eichinger@stud.uni-regensburg.de>",
+    "Timon Lorenz <timon.lorenz@stud.uni-regensburg.de>",
+    "Tobias Dollhofer <tobias.dollhofer@stud.uni-regensburg.de>"
+  ],
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
