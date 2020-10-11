@@ -39,7 +39,7 @@ Die Anwendung soll eine Plattform für kollaboratives Zeichnen mit mehreren Benu
 
 Die App wird vom Projektteam unter der Domain https://www.sketchimp.me angeboten.
 Zusätzlich besteht die Möglichkeit, das Projekt direkt auf einem eigenen Webserver auszuführen.
-Allerdings ist zu beachten, dass, ohne Anpassung der Datenbank-Verbindung, die Bild-Referenzen nicht geladen werden können, da die Quelldateien nur auf dem gehosteten Webserver vorliegen. Die reguläre Datenbank-URL liegt unter `/lib/config/Constants.js` als Konstante vor.
+Allerdings ist zu beachten, dass, ohne Anpassung der Datenbank-Verbindung, die Bild-Referenzen nicht geladen werden können, da die Quelldateien nur auf dem gehosteten Webserver vorliegen. Die reguläre Datenbank-URL liegt unter `/lib/config/Constants.js` als Konstante vor. Diese muss von Ihrer eigenen MONGO-DB Adresse ersetzt werden.
 
 Um die Anwendung lokal zu installieren und zu starten sind keine besonderen Schritte notwendig. 
 Es reichen folgende Kommandos:
